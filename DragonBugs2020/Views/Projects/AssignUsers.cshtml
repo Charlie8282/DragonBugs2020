@@ -1,0 +1,52 @@
+﻿@model DragonBugs2020.Models.ViewModels.ManageProjectUsersViewModel
+
+
+
+@{ ViewData["Title"] = "Assign Project Users"; }
+<h2>Assign Project Users</h2>
+<hr />
+<div class="row">
+    <div class="card col-6" style="margin:2px">
+        <div class="card-body">
+            <h2><b>Assign Users to @Model.Project.Name</b></h2>
+            <hr />
+            <form asp-controller="Projects" asp-action="AssignUsers" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="@Model.Project.Id">
+                <input type="hidden" asp-for="@Model.Project.Name">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.Users" class="control-label">Team for @Model.Project.Name</label>
+                        <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
+                    </div>
+                </div>
+                <hr />
+                <div class="col-12">
+                    <div>
+                        <input type="submit" value="Assign Roles" class="btn btn-info" />
+                        <a class="btn btn-info" asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project.Id">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@*<div>
+        <a asp-action="AddProjectUsers" asp-route-id="@Model.Id">Add Project Users</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id"></a>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+

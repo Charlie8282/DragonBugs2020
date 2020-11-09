@@ -1,0 +1,37 @@
+﻿
+* {
+    font-family: 'Copperplate Gothic';
+
+}
+
+body {
+ 
+}
+
+footer {
+    background-color: black;
+}
+
+.my-nav {
+    background-color: black;
+    color: white;
+/*    font-weight: 400;*/
+}
+
+.manage-roles {
+    margin: 3em;
+}
+
+.multi {
+    width: 12em;
+}
+
+
+
+.bg {
+    background-color: lightgrey;
+}
+
+.log-reg {
+    max-width: 30em;
+}

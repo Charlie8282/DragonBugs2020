@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        Whack-A-Bug
+    </title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/Custom.css" rel="stylesheet" />
+    <link src="~/favicon.ico" />
+</head>
+<body>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="~/img/nav-title.png" />
+                <hr />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                    </div>
+                    <div class="col-sm">
+                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - DragonBugs2020 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>
+
+
+
