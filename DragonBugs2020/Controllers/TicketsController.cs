@@ -10,6 +10,7 @@ using DragonBugs2020.Models;
 using Microsoft.AspNetCore.Identity;
 using DragonBugs2020.Models.ViewModels;
 using DragonBugs2020.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace DragonBugs2020.Controllers
 {
@@ -18,11 +19,13 @@ namespace DragonBugs2020.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
         private readonly UserManager<BTUser> _userManager;
-        public TicketsController(ApplicationDbContext context, IBTProjectService projectService, UserManager<BTUser> userManager)
+        private readonly IBTHistoriesService __historiesService;
+        public TicketsController(ApplicationDbContext context, IBTProjectService projectService, UserManager<BTUser> userManager, IBTHistoriesService historiesService)
         {
             _context = context;
             _projectService = projectService;
             _userManager = userManager;
+            __historiesService = historiesService;
         }
 
         // GET: Tickets
@@ -40,20 +43,17 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-            var vm = new TicketsManagerViewModel();
-
-            var project = await _context.Projects
-                .Include(p => p.ProjectUsers)
-                .ThenInclude(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
 
             var ticket = await _context.Tickets
-                .Where(t => t.ProjectId == id)
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
-                .ToListAsync();
-                //.FirstOrDefaultAsync(m => m.Id == id);
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Attachments)
+                .Include(t => t.Comments)
+                .ThenInclude(tc => tc.User)
+            .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
                 return NotFound();
@@ -63,15 +63,15 @@ namespace DragonBugs2020.Controllers
         }
 
         // GET: Tickets/Create
-        public IActionResult Create(int? id)
+        public IActionResult Create(int? Id, IFormFile attachment)
         {
 
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
-            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id");
-            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id");
-            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id");
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
             return View();
         }
 
@@ -80,23 +80,38 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,ProjectId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Title,Description,ProjectId,DeveloperUserId,TicketPriorityId,TicketStatusId,TicketTypeId")] Ticket ticket, IFormFile attachment)
         {
             if (ModelState.IsValid)
             {
-                ticket.Created = DateTimeOffset.Now;
+                //if (attachment != null)
+                //{
+                //    AttachmentsService attachmentsService = new AttachmentsService();
+                //    ticket.Attachments.Add(attachmentsService.Attach(attachment));
+                //}
+                try
+                {
+                    ticket.Created = DateTime.Now;
+                    ticket.OwnerUserId = _userManager.GetUserId(User);
+                    TicketPriority priority = await _context.TicketPriorities.FirstOrDefaultAsync(t => t.Name == "Low");
+                    if (priority != null)
+                    {
+                        ticket.TicketPriorityId = priority.Id;
+                    }
 
-                //if(ticket.TicketPriorityId == 0 || ticket.TicketStatusId == 0)
-                //{
-                //    ticket.TicketPriorityId = _context.TicketPriorities.Where(tp => tp.Name == "Low").FirstOrDefault().Id;
-                //    ticket.TicketStatusId = _context.TicketStatuses.Where(ts => ts.Name == "Unassigned").FirstOrDefault().Id;
-                //}
-                //if(ticket.OwnerUserId == null)
-                //{
-                //    ticket.OwnerUserId = _userManager.GetUserId(User);
-                //}
-                _context.Add(ticket);
-                await _context.SaveChangesAsync();
+                    TicketStatus status = await _context.TicketStatuses.FirstOrDefaultAsync(s => s.Name == "New");
+                    if (status != null)
+                    {
+                        ticket.TicketStatusId = status.Id;
+                    }
+
+                    _context.Add(ticket);
+                    await _context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
@@ -109,7 +124,7 @@ namespace DragonBugs2020.Controllers
         }
 
         // GET: Tickets/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, IFormFile attachment)
         {
             if (id == null)
             {
@@ -121,12 +136,12 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
+            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
+            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             return View(ticket);
         }
 
@@ -141,6 +156,8 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
+
+            Ticket oldTicket = await _context.Tickets.AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
 
             if (ModelState.IsValid)
             {
@@ -160,6 +177,11 @@ namespace DragonBugs2020.Controllers
                         throw;
                     }
                 }
+
+                //Add history
+                string userId = _userManager.GetUserId(User);
+               await __historiesService.AddHistory(oldTicket, ticket, userId);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);

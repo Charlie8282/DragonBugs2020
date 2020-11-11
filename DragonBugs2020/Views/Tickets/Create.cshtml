@@ -23,30 +23,28 @@
             <div class="col-sm">
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
+                    <input asp-for="Description" class="form-control" id="mytextarea" />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
-            @*<div class="form-group">
-            <label asp-for="Created" class="control-label"></label>
-            <input asp-for="Created" class="form-control" />
-            <span asp-validation-for="Created" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Updated" class="control-label"></label>
-            <input asp-for="Updated" class="form-control" />
-            <span asp-validation-for="Updated" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
                 <label asp-for="ProjectId" class="control-label"></label>
                 <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
             </div>
-            @*<div class="form-group">
+            <div class="form-group">
                 <label asp-for="TicketTypeId" class="control-label"></label>
                 <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
-            </div>*@
+            </div>
+
+            <div class="form-group">
+                <label for="FileName" class="control-label"></label><br />
+                <input name="attachments" type="file" />
+               
+            </div>
+
             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
             {
+
                 <div class="form-group">
                     <label asp-for="TicketPriorityId" class="control-label"></label>
                     <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
@@ -55,15 +53,14 @@
                     <label asp-for="TicketStatusId" class="control-label"></label>
                     <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
                 </div>
+
+
+
                 <div class="form-group">
-                    <label asp-for="OwnerUserId" class="control-label"></label>
-                    <select asp-for="OwnerUserId" class="form-control" asp-items="ViewBag.OwnerUserId"></select>
+                    <label asp-for="DeveloperUserId" class="control-label"></label>
+                    <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
                 </div>
             }
-            <div class="form-group">
-                <label asp-for="DeveloperUserId" class="control-label"></label>
-                <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
-            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -74,7 +71,13 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script src="https://cdn.tiny.cloud/1/l7peclxd2nqv523591f18wsp3j66odysd1mpur7xqsih9wm2/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
+<script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

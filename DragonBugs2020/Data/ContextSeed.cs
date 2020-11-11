@@ -1,5 +1,6 @@
 ﻿using DragonBugs2020.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,11 +29,11 @@ namespace DragonBugs2020.Data
             await roleManager.CreateAsync(new IdentityRole(Roles.NewUser.ToString()));
         }
 
-        
+
         public static async Task SeedDefaultUsersAsync(UserManager<BTUser> userManager)
         {
             #region Seed Admin
-          
+
             var defaultAdmin = new BTUser
             {
                 UserName = "charlie@mailinator.com",
@@ -61,7 +62,7 @@ namespace DragonBugs2020.Data
             #endregion
 
             #region Seed Project Manager
-          
+
             var defaultProjectManager = new BTUser
             {
                 UserName = "topdollar@mailinator.com",
@@ -176,9 +177,109 @@ namespace DragonBugs2020.Data
             }
             #endregion
         }
-        //public static async Task SeedTicketInfo(TicketManager<Ticket> ticketManager)
-        //{
-        //    await ticketManager.CreateAsync(new Ticket(Type.)
-        //}
+
+
+
+
+        #region TicketType
+
+        public static async Task SeedDefaultTicketTypeAsync(ApplicationDbContext context)
+        {
+            try
+            {
+                if (!context.TicketTypes.Any(t => t.Name == "Runtime"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Runtime" });
+                }
+                if (!context.TicketTypes.Any(t => t.Name == "UI"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "UI" });
+                }
+                if (!context.TicketTypes.Any(t => t.Name == "Backend"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Backend" });
+                }
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*************  ERROR  *************");
+                Debug.WriteLine("Error Seeding Ticket Types.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("***********************************");
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region TicketPriority
+
+        public static async Task SeedDefaultTicketPriorityAsync(ApplicationDbContext context)
+        {
+            try
+            {
+                if (!context.TicketPriorities.Any(t => t.Name == "Low"))
+                {
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Low" });
+                }
+                if (!context.TicketPriorities.Any(t => t.Name == "High"))
+                {
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "High" });
+                }
+                if (!context.TicketPriorities.Any(t => t.Name == "Urgent"))
+                {
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Urgent" });
+                }
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*************  ERROR  *************");
+                Debug.WriteLine("Error Seeding Ticket Priority.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("***********************************");
+                throw;
+            }
+        }
+
+
+        #endregion
+
+        #region Ticket Status
+
+        public static async Task SeedDefaultTicketStatusAsync(ApplicationDbContext context)
+        {
+            try
+            {
+                if (!context.TicketStatuses.Any(t => t.Name == "New"))
+                {
+                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "New" });
+                }
+                if (!context.TicketStatuses.Any(t => t.Name == "Open"))
+                {
+                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "Open" });
+                }
+                if (!context.TicketStatuses.Any(t => t.Name == "Closed"))
+                {
+                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "Closed" });
+                }
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*************  ERROR  *************");
+                Debug.WriteLine("Error Seeding Ticket Status.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("***********************************");
+                throw;
+            }
+        }
+
+
+        #endregion
+
+
     }
 }
+

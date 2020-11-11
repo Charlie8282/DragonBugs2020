@@ -37,6 +37,7 @@ namespace DragonBugs2020
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+            services.AddScoped<IBTHistoriesService, BTHistoriesService>();
 
             services.AddScoped<IBTRolesService, BTRolesService>();
 

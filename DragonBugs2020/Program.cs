@@ -30,6 +30,9 @@ namespace DragonBugs2020
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(roleManager);
                     await ContextSeed.SeedDefaultUsersAsync(userManager);
+                    await ContextSeed.SeedDefaultTicketTypeAsync(context);
+                    await ContextSeed.SeedDefaultTicketStatusAsync(context);
+                    await ContextSeed.SeedDefaultTicketPriorityAsync(context);
                 }
                 catch (Exception ex)
                 {

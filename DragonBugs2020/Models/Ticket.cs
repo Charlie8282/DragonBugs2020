@@ -33,6 +33,8 @@ namespace DragonBugs2020.Models
         public int TicketStatusId { get; set; }
         public string OwnerUserId { get; set; }
         public string DeveloperUserId { get; set; }
+        public string FileName { get; set; }
+        public byte[] Image { get; set; }
         public Project Project { get; set; }
         public TicketType TicketType { get; set; }
         public TicketPriority TicketPriority { get; set; }
