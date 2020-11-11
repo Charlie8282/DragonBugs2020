@@ -98,7 +98,7 @@
         <div class="col-sm-6">
             @foreach(var comment in Model.Comments)
             { 
-            <p>@comment.Comment by @comment.User.FullName </p>
+            <p>@comment.Comment by @comment.User?.FullName </p>
             <hr />
             }
         </div>
@@ -112,6 +112,29 @@
                 @Html.Hidden("TicketId", Model.Id)
                 <div class="form-group">
                     <input name="Comment" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <form asp-controller="TicketAttachments" asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="btn btn-dark"></div>
+                @Html.Hidden("TicketId", Model.Id)
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" value="" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="FileName" class="control-label"></label><br />
+                    <input name="attachment" type="file" />
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />

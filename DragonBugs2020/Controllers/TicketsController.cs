@@ -80,15 +80,11 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,ProjectId,DeveloperUserId,TicketPriorityId,TicketStatusId,TicketTypeId")] Ticket ticket, IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("Title,Description,ProjectId,DeveloperUserId,TicketPriorityId,TicketStatusId,TicketTypeId,TicketAttachment")] Ticket ticket, IFormFile attachment)
         {
             if (ModelState.IsValid)
             {
-                //if (attachment != null)
-                //{
-                //    AttachmentsService attachmentsService = new AttachmentsService();
-                //    ticket.Attachments.Add(attachmentsService.Attach(attachment));
-                //}
+                
                 try
                 {
                     ticket.Created = DateTime.Now;
@@ -104,7 +100,13 @@ namespace DragonBugs2020.Controllers
                     {
                         ticket.TicketStatusId = status.Id;
                     }
+                    
 
+                    if (attachment != null)
+                    {
+                        AttachmentsService attachmentsService = new AttachmentsService();
+                        ticket.Attachments.Add(attachmentsService.Attach(attachment));
+                    }
                     _context.Add(ticket);
                     await _context.SaveChangesAsync();
                 }
@@ -112,6 +114,7 @@ namespace DragonBugs2020.Controllers
                 {
                     throw;
                 }
+                
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
@@ -150,7 +153,7 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
             if (id != ticket.Id)
             {
@@ -161,6 +164,11 @@ namespace DragonBugs2020.Controllers
 
             if (ModelState.IsValid)
             {
+                if (attachment != null)
+                {
+                    AttachmentsService attachmentsService = new AttachmentsService();
+                    ticket.Attachments.Add(attachmentsService.Attach(attachment));
+                }
                 try
                 {
                     _context.Update(ticket);

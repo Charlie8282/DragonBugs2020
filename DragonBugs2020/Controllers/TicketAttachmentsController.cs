@@ -7,16 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DragonBugs2020.Data;
 using DragonBugs2020.Models;
+using Microsoft.AspNetCore.Http;
+using DragonBugs2020.Services;
+using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace DragonBugs2020.Controllers
 {
     public class TicketAttachmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
 
-        public TicketAttachmentsController(ApplicationDbContext context)
+        public TicketAttachmentsController(ApplicationDbContext context, UserManager<BTUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: TicketAttachments
@@ -59,10 +65,27 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment)
+        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
         {
             if (ModelState.IsValid)
             {
+
+
+                if (attachment != null)
+                {
+                    var memoryStream = new MemoryStream();
+                    attachment.CopyTo(memoryStream);
+                    byte[] bytes = memoryStream.ToArray();
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                    var binary = Convert.ToBase64String(bytes);
+                    var ext = Path.GetExtension(attachment.FileName);
+
+                    ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+                    ticketAttachment.FileData = bytes;
+                }
+                    ticketAttachment.Created = DateTime.Now;
+                ticketAttachment.UserId = _userManager.GetUserId(User);
                 _context.Add(ticketAttachment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
