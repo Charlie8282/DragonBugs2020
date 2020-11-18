@@ -15,7 +15,8 @@ namespace DragonBugs2020.Data
         ProjectManager,
         Developer,
         Submitter,
-        NewUser
+        NewUser,
+        Demo
     }
 
     public static class ContextSeed
@@ -27,6 +28,7 @@ namespace DragonBugs2020.Data
             await roleManager.CreateAsync(new IdentityRole(Roles.Developer.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Submitter.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.NewUser.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Demo.ToString()));
         }
 
 
@@ -176,6 +178,162 @@ namespace DragonBugs2020.Data
 
             }
             #endregion
+
+            //Start demo user seeds
+            //Each user occupies a "main" role and this new demo version of the role
+            //We will target this Demo role in order to demo this project without giving the abilty to this demo users to access the database
+            //Below is the password for all of the demo users
+            string demoPassword = "Dragon@2020";
+            #region Demo Seed Admin
+
+            defaultAdmin = new BTUser
+            {
+                UserName = "democharlie@mailinator.com",
+                Email = "democharlie@mailinator.com",
+                FirstName = "Chaarlie",
+                LastName = "Tiincheer",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultAdmin.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultAdmin, demoPassword);
+                    await userManager.AddToRoleAsync(defaultAdmin, Roles.Admin.ToString());
+                    await userManager.AddToRoleAsync(defaultAdmin, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Default Admin User.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+
+            }
+            #endregion
+
+            #region Demo Seed Project Manager
+
+            defaultProjectManager = new BTUser
+            {
+                UserName = "demotopdollar@mailinator.com",
+                Email = "demotopdollar@mailinator.com",
+                FirstName = "Toop",
+                LastName = "Doollar",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultProjectManager.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultProjectManager, demoPassword);
+                    await userManager.AddToRoleAsync(defaultProjectManager, Roles.ProjectManager.ToString());
+                    await userManager.AddToRoleAsync(defaultProjectManager, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Default Project Manager User.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+
+            }
+            #endregion
+
+            #region Demo Seed Developer
+
+            defaultDeveloper = new BTUser
+            {
+                UserName = "demodraven@mailinator.com",
+                Email = "demodraven@mailinator.com",
+                FirstName = "Eriic",
+                LastName = "Draaven",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultDeveloper.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultDeveloper, demoPassword);
+                    await userManager.AddToRoleAsync(defaultDeveloper, Roles.Developer.ToString());
+                    await userManager.AddToRoleAsync(defaultDeveloper, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Default Developer User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("*******************************");
+
+            }
+            #endregion
+
+            #region Demo Seed Submitter
+
+            defaultSubmitter = new BTUser
+            {
+                UserName = "demobrandon@mailinator.com",
+                Email = "demobrandon@mailinator.com",
+                FirstName = "Braandon",
+                LastName = "Leee",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultSubmitter.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultSubmitter, demoPassword);
+                    await userManager.AddToRoleAsync(defaultSubmitter, Roles.Submitter.ToString());
+                    await userManager.AddToRoleAsync(defaultSubmitter, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Default Submitter User.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+
+            }
+            #endregion
+
+            #region Demo Seed New User
+
+            defaultNewUser = new BTUser
+            {
+                UserName = "demowebster@mailinator.com",
+                Email = "demowebster@mailinator.com",
+                FirstName = "Sheelly",
+                LastName = "Weebster",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNewUser.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNewUser, demoPassword);
+                    await userManager.AddToRoleAsync(defaultNewUser, Roles.NewUser.ToString());
+                    await userManager.AddToRoleAsync(defaultNewUser, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+
+            }
+            #endregion
+
         }
 
 

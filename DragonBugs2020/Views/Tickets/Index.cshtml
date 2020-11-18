@@ -14,9 +14,12 @@
 <!-- Start Page Content here -->
 <!-- ============================================================== -->
 <h2>All Tickets</h2>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (!User.IsInRole("NewUser"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <div class="row">
     <div class="col-12">
         <div class="card-box table-responsive">

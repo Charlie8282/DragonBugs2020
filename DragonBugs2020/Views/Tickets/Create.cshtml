@@ -39,7 +39,7 @@
             <div class="form-group">
                 <label for="FileName" class="control-label"></label><br />
                 <input name="attachments" type="file" />
-               
+
             </div>
 
             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
@@ -53,11 +53,16 @@
                     <label asp-for="TicketStatusId" class="control-label"></label>
                     <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
                 </div>
+
+            }
+            @if (User.IsInRole("Admin"))
+            {
                 <div class="form-group">
                     <label asp-for="DeveloperUserId" class="control-label"></label>
                     <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
                 </div>
             }
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -71,9 +76,9 @@
 <script src="https://cdn.tiny.cloud/1/l7peclxd2nqv523591f18wsp3j66odysd1mpur7xqsih9wm2/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
-        tinymce.init({
-            selector: '#mytextarea'
-        });
+    tinymce.init({
+        selector: '#mytextarea'
+    });
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

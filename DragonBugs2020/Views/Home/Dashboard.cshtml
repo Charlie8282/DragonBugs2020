@@ -16,7 +16,7 @@
 
 
 <h2>Dashboard</h2>
-@if (!User.IsInRole("newUser"))
+@if (!User.IsInRole("NewUser"))
 {
 <p>
     <a asp-controller="Tickets" asp-action="Create">Create New</a>

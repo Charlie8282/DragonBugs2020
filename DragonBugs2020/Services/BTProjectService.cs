@@ -34,11 +34,17 @@ namespace DragonBugs2020.Services
             bool result = project.ProjectUsers.Any(u => u.UserId == userId);
             return result;
         }
-        public async Task<ICollection<Project>> ListUserProjects(string userId)
+        public async Task<List<Project>> ListUserProjects(string userId)
         {
             BTUser user = await _context.Users
                  .Include(p => p.ProjectUsers)
-                 .ThenInclude(p => p.Project)
+                 .ThenInclude(p => p.Project).ThenInclude(p => p.Tickets).ThenInclude(p => p.TicketPriority)
+                 .Include(p => p.ProjectUsers)
+                 .ThenInclude(p => p.Project).ThenInclude(p => p.Tickets).ThenInclude(p => p.TicketStatus)
+                 .Include(p => p.ProjectUsers)
+                 .ThenInclude(p => p.Project).ThenInclude(p => p.Tickets).ThenInclude(p => p.TicketType)
+                 .Include(p => p.ProjectUsers)
+                 .ThenInclude(p => p.Project).ThenInclude(p => p.Tickets).ThenInclude(p => p.DeveloperUser)
                  .FirstOrDefaultAsync(p => p.Id == userId);
 
             List<Project> projects = user.ProjectUsers.SelectMany(p => (IEnumerable<Project>)p.Project).ToList();

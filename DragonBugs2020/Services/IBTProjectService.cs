@@ -10,7 +10,7 @@ namespace DragonBugs2020.Services
     {
         public Task<bool> IsUserOnProject(string userId, int projectId);
 
-        public Task<ICollection<Project>> ListUserProjects(string userId);
+        public Task<List<Project>> ListUserProjects(string userId);
 
         public Task AddUserToProject(string userId, int projectId);
 
