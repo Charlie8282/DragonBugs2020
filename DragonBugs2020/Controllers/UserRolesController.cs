@@ -6,12 +6,14 @@ using DragonBugs2020.Data;
 using DragonBugs2020.Models;
 using DragonBugs2020.Models.ViewModels;
 using DragonBugs2020.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DragonBugs2020.Controllers
 {
+    [Authorize]
     public class UserRolesController : Controller
     {
 
@@ -29,7 +31,7 @@ namespace DragonBugs2020.Controllers
         {
             return View();
         }
-
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();

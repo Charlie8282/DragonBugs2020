@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DragonBugs2020.Models;
 using DragonBugs2020.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace DragonBugs2020
 {
@@ -43,9 +44,19 @@ namespace DragonBugs2020
 
             services.AddScoped<IBTProjectService, BTProjectService>();
 
+            services.AddScoped<IBTAccessService, BTAccessService>();
+
+            //services.Configure<AdminSettings>(Configuration.GetSection("AdminSettings"));
+
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
+            services.AddTransient<IEmailSender, EmailService>();
+
             services.AddControllersWithViews();
 
             services.AddRazorPages();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

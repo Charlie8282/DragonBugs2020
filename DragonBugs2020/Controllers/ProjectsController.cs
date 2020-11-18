@@ -10,13 +10,12 @@ using DragonBugs2020.Models;
 using DragonBugs2020.Services;
 using DragonBugs2020.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DragonBugs2020.Controllers
 {
     public class ProjectsController : Controller
     {
-       
-       
         private readonly UserManager<BTUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _btProjectService;
@@ -32,8 +31,54 @@ namespace DragonBugs2020.Controllers
         {
             return View(await _context.Projects.ToListAsync());
         }
+        public async Task<IActionResult> MyProjects()
+        {
+            var model = new List<Project>();
+            var userId = _userManager.GetUserId(User);
 
-        // GET: Projects/Details/5
+            if (User.IsInRole("Admin"))
+            {
+                model = _context.Projects.Include(p => p.ProjectUsers).ToList();
+            }
+
+            else if (User.IsInRole("ProjectManager"))
+            {
+                var projectIds = new List<int>();
+                //grab data that I need here
+                var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
+
+                foreach (var record in userProjects)
+                {
+                    projectIds.Add(record.ProjectId);
+                }
+                foreach (var id in projectIds)
+                {
+                    var project = _context.Projects.Find(id);
+                    model.Add(project);
+                }
+            }
+
+            else if (User.IsInRole("Developer"))
+            {
+                model = _context.Projects
+                    .Include(p => p.Name).ToList();
+
+              
+            }
+
+            else if (User.IsInRole("Submitter"))
+            {
+                model = _context.Projects
+                    
+                    .Include(p => p.Name).ToList();
+            }
+            else
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+        //GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -54,6 +99,7 @@ namespace DragonBugs2020.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Admin, ProjectManager")]
         public IActionResult Create()
         {
             return View();
@@ -64,6 +110,7 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> Create([Bind("Id,Name,ImagePath,ImageData")] Project project)
         {
             if (ModelState.IsValid)
@@ -76,6 +123,7 @@ namespace DragonBugs2020.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -96,6 +144,7 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImagePath,ImageData")] Project project)
         {
             if (id != project.Id)
@@ -127,6 +176,7 @@ namespace DragonBugs2020.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,6 +197,7 @@ namespace DragonBugs2020.Controllers
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Projects.FindAsync(id);
@@ -161,6 +212,7 @@ namespace DragonBugs2020.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> AssignUsers(int id)
         {
             var model = new ManageProjectUsersViewModel();
@@ -178,6 +230,7 @@ namespace DragonBugs2020.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> AssignUsers(ManageProjectUsersViewModel model)
         {
             if (ModelState.IsValid)
@@ -206,6 +259,7 @@ namespace DragonBugs2020.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> RemoveUsers(int id)
         {
             var model = new ManageProjectUsersViewModel();
@@ -220,6 +274,7 @@ namespace DragonBugs2020.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> RemoveUsers(ManageProjectUsersViewModel model)
         {
             if (ModelState.IsValid)

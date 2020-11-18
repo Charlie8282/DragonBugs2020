@@ -5,7 +5,7 @@
 @inject IBTAccessService accessService
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Dashboard";
     var userId = userManager.GetUserId(User);
     var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
@@ -13,10 +13,17 @@
 <!-- ============================================================== -->
 <!-- Start Page Content here -->
 <!-- ============================================================== -->
-<h2>All Tickets</h2>
+
+
+<h2>Dashboard</h2>
+@if (!User.IsInRole("newUser"))
+{
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Tickets" asp-action="Create">Create New</a>
 </p>
+}
+
+
 <div class="row">
     <div class="col-12">
         <div class="card-box table-responsive">
@@ -52,9 +59,9 @@
                             <td>
                                 @if (await accessService.CanInteractTicket(userId, item.Id, roles))
                                 {
-                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                    <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                                 }
                             </td>
                         </tr>
@@ -72,10 +79,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-
-
-
-
-
-

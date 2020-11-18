@@ -39,7 +39,6 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-
             var ticketAttachment = await _context.TicketAttachments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
@@ -48,7 +47,6 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-
             return View(ticketAttachment);
         }
 
@@ -69,8 +67,6 @@ namespace DragonBugs2020.Controllers
         {
             if (ModelState.IsValid)
             {
-
-
                 if (attachment != null)
                 {
                     var memoryStream = new MemoryStream();

@@ -46,7 +46,8 @@
                 @Html.DisplayFor(modelItem => item.NewValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Created)
+                @*@Html.DisplayFor(modelItem => item.Created)*@
+                @item.Created.ToString("MM/dd/yyyy")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ticket.Description)

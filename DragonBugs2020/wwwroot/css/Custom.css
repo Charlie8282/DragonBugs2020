@@ -1,11 +1,57 @@
-﻿
-* {
-    font-family: 'Copperplate Gothic';
-
+﻿* {
+   
 }
 
-body {
- 
+.landing {
+    background-color: #323a46;
+    align-content: center;
+    
+}
+
+.button-three {
+    position: relative;
+    background-image: linear-gradient(#fff, #f39c12);
+    /*background-color: #f39c12;*/
+    border: none;
+    width: 200px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-family: 'Copperplate Gothic', sans-serif;
+    font-size: larger;
+}
+
+    .button-three:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
+    }
+
+    .button-three:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+       /* padding-top: 300%;
+        padding-left: 350%;
+        margin-left: -20px !important;
+        margin-top: -120%;*/
+        opacity: 0;
+        transition: all 0.8s
+    }
+
+    .button-three:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+.card-box {
+    box-shadow: 0 0 10px 5px orange;
+    margin: 30px;
 }
 
 footer {
@@ -13,9 +59,8 @@ footer {
 }
 
 .my-nav {
-    background-color: black;
     color: white;
-/*    font-weight: 400;*/
+    /*    font-weight: 400;*/
 }
 
 .manage-roles {
@@ -34,4 +79,10 @@ footer {
 
 .log-reg {
     max-width: 30em;
+}
+
+.tablehead-bg {
+    background-image: linear-gradient(silver, black);
+    color: black;
+    border-radius: .2em;
 }

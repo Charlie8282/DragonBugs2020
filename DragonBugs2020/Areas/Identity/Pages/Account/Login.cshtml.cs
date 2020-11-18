@@ -43,6 +43,7 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+           
             [Required]
             [EmailAddress]
             public string Email { get; set; }
@@ -84,7 +85,8 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    //return LocalRedirect(returnUrl);
+                    return Redirect("~/Home/Dashboard");
                 }
                 if (result.RequiresTwoFactor)
                 {

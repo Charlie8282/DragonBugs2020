@@ -5,7 +5,7 @@
 @inject IBTAccessService accessService
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Dashboard";
     var userId = userManager.GetUserId(User);
     var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
@@ -13,7 +13,7 @@
 <!-- ============================================================== -->
 <!-- Start Page Content here -->
 <!-- ============================================================== -->
-<h2>All Tickets</h2>
+<h2>Dashboard</h2>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -72,10 +72,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-
-
-
-
-
-

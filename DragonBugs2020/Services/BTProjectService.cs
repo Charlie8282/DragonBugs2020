@@ -76,7 +76,6 @@ namespace DragonBugs2020.Services
                 Debug.WriteLine($"***ERROR*** - Error removing user from project. --> {ex.Message}");
                 throw;
             }
-
         }
         public async Task<ICollection<BTUser>> UsersOnProject(int projectId)
         {
@@ -87,9 +86,6 @@ namespace DragonBugs2020.Services
 
             List<BTUser> projectusers = project.ProjectUsers.Select(p => p.User).ToList();
             return projectusers;
-
-            //List<BTUser> projectusers = project.ProjectUsers.SelectMany(p => (IEnumerable<BTUser>)p.User).ToList();
-            //return projectusers;
         }
         public async Task<ICollection<BTUser>> UsersNotOnProject(int projectId)
         {
