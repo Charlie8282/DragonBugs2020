@@ -40,20 +40,20 @@ namespace DragonBugs2020.Services
                     result = true;
                     break;
                 case "ProjectManager":
-                    var projectId = (await _context.Tickets.FindAsync(ticketId)).ProjectId;
-                    if (await _context.ProjectUsers.Where(pu => pu.UserId == userId && pu.ProjectId == projectId).AnyAsync())
+                    var projectId = _context.Tickets.FindAsync(ticketId).Result.ProjectId;
+                    if (await _context.ProjectUsers.Where(pu => pu.ProjectId == projectId && pu.UserId == userId).AnyAsync())
                     {
                         result = true;
                     }
                     break;
                 case "Developer":
-                    if (await _context.Tickets.Where(t => t.DeveloperUserId == userId && t.Id == ticketId).AnyAsync())
+                    if (await _context.Tickets.Where(t => t.Id == ticketId && t.DeveloperUserId == userId).AnyAsync())  
                     {
                         result = true;
                     }
                     break;
                 case "Submitter":
-                    if (await _context.Tickets.Where(t => t.OwnerUserId == userId && t.Id == ticketId).AnyAsync())
+                    if (await _context.Tickets.Where(t => t.Id == ticketId && t.OwnerUserId == userId).AnyAsync())
                     {
                         result = true;
                     }
@@ -66,3 +66,41 @@ namespace DragonBugs2020.Services
     }
 
 }
+
+
+
+//public async Task<bool> CanInteractTicket(string userId, int ticketId, string roleName)
+//{
+//    bool result = false;
+//    switch (roleName)
+//    {
+//        case "Admin":
+//            result = true;
+//            break;
+//        case "ProjectManager":
+//            var projectId = (await _context.Tickets.FindAsync(ticketId)).ProjectId;
+//            if (await _context.ProjectUsers.Where(pu => pu.UserId == userId && pu.ProjectId == projectId).AnyAsync())
+//            {
+//                result = true;
+//            }
+//            break;
+//        case "Developer":
+//            if (await _context.Tickets.Where(t => t.DeveloperUserId == userId && t.Id == ticketId).AnyAsync())
+//            {
+//                result = true;
+//            }
+//            break;
+//        case "Submitter":
+//            if (await _context.Tickets.Where(t => t.OwnerUserId == userId && t.Id == ticketId).AnyAsync())
+//            {
+//                result = true;
+//            }
+//            break;
+//        default:
+//            break;
+//    }
+//    return result;
+//}
+//    }
+
+//}

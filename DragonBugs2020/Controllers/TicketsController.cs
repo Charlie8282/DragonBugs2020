@@ -179,7 +179,6 @@ namespace DragonBugs2020.Controllers
         // GET: Tickets/Create
         public IActionResult Create(int? Id, IFormFile attachment)
         {
-
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
@@ -200,7 +199,6 @@ namespace DragonBugs2020.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     try
                     {
                         ticket.Created = DateTime.Now;
@@ -210,19 +208,17 @@ namespace DragonBugs2020.Controllers
                         {
                             ticket.TicketPriorityId = priority.Id;
                         }
-
                         TicketStatus status = await _context.TicketStatuses.FirstOrDefaultAsync(s => s.Name == "New");
                         if (status != null)
                         {
                             ticket.TicketStatusId = status.Id;
                         }
-
-
                         if (attachment != null)
                         {
                             AttachmentsService attachmentsService = new AttachmentsService();
                             ticket.Attachments.Add(attachmentsService.Attach(attachment));
                         }
+
                         _context.Add(ticket);
                         await _context.SaveChangesAsync();
                     }
@@ -230,7 +226,6 @@ namespace DragonBugs2020.Controllers
                     {
                         throw;
                     }
-
                     return RedirectToAction(nameof(MyTickets));
                 }
                 ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
@@ -243,9 +238,9 @@ namespace DragonBugs2020.Controllers
             }
             else
             {
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
                 return RedirectToAction(nameof(MyTickets));
             }
-                
         }
 
         // GET: Tickets/Edit/5
@@ -347,7 +342,7 @@ namespace DragonBugs2020.Controllers
             else
             {
                 TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
-                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
+                return RedirectToAction("Details", "Tickets", new { id = ticket.ProjectId });
             }
         }
 
@@ -382,9 +377,13 @@ namespace DragonBugs2020.Controllers
         [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
+            if (!User.IsInRole("Demo"))
+            {
+                var ticket = await _context.Tickets.FindAsync(id);
+                _context.Tickets.Remove(ticket);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
             return RedirectToAction(nameof(Index));
         }
 

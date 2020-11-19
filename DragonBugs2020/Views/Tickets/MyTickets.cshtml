@@ -1,7 +1,13 @@
 ﻿@model IEnumerable<DragonBugs2020.Models.Ticket>
+@using DragonBugs2020.Services
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<BTUser> userManager
+@inject IBTAccessService accessService
 
 @{
     ViewData["Title"] = "MyTickets";
+    //var userId = userManager.GetUserId(User);
+    //var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
 
 <h1>MyTickets</h1>
@@ -22,14 +28,14 @@
                 @Html.DisplayNameFor(model => model.Created)
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.Updated)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.Updated)
+                </th>*@
             @*<th>
-                @Html.DisplayNameFor(model => model.FileName)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.FileName)
+                </th>*@
             @*<th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.Image)
+                </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Project)
             </th>
@@ -52,50 +58,59 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.Raw(item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Updated)
-            </td>*@
-            @*<td>
-                @Html.DisplayFor(modelItem => item.FileName)
-            </td>*@
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketType.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketPriority.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketStatus.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.Raw(item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Updated)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Image)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Project.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketPriority.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketStatus.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                </td>
+                <td>
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    @*@if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

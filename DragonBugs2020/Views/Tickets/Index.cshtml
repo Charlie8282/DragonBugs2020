@@ -6,8 +6,8 @@
 
 @{
     ViewData["Title"] = "Index";
-    var userId = userManager.GetUserId(User);
-    var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
+    //var userId = userManager.GetUserId(User);
+    //var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
 
 <!-- ============================================================== -->
@@ -53,12 +53,18 @@
                             <td>@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
                             <td>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
                             <td>
-                                @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                                {<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                }
+
+                                @*@if (await accessService.CanInteractTicket(userId, item.Id, roles))
                                 {
                                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                }
+                                }*@
                             </td>
                         </tr>
                     }

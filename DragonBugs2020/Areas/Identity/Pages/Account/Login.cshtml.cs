@@ -97,8 +97,6 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
                     return Page();
                 }
                 }
-            
-
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout

@@ -18,9 +18,9 @@
 <h2>Dashboard</h2>
 @if (!User.IsInRole("NewUser"))
 {
-<p>
-    <a asp-controller="Tickets" asp-action="Create">Create New</a>
-</p>
+    <p>
+        <a asp-controller="Tickets" asp-action="Create">Create New</a>
+    </p>
 }
 
 
@@ -57,6 +57,13 @@
                             <td>@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
                             <td>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
                             <td>
+
+                                @*@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                                    {<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    }*@
+
                                 @if (await accessService.CanInteractTicket(userId, item.Id, roles))
                                 {
                                     <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
