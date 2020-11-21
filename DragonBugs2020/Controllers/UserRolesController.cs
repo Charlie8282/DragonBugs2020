@@ -57,15 +57,18 @@ namespace DragonBugs2020.Controllers
 
             IEnumerable<string> roles = await _rolesService.ListUserRoles(user);
             await _userManager.RemoveFromRolesAsync(user, roles);
-            string userRole = btuser.SelectedRoles.FirstOrDefault();
+            var userRoles = btuser.SelectedRoles;
 
-            if (Enum.TryParse(userRole, out Roles roleValue))
+            foreach (var role in userRoles)
             {
-                await _rolesService.AddUserToRole(user, userRole);
-                return RedirectToAction("ManageUserRoles");
+                if (Enum.TryParse(role, out Roles roleValue))
+                {
+                    await _rolesService.AddUserToRole(user, role);
+                    //return RedirectToAction("ManageUserRoles");
+                }
             }
+
             return RedirectToAction("ManageUserRoles");
         }
-
     }
 }

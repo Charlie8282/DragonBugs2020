@@ -6,8 +6,8 @@
 
 @{
     ViewData["Title"] = "Index";
-    //var userId = userManager.GetUserId(User);
-    //var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
+    var userId = userManager.GetUserId(User);
+    var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
 
 <!-- ============================================================== -->
@@ -20,56 +20,81 @@
         <a asp-action="Create">Create New</a>
     </p>
 }
-<div class="row">
-    <div class="col-12">
-        <div class="card-box table-responsive">
-            <table id="responsive-datatable" class="table table-bordered table-bordered dt-responsive nowrap">
-                <thead>
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.Title)</th>
-                        <th>@Html.DisplayNameFor(model => model.Description)</th>
-                        <th>@Html.DisplayNameFor(model => model.Created)</th>
-                        <th>@Html.DisplayNameFor(model => model.Project)</th>
-                        <th>@Html.DisplayNameFor(model => model.TicketType)</th>
-                        <th>@Html.DisplayNameFor(model => model.TicketPriority)</th>
-                        <th>@Html.DisplayNameFor(model => model.TicketStatus)</th>
-                        <th>@Html.DisplayNameFor(model => model.OwnerUser)</th>
-                        <th>@Html.DisplayNameFor(model => model.DeveloperUser)</th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+<div id="wrapper">
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box table-responsive">
+                <table id="responsive-datatable" class="table table-bordered table-bordered dt-responsive nowrap">
+                    <thead>
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Title)</td>
-                            <td>@Html.Raw(item.Description)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Created)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Project.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
-                            <td>
-                                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                                {<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                }
-
-                                @*@if (await accessService.CanInteractTicket(userId, item.Id, roles))
-                                {
-                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                }*@
-                            </td>
+                            <th>@Html.DisplayNameFor(model => model.Title)</th>
+                            <th>@Html.DisplayNameFor(model => model.Description)</th>
+                            <th>@Html.DisplayNameFor(model => model.Created)</th>
+                            <th>@Html.DisplayNameFor(model => model.Project)</th>
+                            <th>@Html.DisplayNameFor(model => model.TicketType)</th>
+                            <th>@Html.DisplayNameFor(model => model.TicketPriority)</th>
+                            <th>@Html.DisplayNameFor(model => model.TicketStatus)</th>
+                            <th>@Html.DisplayNameFor(model => model.OwnerUser)</th>
+                            <th>@Html.DisplayNameFor(model => model.DeveloperUser)</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                                <td>
+                                    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-animation="makeway">
+                                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="exampleModalScrollableTitle">Modal title</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @Html.Raw(item.Description)
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#exampleModalScrollable">Scrollable</button>
+
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Created)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Project.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
+                                <td>
+                                    @*@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                                        {<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        }*@
+
+                                    @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

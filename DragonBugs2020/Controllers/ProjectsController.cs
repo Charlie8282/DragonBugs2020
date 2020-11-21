@@ -60,17 +60,14 @@ namespace DragonBugs2020.Controllers
 
             else if (User.IsInRole("Developer"))
             {
-                model = _context.Projects
-                    .Include(p => p.Name).ToList();
-
-              
+                model = await _btProjectService.ListUserProjects(userId);
+                
             }
 
             else if (User.IsInRole("Submitter"))
             {
-                model = _context.Projects
-                    
-                    .Include(p => p.Name).ToList();
+                model = await _btProjectService.ListUserProjects(userId);
+
             }
             else
             {

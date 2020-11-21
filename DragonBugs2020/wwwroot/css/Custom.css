@@ -1,17 +1,14 @@
-﻿* {
-   
-}
+﻿
 
 .landing {
     background-color: #323a46;
-    align-content: center;
+    
     
 }
 
 .button-three {
     position: relative;
     background-image: linear-gradient(#fff, #f39c12);
-    /*background-color: #f39c12;*/
     border: none;
     width: 200px;
     text-align: center;
@@ -34,10 +31,6 @@
         background: #f1c40f;
         display: block;
         position: absolute;
-       /* padding-top: 300%;
-        padding-left: 350%;
-        margin-left: -20px !important;
-        margin-top: -120%;*/
         opacity: 0;
         transition: all 0.8s
     }
@@ -49,18 +42,13 @@
         transition: 0s
     }
 
-.card-box {
+/*.card-box {
     box-shadow: 0 0 10px 5px orange;
     margin: 30px;
-}
+}*/
 
 footer {
     background-color: black;
-}
-
-.my-nav {
-    color: white;
-    /*    font-weight: 400;*/
 }
 
 .manage-roles {
@@ -72,17 +60,46 @@ footer {
 }
 
 
-
-.bg {
-    background-color: lightgrey;
-}
-
 .log-reg {
     max-width: 30em;
 }
 
-.tablehead-bg {
-    background-image: linear-gradient(silver, black);
-    color: black;
-    border-radius: .2em;
+.nav-icon {
+    padding-right: 20px;
 }
+.nav-items {
+    color: white;
+    font-family: 'Bodoni MT','Agency FB', sans-serif;
+    font-weight: bolder;
+    font-size: 25px;
+}
+
+.nav-items-small {
+    color: navajowhite;
+    font-family: 'Bodoni MT','Agency FB', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.img-thumbnail {
+    padding: 0.25rem;
+    background-color: #ebeff2;
+    border: none;
+    border-radius: 0.25rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.left-side-menu {
+    background-color: black;
+}
+
+.my-logo {
+    margin-top: .5rem;
+    margin-left: .5rem;
+}
+
+.logo-box {
+    background-color: black;
+}
+

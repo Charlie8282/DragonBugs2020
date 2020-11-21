@@ -36,6 +36,9 @@ namespace DragonBugs2020.Services
             bool result = false;
             switch (roleName)
             {
+                case "Demo":
+                    result = true;
+                    break;
                 case "Admin":
                     result = true;
                     break;
@@ -47,7 +50,8 @@ namespace DragonBugs2020.Services
                     }
                     break;
                 case "Developer":
-                    if (await _context.Tickets.Where(t => t.Id == ticketId && t.DeveloperUserId == userId).AnyAsync())  
+                    //if (await _context.Tickets.Where(t => t.Id == ticketId && t.DeveloperUserId == userId).AnyAsync()) 
+                    if (await _context.Tickets.Where(t => (t.DeveloperUserId == userId || t.OwnerUserId == userId) && t.Id == ticketId).AnyAsync())
                     {
                         result = true;
                     }
@@ -58,6 +62,7 @@ namespace DragonBugs2020.Services
                         result = true;
                     }
                     break;
+
                 default:
                     break;
             }

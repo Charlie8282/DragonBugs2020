@@ -47,7 +47,7 @@ namespace DragonBugs2020.Services
                  .ThenInclude(p => p.Project).ThenInclude(p => p.Tickets).ThenInclude(p => p.DeveloperUser)
                  .FirstOrDefaultAsync(p => p.Id == userId);
 
-            List<Project> projects = user.ProjectUsers.SelectMany(p => (IEnumerable<Project>)p.Project).ToList();
+            List<Project> projects = user.ProjectUsers.Select(p => p.Project).ToList();
             return projects;
         }
         public async Task AddUserToProject(string userId, int projectId)

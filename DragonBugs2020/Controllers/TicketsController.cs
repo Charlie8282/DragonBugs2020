@@ -77,35 +77,8 @@ namespace DragonBugs2020.Controllers
             }
             else if (User.IsInRole("ProjectManager"))
             {
-
-
                 var projects = await _projectService.ListUserProjects(userId);
                 model = projects.SelectMany(t => t.Tickets).ToList();
-
-
-
-                //var projectIds = new List<int>();
-                ////grab data that I need here
-                //var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
-
-
-
-                //foreach (var record in userProjects)
-                //{
-                //    projectIds.Add(record.ProjectId);
-                //}
-                //foreach (var id in projectIds)
-                //{
-                //    var tickets = _context.Tickets
-                //        .Where(t => t.ProjectId == id)
-                //        .Include(t => t.DeveloperUser)
-                //        .Include(t => t.OwnerUser)
-                //        .Include(t => t.Project)
-                //        .Include(t => t.TicketPriority)
-                //        .Include(t => t.TicketStatus)
-                //        .Include(t => t.TicketType).ToList();
-                //    model.AddRange(tickets);
-                //}
             }
             else if (User.IsInRole("Developer"))
             {
@@ -117,7 +90,6 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.TicketStatus)
                     .Include(t => t.TicketType).ToList();
             }
-
             else if (User.IsInRole("Submitter"))
             {
                 model = _context.Tickets
@@ -180,7 +152,7 @@ namespace DragonBugs2020.Controllers
         public IActionResult Create(int? Id, IFormFile attachment)
         {
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
             ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
@@ -257,13 +229,22 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.OwnerUserId);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            return View(ticket);
+
+            var userId = _userManager.GetUserId(User);
+            var roleName = _userManager.GetRolesAsync(await _userManager.GetUserAsync(User)).Result.FirstOrDefault();
+            if (await _accessService.CanInteractTicket(userId, (int)id, roleName))
+            {
+                await _projectService.UsersOnProject(ticket.ProjectId);
+
+                ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
+                ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.OwnerUserId);
+                ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+                ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+                ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
+                ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+                return View(ticket);
+            }
+            return RedirectToAction("Index");
         }
 
         // POST: Tickets/Edit/5
@@ -281,6 +262,7 @@ namespace DragonBugs2020.Controllers
                 }
 
                 Ticket oldTicket = await _context.Tickets
+                    //.Where(t => t.Id == ticket.Id)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
                     .Include(t => t.TicketType)
