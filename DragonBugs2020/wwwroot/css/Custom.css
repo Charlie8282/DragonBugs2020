@@ -78,7 +78,7 @@ footer {
     color: navajowhite;
     font-family: 'Bodoni MT','Agency FB', sans-serif;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 .img-thumbnail {
@@ -101,5 +101,26 @@ footer {
 
 .logo-box {
     background-color: black;
+}
+
+.card-head {
+    margin-left: 1.5rem;
+    color: navajowhite;
+    font-weight: normal;
+    font-size: smaller;
+}
+
+.ticket-label {
+    color: white;
+    font-weight: normal;
+}
+
+.nav-title {
+    margin-left: 1rem;
+}
+
+.my-div {
+    box-shadow: 10px 10px 5px black;
+    
 }
 

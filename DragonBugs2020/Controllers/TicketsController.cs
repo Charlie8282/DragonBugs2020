@@ -77,8 +77,9 @@ namespace DragonBugs2020.Controllers
             }
             else if (User.IsInRole("ProjectManager"))
             {
-                var projects = await _projectService.ListUserProjects(userId);
-                model = projects.SelectMany(t => t.Tickets).ToList();
+
+                //var projects = await _projectService.ListUserProjects(userId);
+                //model = projects.SelectMany(t => t.Tickets).ToList();
             }
             else if (User.IsInRole("Developer"))
             {

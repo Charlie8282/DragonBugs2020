@@ -9,6 +9,7 @@ using DragonBugs2020.Models;
 using Microsoft.AspNetCore.Authorization;
 using DragonBugs2020.Data;
 using Microsoft.EntityFrameworkCore;
+using DragonBugs2020.Models.ViewModels;
 
 namespace DragonBugs2020.Controllers
 {
@@ -25,36 +26,41 @@ namespace DragonBugs2020.Controllers
             _context = context;
         }
         
+        //public async Task<IActionResult> Dashboard(string userId)
+        //{
+            
+        //    var applicationDbContext = _context.Tickets
+        //        .Include(t => t.DeveloperUser)
+        //        .Include(t => t.OwnerUser)
+        //        .Include(t => t.Project)
+        //        .Include(t => t.TicketPriority)
+        //        .Include(t => t.TicketStatus)
+        //        .Include(t => t.TicketType);
+        //    return View(await applicationDbContext.ToListAsync());
+            
+        //}
+
         public async Task<IActionResult> Dashboard(string userId)
         {
-            
-            var applicationDbContext = _context.Tickets
-                .Include(t => t.DeveloperUser)
-                .Include(t => t.OwnerUser)
-                .Include(t => t.Project)
-                .Include(t => t.TicketPriority)
-                .Include(t => t.TicketStatus)
-                .Include(t => t.TicketType);
-            return View(await applicationDbContext.ToListAsync());
-            
-        }
+            var vm = new ProjectTicketsViewModel();
+            //var projectIds = new List<int>();
+            //var tickets = _context.Tickets.ToList();
+            //var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
+            //var projects = _context.Projects.ToList();
+            //foreach (var record in userProjects)
+            //{
+            //    projectIds.Add(_context.Projects.Find(record.ProjectId).Id);
+            //    projects.Add(record.Project);
 
-        public async Task<IActionResult> SecondDashboard(string userId)
-        {
-            var projectIds = new List<int>();
-            var model = new List<Ticket>();
-            var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
-            foreach (var record in userProjects)
-            {
-                projectIds.Add(_context.Projects.Find(record.ProjectId).Id);
-
-            }
-            foreach (var id in projectIds)
-            {
-                var tickets = _context.Tickets.Where(t => t.ProjectId == id).ToList();
-                model.AddRange(tickets);
-            }
-            return View(model);
+            //}
+            //foreach (var id in projectIds)
+            //{
+            //    var ticket = _context.Tickets.Where(t => t.ProjectId == id).ToList();
+            //    tickets.AddRange(ticket);
+            //}
+            vm.Tickets = _context.Tickets.ToList();
+            vm.Projects = _context.Projects.ToList();
+            return View(vm);
         }
             [AllowAnonymous]
         public IActionResult Index()
