@@ -1,4 +1,6 @@
-﻿@model DragonBugs2020.Models.ViewModels.ProjectTicketsViewModel
+﻿@*@model DragonBugs2020.Models.ViewModels.ProjectTicketsViewModel*@
+@model IEnumerable<DragonBugs2020.Models.Ticket>
+
 @using DragonBugs2020.Services
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<BTUser> userManager
@@ -6,102 +8,230 @@
 
 
 @{
-    ViewData["Title"] = "MyTickets";
+    ViewData["Title"] = "Dashboard";
     var userId = userManager.GetUserId(User);
     var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 
 }
+@if (!User.IsInRole("NewUser"))
+    {
+        <span>
+            <a asp-controller="Tickets" asp-action="Create">
+                Create new ticket
+            </a>
+        </span>
+    }
+
+@*<form asp-controller="Tickets" asp-action="Create">
+    <button class="button-three">Create new ticket</button>
+</form>*@
+
 
 <div class="row">
-    <div class="col-xl-6">
-        <h1>My Projects</h1>
-        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-        {
-            <p>
-                <a asp-controller="Tickets" asp-action="Create">Create New</a>
-            </p>
-        }
-        <div id="accordion" class="mb-3 my-div">
-            @foreach (var item in Model.Projects)
+    <div class="col-md-12 dash">
+
+        <div id="accordion2">
+            @foreach (var item in Model)
             {
                 <div class="card mb-1">
+                    <a class="ml-2" data-toggle="collapse" href="#collapseTicket1-@item.Id">
+                        <div id="headingOne">
+                            <h5>
+                                <span class="accordion-title">@Html.DisplayFor(modelItem => item.Title)</span>
+                                <span style="align-content:flex-end"> | </span>
 
-                    <div class="card-header" id="projectHead">
+                                <span class="created">Created: @Html.DisplayFor(modelItem => item.Created)</span>
+                                <span> | </span>
+                                <span class="author">By: @Html.DisplayFor(modelItem => item.OwnerUser.FullName)</span>
+                            </h5>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-lg-4">
+                                <h5 class="font-600 m-b-5">Type: @Html.DisplayFor(model => model.TicketType.Name)</h5>
+                            </div>
+                            <div class="col-lg-4">
+                                <h5 class="font-600 m-b-5">Priority: @Html.DisplayFor(model => model.TicketPriority.Name)</h5>
+                            </div>
+                            <div class="col-lg-4">
+                                <h5 class="font-600 m-b-5">Status: @Html.DisplayFor(model => model.TicketStatus.Name)</h5>
+                            </div>
 
-                        <h5 class="m-0">
-                            <a class="text-dark" data-toggle="collapse" href="#collapseProject-@item.Id">
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </a>
-                        </h5>
-
-                    </div>
-
-                    <div id="collapseProject-@item.Id" class="collapse" aria-labelledby="collapseProject-@item.Id" data-parent="#accordion">
+                        </div>*@
+                    </a>
+                    <div id="collapseTicket1-@item.Id" class="collapse" aria-labelledby="collapseTicket1-@item.Id" data-parent="#accordion2">
                         <div class="card-body">
+
+                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                            {
+                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a><span> | </span>
+                                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            }
+
+                            <p class="ticket-label descrip">Description:</p>
+                            <p>@Html.Raw(item.Description)</p>
+                            <span class="created">Project: </span>
+                            <span class="ticket-label">
+                                @Html.DisplayFor(modelItem => item.Project.Name)
+                            </span>
+                            <br />
+                            <span class="created">Developer: </span>
+                            <span class="ticket-label">
+                                @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                            </span>
+                            <br />
+
                             <a class="nav-link my-nav" asp-area="" asp-controller="Home" asp-action="Dashboard">
                                 <span>Close</span>
                             </a>
-                            @Html.Raw(item.Name)
                         </div>
                     </div>
-
                 </div>
             }
         </div>
     </div>
-
-
-    <div class="col-xl-6">
-        <h1>My Tickets</h1>
-        @if (!User.IsInRole("NewUser"))
-        {
-            <p>
-                <a asp-controller="Tickets" asp-action="Create">Create New</a>
-            </p>
-        }
-
-        <div id="accordion2" class="mb-3 my-div">
-            @foreach (var item in Model.Tickets)
-            {
-                <div class="card mb-1">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="m-0">
-                            <a class="text-dark" data-toggle="collapse" href="#collapseTicket-@item.Id">
-                                @Html.DisplayFor(modelItem => item.Title)
-                                <span style="align-content:flex-end"></span>
-                                <span class="card-head"> | </span>
-                                <span class="card-head">Created: @Html.DisplayFor(modelItem => item.Created)</span>
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseTicket-@item.Id" class="collapse" aria-labelledby="collapseTicket-@item.Id" data-parent="#accordion2">
-                        <div class="card-body">
-                            <a class="nav-link my-nav" asp-area="" asp-controller="Home" asp-action="Dashboard">
-                                <span>Close</span>
-                            </a><hr />
-                            <p class="ticket-label">Description:</p>
-                            <p>@Html.Raw(item.Description)</p>
-                            <p class="ticket-label">Project:</p>
-                            <p>@Html.DisplayFor(modelItem => item.Project.Name)</p>
-                            <p class="ticket-label"></p>
-                            <p>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</p><hr />
-                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
-                            {
-                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            }
-                        </div>
-                    </div>
-                </div>
-            }
+</div>
+<div class="row">
+    <div class="col-xl-4 dash">
+        <h3 class="text-center">Tickets by Priority</h3>
+        <div id="priorityDonut" class="morris-chart" style="height: 175px;"></div>
+        <div class="text-center">
+            <ul class="list-inline chart-detail-list">
+                <li class="list-inline-item">
+                    <h5 style="color: #35b8e0;">Low: <span id="low"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #ff9933;">High: <span id="high"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #ff3333;">Urgent: <span id="urgent"></span></h5>
+                </li>
+            </ul>
         </div>
-    </div><!-- end col -->
-</div><!-- end row -->
-
-
+    </div>
+    <div class="col-xl-4 dash">
+        <h3 class="text-center">Tickets by Status</h3>
+        <div id="statusDonut" class="morris-chart" style="height: 175px;"></div>
+        <div class="text-center">
+            <ul class="list-inline chart-detail-list">
+                <li class="list-inline-item">
+                    <h5 style="color: #ff8533;">New: <span id="new"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #ffff99;">Open: <span id="open"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #339933;">Resolved: <span id="resolved"></span></h5>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xl-4 dash">
+        <h3 class="text-center">Tickets by Type</h3>
+        <div id="typeDonut" class="morris-chart" style="height: 175px;"></div>
+        <div class="text-center">
+            <ul class="list-inline chart-detail-list">
+                <li class="list-inline-item">
+                    <h5 style="color: #d5ff80;">Runtime: <span id="runtime"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #0099cc;">UI: <span id="ui"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #c2d6d6;">Backend: <span id="backend"></span></h5>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts {
+
+    <script>
+
+         var Url = '@Url.Action("PriorityDonutChart", "Charts")';
+
+        $.post(Url).then(function (response) {
+            new Morris.Donut({
+
+                // ID of the element in which to draw the chart.
+                element: 'priorityDonut',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: response,
+                colors: ["#ff3333", "#ff9933", "#35b8e0"],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'Label',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value']
+            });
+            document.getElementById("low").innerHTML = response[2].value;
+            document.getElementById("high").innerHTML = response[1].value;
+            document.getElementById("urgent").innerHTML = response[0].value;
+            console.log(response)
+        });
+
+    </script>
+    <script>
+
+         var Url = '@Url.Action("StatusDonutChart", "Charts")';
+
+        $.post(Url).then(function (response) {
+            new Morris.Donut({
+
+                // ID of the element in which to draw the chart.
+                element: 'statusDonut',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: response,
+                colors: ["#339933", "#ffff99", "#ff8533"],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'Label',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value']
+            });
+            document.getElementById("new").innerHTML = response[2].value;
+            document.getElementById("open").innerHTML = response[1].value;
+            document.getElementById("resolved").innerHTML = response[0].value;
+            console.log(response)
+        });
+
+    </script>
+    <script>
+
+         var Url = '@Url.Action("TypeDonutChart", "Charts")';
+
+        $.post(Url).then(function (response) {
+            new Morris.Donut({
+
+                // ID of the element in which to draw the chart.
+                element: 'typeDonut',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: response,
+                colors: ["#c2d6d6", "#0099cc", "#d5ff80"],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'Label',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value']
+            });
+            document.getElementById("runtime").innerHTML = response[2].value;
+            document.getElementById("ui").innerHTML = response[1].value;
+            document.getElementById("backend").innerHTML = response[0].value;
+            console.log(response)
+        });
+
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 }

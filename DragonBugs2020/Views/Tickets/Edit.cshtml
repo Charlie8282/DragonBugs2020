@@ -1,80 +1,77 @@
 ﻿@model DragonBugs2020.Models.Ticket
+@using DragonBugs2020.Services
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<BTUser> userManager
+@inject IBTAccessService accessService
 
 @{
     ViewData["Title"] = "Edit";
+    var userId = userManager.GetUserId(User);
+    var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
-
-<h1>Edit</h1>
-
-<h4>Ticket</h4>
+<h1 class="descrip">Edit Ticket</h1>
+<div>
+    <a asp-controller="Tickets" asp-action="Edit">Edit</a> |
+    <a asp-action="MyTickets">Back to List</a>
+</div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-
-            <input type="hidden" asp-for="FileName" />
-
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="col-sm">
+            <div class="dash-radius task-detail">
+                <div class="media mb-3">
+                    <img class="d-flex mr-3 rounded-circle avatar-md" alt="64x64" src="~/img/user-1.jpg">
+                    <div class="media-body">
+                        <h4 class="media-heading mt-0"></h4>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
                     <input asp-for="Description" class="form-control" id="mytextarea" />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Created" class="control-label"></label>
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Updated" class="control-label"></label>
-                <input asp-for="Updated" class="form-control" />
-                <span asp-validation-for="Updated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                <span asp-validation-for="ProjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TicketTypeId" class="control-label"></label>
-                <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
-                <span asp-validation-for="TicketTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TicketPriorityId" class="control-label"></label>
-                <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
-                <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TicketStatusId" class="control-label"></label>
-                <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
-                <span asp-validation-for="TicketStatusId" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="ProjectId" class="control-label"></label>
+                    <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                </div>
+                <div class="row ml-2">
+                    <div class="form-group">
+                        <label asp-for="TicketTypeId" class="control-label"></label>
+                        <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
+                    </div>
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {
+                        <div class="form-group ml-2">
+                            <label asp-for="TicketPriorityId" class="control-label"></label>
+                            <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
+                        </div>
+                        <div class="form-group ml-2">
+                            <label asp-for="TicketStatusId" class="control-label"></label>
+                            <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
+                        </div>
 
-            <div class="form-group">
-                <label asp-for="DeveloperUserId" class="control-label"></label>
-                <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
-                <span asp-validation-for="DeveloperUserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="FileName" class="control-label"></label><br />
-                <input name="attachments" type="file" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                    }
+
+                </div>
+                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                {
+                    <div class="form-group">
+                        <label asp-for="DeveloperUserId" class="control-label"></label>
+                        <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
+                    </div>
+                }
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
             </div>
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
@@ -82,9 +79,10 @@
 <script src="https://cdn.tiny.cloud/1/l7peclxd2nqv523591f18wsp3j66odysd1mpur7xqsih9wm2/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
-        tinymce.init({
-            selector: '#mytextarea'
-        });
+    tinymce.init({
+        selector: '#mytextarea',
+        content_css: 'dark'
+    });
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

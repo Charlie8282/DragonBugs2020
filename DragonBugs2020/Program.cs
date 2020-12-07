@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DragonBugs2020.Data;
 using DragonBugs2020.Models;
+using DragonBugs2020.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -15,10 +16,11 @@ namespace DragonBugs2020
 {
     public class Program
     {
-        public async static Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             //CreateHostBuilder(args).Build().Run();
             var host = CreateHostBuilder(args).Build();
+            await DataHelper.ManageData(host);
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -28,11 +30,8 @@ namespace DragonBugs2020
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<UserManager<BTUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    await ContextSeed.SeedRolesAsync(roleManager);
-                    await ContextSeed.SeedDefaultUsersAsync(userManager);
-                    await ContextSeed.SeedDefaultTicketTypeAsync(context);
-                    await ContextSeed.SeedDefaultTicketStatusAsync(context);
-                    await ContextSeed.SeedDefaultTicketPriorityAsync(context);
+                    await ContextSeed.RunSeedMethods(roleManager, userManager, context);
+
                 }
                 catch (Exception ex)
                 {
@@ -48,6 +47,8 @@ namespace DragonBugs2020
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.CaptureStartupErrors(true);
+                    webBuilder.UseSetting(WebHostDefaults.DetailedErrorsKey, "true");
                     webBuilder.UseStartup<Startup>();
                 });
     }

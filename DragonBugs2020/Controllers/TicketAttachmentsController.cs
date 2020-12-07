@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +6,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DragonBugs2020.Data;
 using DragonBugs2020.Models;
-using Microsoft.AspNetCore.Http;
-using DragonBugs2020.Services;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using DragonBugs2020.Services;
 
 namespace DragonBugs2020.Controllers
 {
@@ -18,11 +16,14 @@ namespace DragonBugs2020.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTFileService _fileService;
 
-        public TicketAttachmentsController(ApplicationDbContext context, UserManager<BTUser> userManager)
+
+        public TicketAttachmentsController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTFileService fileService)
         {
             _context = context;
             _userManager = userManager;
+            _fileService = fileService;
         }
 
         // GET: TicketAttachments
@@ -61,30 +62,33 @@ namespace DragonBugs2020.Controllers
         // POST: TicketAttachments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("FormFile,Description,TicketId")] TicketAttachment ticketAttachment)
         {
             if (ModelState.IsValid)
             {
-                if (attachment != null)
-                {
-                    var memoryStream = new MemoryStream();
-                    attachment.CopyTo(memoryStream);
-                    byte[] bytes = memoryStream.ToArray();
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                    var binary = Convert.ToBase64String(bytes);
-                    var ext = Path.GetExtension(attachment.FileName);
+                MemoryStream ms = new MemoryStream();
+                await ticketAttachment.FormFile.CopyToAsync(ms);
 
-                    ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
-                    ticketAttachment.FileData = bytes;
-                }
-                    ticketAttachment.Created = DateTime.Now;
+                ticketAttachment.ContentType = ticketAttachment.FormFile.ContentType;
+                ticketAttachment.FileData = await _fileService.ConvertFileToByteArrayAsync(ticketAttachment.FormFile);
+                ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
+                ticketAttachment.Created = DateTimeOffset.Now;
                 ticketAttachment.UserId = _userManager.GetUserId(User);
-                _context.Add(ticketAttachment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                try
+                {
+                    _context.Add(ticketAttachment);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = ex.Message;
+                }
+
+                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
@@ -149,21 +153,26 @@ namespace DragonBugs2020.Controllers
         // GET: TicketAttachments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (!User.IsInRole("Demo"))
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var ticketAttachment = await _context.TicketAttachments
-                .Include(t => t.Ticket)
-                .Include(t => t.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ticketAttachment == null)
-            {
-                return NotFound();
-            }
+                var ticketAttachment = await _context.TicketAttachments
+                    .Include(t => t.Ticket)
+                    .Include(t => t.User)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (ticketAttachment == null)
+                {
+                    return NotFound();
+                }
 
-            return View(ticketAttachment);
+                return View(ticketAttachment);
+            }
+            TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: TicketAttachments/Delete/5
@@ -180,6 +189,12 @@ namespace DragonBugs2020.Controllers
         private bool TicketAttachmentExists(int id)
         {
             return _context.TicketAttachments.Any(e => e.Id == id);
+        }
+
+        public async Task<FileResult> DownloadFile(int id)
+        {
+            TicketAttachment attachment = await _context.TicketAttachments.FindAsync(id);
+            return File(attachment.FileData, attachment.ContentType);
         }
     }
 }

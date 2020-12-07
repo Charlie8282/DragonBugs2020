@@ -12,6 +12,7 @@ using DragonBugs2020.Models.ViewModels;
 using DragonBugs2020.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace DragonBugs2020.Controllers
 {
@@ -60,7 +61,7 @@ namespace DragonBugs2020.Controllers
         }
 
 
-        public async Task<IActionResult> MyTickets()
+        public IActionResult MyTickets()
         {
             var model = new List<Ticket>();
             var userId = _userManager.GetUserId(User);
@@ -78,6 +79,53 @@ namespace DragonBugs2020.Controllers
             else if (User.IsInRole("ProjectManager"))
             {
 
+                model = _context.Tickets
+                    .Where(t => t.DeveloperUserId == userId)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+
+
+                var projectIds = new List<int>();
+                var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
+
+
+                foreach (var record in userProjects)
+                {
+                    projectIds.Add(record.ProjectId);
+                }
+                foreach (var id in projectIds)
+                {
+                    var tickets = _context.Tickets.Where(t => t.ProjectId == id)
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+                    model.AddRange(tickets);
+                }
+
+                //var projectIds = new List<int>();
+                //model = new List<Ticket>();
+                //var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
+                //foreach (var record in userProjects)
+                //{
+                //    projectIds.Add(_context.Projects.Find(record.ProjectId).Id);
+                //}
+                //foreach (var id in projectIds)
+                //{
+                //    var tickets = _context.Tickets.Where(t => t.ProjectId == id)
+                //        .Include(t => t.OwnerUser)
+                //        .Include(t => t.TicketPriority)
+                //        .Include(t => t.TicketStatus)
+                //        .Include(t => t.TicketType)
+                //        .Include(t => t.Project)
+                //        .ToList();
+                //    model.AddRange(tickets);
+                //}
                 //var projects = await _projectService.ListUserProjects(userId);
                 //model = projects.SelectMany(t => t.Tickets).ToList();
             }
@@ -118,7 +166,7 @@ namespace DragonBugs2020.Controllers
             return View(model);
         }
         // GET: Tickets/Details/5
-
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -136,6 +184,7 @@ namespace DragonBugs2020.Controllers
                                .Include(t => t.DeveloperUser)
                                .Include(t => t.OwnerUser)
                                .Include(t => t.Attachments)
+                               .Include(t => t.Histories)
                                .Include(t => t.Comments)
                                .ThenInclude(tc => tc.User)
                            .FirstOrDefaultAsync(m => m.Id == id);
@@ -149,6 +198,8 @@ namespace DragonBugs2020.Controllers
             return RedirectToAction("Index");
 
         }
+
+        [Authorize(Roles = "Admin, ProjectManager, Developer, Submitter")]
         // GET: Tickets/Create
         public IActionResult Create(int? Id, IFormFile attachment)
         {
@@ -166,7 +217,8 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,ProjectId,DeveloperUserId,TicketPriorityId,TicketStatusId,TicketTypeId,TicketAttachment")] Ticket ticket, IFormFile attachment)
+        //public async Task<IActionResult> Create([Bind("Id,FormFile,Image,Description,Created,TicketId,UserId")] Ticket ticket, TicketAttachment ticketAttachment, IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("Title,Description,ProjectId,DeveloperUserId,TicketPriorityId,TicketStatusId,TicketTypeId,TicketAttachment")] Ticket ticket)
         {
             if (!User.IsInRole("Demo"))
             {
@@ -176,20 +228,23 @@ namespace DragonBugs2020.Controllers
                     {
                         ticket.Created = DateTime.Now;
                         ticket.OwnerUserId = _userManager.GetUserId(User);
-                        TicketPriority priority = await _context.TicketPriorities.FirstOrDefaultAsync(t => t.Name == "Low");
-                        if (priority != null)
+                        if (ticket.TicketPriorityId == 0)
                         {
-                            ticket.TicketPriorityId = priority.Id;
+                            TicketPriority priority = await _context.TicketPriorities.FirstOrDefaultAsync(t => t.Name == "Low");
+                            if (priority != null)
+                            {
+                                ticket.TicketPriorityId = priority.Id;
+                            }
+
                         }
-                        TicketStatus status = await _context.TicketStatuses.FirstOrDefaultAsync(s => s.Name == "New");
-                        if (status != null)
+                        if (ticket.TicketStatusId == 0)
                         {
-                            ticket.TicketStatusId = status.Id;
-                        }
-                        if (attachment != null)
-                        {
-                            AttachmentsService attachmentsService = new AttachmentsService();
-                            ticket.Attachments.Add(attachmentsService.Attach(attachment));
+                            TicketStatus status = await _context.TicketStatuses.FirstOrDefaultAsync(s => s.Name == "New");
+                            if (status != null)
+                            {
+                                ticket.TicketStatusId = status.Id;
+                            }
+
                         }
 
                         _context.Add(ticket);
@@ -200,6 +255,7 @@ namespace DragonBugs2020.Controllers
                         throw;
                     }
                     return RedirectToAction(nameof(MyTickets));
+
                 }
                 ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
                 ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
@@ -275,12 +331,6 @@ namespace DragonBugs2020.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    if (attachment != null)
-                    {
-                        AttachmentsService attachmentsService = new AttachmentsService();
-                        ticket.Attachments.Add(attachmentsService.Attach(attachment));
-                    }
-
                     try
                     {
                         ticket.Updated = DateTimeOffset.Now;
@@ -319,55 +369,14 @@ namespace DragonBugs2020.Controllers
                 ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
                 ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
                 ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
-                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
+                return RedirectToAction("Details", "Tickets", new { id = ticket.Id });
                 //return View(ticket);
             }
             else
             {
                 TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
-                return RedirectToAction("Details", "Tickets", new { id = ticket.ProjectId });
+                return RedirectToAction("Details", "Tickets", new { id = ticket.Id });
             }
-        }
-
-        // GET: Tickets/Delete/5
-        [Authorize(Roles = "Admin, ProjectManager")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ticket = await _context.Tickets
-                .Include(t => t.DeveloperUser)
-                .Include(t => t.OwnerUser)
-                .Include(t => t.Project)
-                .Include(t => t.TicketPriority)
-                .Include(t => t.TicketStatus)
-                .Include(t => t.TicketType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
-
-            return View(ticket);
-        }
-
-        // POST: Tickets/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, ProjectManager")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (!User.IsInRole("Demo"))
-            {
-                var ticket = await _context.Tickets.FindAsync(id);
-                _context.Tickets.Remove(ticket);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return RedirectToAction(nameof(Index));
         }
 
         private bool TicketExists(int id)

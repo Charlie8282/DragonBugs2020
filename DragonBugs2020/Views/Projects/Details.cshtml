@@ -1,47 +1,102 @@
 ﻿@model DragonBugs2020.Models.Project
+@using DragonBugs2020.Services
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<BTUser> userManager
+@inject DragonBugs2020.Services.IBTProjectService _projectService
+@inject IBTAccessService accessService
 
 @{
     ViewData["Title"] = "Details";
+    var userId = userManager.GetUserId(User);
+    var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
 
-<h1>Details</h1>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageData)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageData)
-        </dd>
-
-        <dt class="col-sm-2">
-          Team Members
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var user in Model.ProjectUsers)
-            {
-                @user.User.FullName <br />
-            }
-        </dd>
-    </dl>
+<div class="container-fluid dash">
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="over-div">
+                @Html.DisplayFor(model => model.Name)
+                @*@Html.DisplayFor(model => model.ImagePath)
+                @Html.DisplayFor(model => model.ImageData)*@
+            </span>
+        </div>
+    </div>
 </div>
+
+@if (await accessService.CanInteractProject(userId, Model.Id, roles))
+{
 <div>
+    <button class="log-button">
     <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a>
+    </button>
+    <button class="log-button"></button>
+    
+    
     <a asp-action="RemoveUsers" asp-route-id="@Model.Id">Remove Team Members</a>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+}
+
+<div class="dash">
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>Team Members:</h5><br />
+            @foreach (var user in Model.ProjectUsers)
+            {
+                @user.User.FullName
+                <br />
+            }
+        </div>
+        <div class="col-xl-6">
+            <p class="descrip">Tickets on this project:</p>
+            @if (!User.IsInRole("NewUser"))
+            {
+                <p>
+                    <a asp-controller="Tickets" asp-action="Create">Create New</a>
+                </p>
+            }
+
+            <div id="accordion2" class="mb-3 dash-radius">
+                @foreach (var item in Model.Tickets)
+                {
+                    <div class="card mb-1">
+                        <a class="text-dark" data-toggle="collapse" href="#collapseTicket-@item.Id">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="m-0">
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                    <span style="align-content:flex-end"></span>
+                                    <span> | </span>
+                                    <span class="created">Created: @Html.DisplayFor(modelItem => item.Created)</span>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="collapseTicket-@item.Id" class="collapse" aria-labelledby="collapseTicket-@item.Id" data-parent="#accordion2">
+                            <div class="card-body">
+                                <a class="nav-link my-nav" asp-area="" asp-controller="Projects" asp-action="Details">
+                                    <span>Close</span>
+                                </a><hr />
+                                <p class="ticket-label">Description:</p>
+                                <p>@Html.Raw(item.Description)</p>
+                                <p class="ticket-label">Project:</p>
+                                <p>@Html.DisplayFor(modelItem => item.Project.Name)</p>
+                                <p class="ticket-label"></p>
+                                <p>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</p><hr />
+
+                                @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                {
+                                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                    @*<a asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div><!-- end col -->
+    </div>
+</div>
+
+

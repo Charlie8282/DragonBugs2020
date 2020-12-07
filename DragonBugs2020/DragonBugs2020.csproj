@@ -16,6 +16,12 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\NotificationsController.cs" />
+    <Compile Remove="Services\AttachmentsService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Projects\Delete.cshtml" />
+    <Content Remove="Views\Tickets\Delete.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +36,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="MimeKit" Version="2.9.2" />
+    <PackageReference Include="Npgsql" Version="4.1.6" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
   </ItemGroup>
 
 </Project>

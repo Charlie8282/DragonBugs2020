@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using DragonBugs2020.Models;
 using DragonBugs2020.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using DragonBugs2020.Utilities;
 
 namespace DragonBugs2020
 {
@@ -31,13 +32,16 @@ namespace DragonBugs2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(
+                    DataHelper.GetConnectionString(Configuration)));
 
             services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IBTFileService, BTFileService>();
+
             services.AddScoped<IBTHistoriesService, BTHistoriesService>();
 
             services.AddScoped<IBTRolesService, BTRolesService>();

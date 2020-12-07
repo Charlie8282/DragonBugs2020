@@ -19,86 +19,79 @@
     <link src="~/favicon.ico" />
 </head>
 <body>
-    <section class="bg">
-        <br /><br /><br /><br />
-        <div class="container text-center log-reg">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h1>@ViewData["Title"]</h1>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="col-md-12">
-                    <section>
-                        <form id="account" method="post">
-                            <div asp-validation-summary="All" class="text-danger"></div>
-                            <div class="form-group">
-                                <label asp-for="Input.Email"></label>
-                                <input asp-for="Input.Email" class="form-control" />
-                                <span asp-validation-for="Input.Email" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Input.Password"></label>
-                                <input asp-for="Input.Password" class="form-control" />
-                                <span asp-validation-for="Input.Password" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label asp-for="Input.RememberMe">
-                                        <input asp-for="Input.RememberMe" />
-                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Log in</button>
-                            </div>
-                            <div class="form-group">
-                                <p>
-                                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                                </p>
-                                <p>
-                                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                                </p>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoAdminEmail" class="btn btn-primary">Demo Admin</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoPMEmail" class="btn btn-primary">Demo Project Manager</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoDevEmail" class="btn btn-primary">Demo Developer</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoSubEmail" class="btn btn-primary">Demo Submitter</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="btn btn-primary">Demo New User</button>
-                            </div>
-                        </form>
-                    </section>
-                </div>
-            </div>
+    <section>
+        <br /><br /><br /><br /><br /><br />
+        <div class="lander log-reg text-center">
+            <img src="~/img/whack-a-bug.png" class="responsive-image" />
+            <span class="over-div">@ViewData["Title"]</span>
         </div>
-        <br /><br /><br /><br /><br />
+        <div class="row">
+            <div class="col-md-4 lander text-center">
+                <form id="account" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email" class="log-reg"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password" class="log-reg"></label>
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe" class="log-reg">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="button-three">Log in</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md">
+                <form id="account" method="post">
+                    <div class="form-group">
+                        <button type="submit" name="demoEmail" value="DemoAdminEmail" class="button-three">Demo Admin</button>
+                    </div>
+                </form>
+                <form id="account" method="post">
+                    <div class="form-group">
+                        <button type="submit" name="demoEmail" value="DemoPMEmail" class="button-three">Demo Project Manager</button>
+                    </div>
+                </form>
+                <form id="account" method="post">
+                    <div class="form-group">
+                        <button type="submit" name="demoEmail" value="DemoDevEmail" class="button-three">Demo Developer</button>
+                    </div>
+                </form>
+                <form id="account" method="post">
+                    <div class="form-group">
+                        <button type="submit" name="demoEmail" value="DemoSubEmail" class="button-three">Demo Submitter</button>
+                    </div>
+                </form>
+                <form id="account" method="post">
+                    <div class="form-group">
+                        <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="button-three">Demo New User</button>
+                    </div>
+                </form>
+            </div>
+            <br /><br />
+            <br /><br /><br /><br /><br />
+        </div>
     </section>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - DragonBugs2020 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
     }

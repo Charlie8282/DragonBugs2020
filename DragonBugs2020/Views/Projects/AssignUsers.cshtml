@@ -3,12 +3,12 @@
 
 
 @{ ViewData["Title"] = "Assign Project Users"; }
-<h2>Assign Project Users</h2>
+<span class="over-div">Assign Project Users</span>
 <hr />
 <div class="row">
-    <div class="card col-6" style="margin:2px">
-        <div class="card-body">
-            <h2><b>Assign Users to @Model.Project.Name</b></h2>
+    <div class="card col-6 dash-radius" style="margin:2px">
+        <div>
+            <span class="descrip">Assign Users to @Model.Project.Name</span>
             <hr />
             <form asp-controller="Projects" asp-action="AssignUsers" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>

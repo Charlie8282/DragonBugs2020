@@ -13,18 +13,19 @@
 <!-- ============================================================== -->
 <!-- Start Page Content here -->
 <!-- ============================================================== -->
-<h2>All Tickets</h2>
+<span class="over-div">All Tickets | </span>
 @if (!User.IsInRole("NewUser"))
 {
-    <p>
+    <span>
         <a asp-action="Create">Create New</a>
-    </p>
+    </span>
 }
+
 <div id="wrapper">
     <div class="row">
         <div class="col-12">
-            <div class="card-box table-responsive">
-                <table id="responsive-datatable" class="table table-bordered table-bordered dt-responsive nowrap">
+            <div class="card">
+                <table id="responsive-datatable" class="table">
                     <thead>
                         <tr>
                             <th>@Html.DisplayNameFor(model => model.Title)</th>
@@ -61,7 +62,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -77,17 +78,10 @@
                                 <td>@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
                                 <td>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
                                 <td>
-                                    @*@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                                        {<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                        }*@
-
                                     @if (await accessService.CanInteractTicket(userId, item.Id, roles))
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
                                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                                     }
                                 </td>
                             </tr>
@@ -99,10 +93,6 @@
     </div>
 </div>
 
-<!-- ============================================================== -->
-<!-- End Page content -->
-<!-- ============================================================== -->
-<!-- Vendor js -->
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

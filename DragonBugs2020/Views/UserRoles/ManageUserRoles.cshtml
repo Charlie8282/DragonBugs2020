@@ -3,29 +3,42 @@
 <h2>Manage User Roles</h2>
 <div class="container">
     <div class="row">
+
         @foreach (var btuser in Model)
         {
-            <div class="col-sm">
-                <b>@btuser.User.FullName</b>
+            <div class="col-md-3 dash-radius padder">
+                <h3>@btuser.User.FullName</h3><hr />
 
                 <form asp-controller="UserRoles" asp-action="ManageUserRoles" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly"></div>
                     <input type="hidden" asp-for="@btuser.User.Id">
-                    
-                        <div class="form-group multi">
-                            <select asp-for="@btuser.SelectedRoles" class="form-control" asp-items="@btuser.Roles" multiple="multiple"></select>
-                        </div>
-                 
+                    <div class="form-group multi">
+                        <select asp-for="@btuser.SelectedRoles" class="form-control" asp-items="@btuser.Roles" multiple="multiple"></select>
 
-                   
-                        <div>
-                            <input type="submit" value="Assign Roles" class="btn btn-outline-light" />
-                            <a class="btn btn-danger" asp-controller="Users" asp-action="Index">Cancel</a>
-                        </div>
-                    
+                        @*<div class="col-xl-2">
+                            <label class="container">
+                                <input type="radio" value="@btuser.Roles" checked="checked" class="radio-warning form-control" asp-for="@btuser.SelectedRoles" />
+                                <span class="dripicons-checkmark"></span>
+                            </label>
+                        </div>*@
+
+                    </div>
+                    <div>
+                        <input type="submit" value="Assign Roles" class="btn btn-bordered-primary" />
+                        <a class="btn btn-danger" asp-controller="Users" asp-action="Index">Cancel</a>
+                    </div>
                 </form>
             </div>
         }
+        @*@foreach (var btuser in Model)
+        {
+        <div class="col-xl-2">
+            <label class="container">
+                <input type="radio" value="@btuser.Roles" checked="checked" class="radio-warning form-control" asp-for="@btuser.SelectedRoles" />
+                <span class="dripicons-checkmark"></span>
+            </label>
+        </div>
+        }*@
     </div>
 </div>
 

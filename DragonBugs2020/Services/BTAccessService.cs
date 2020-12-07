@@ -43,8 +43,9 @@ namespace DragonBugs2020.Services
                     result = true;
                     break;
                 case "ProjectManager":
-                    var projectId = _context.Tickets.FindAsync(ticketId).Result.ProjectId;
+                    var projectId = (await _context.Tickets.FindAsync(ticketId)).ProjectId;
                     if (await _context.ProjectUsers.Where(pu => pu.ProjectId == projectId && pu.UserId == userId).AnyAsync())
+                        //if (await _context.ProjectUsers.Where(pu => pu.UserId == userId && pu.ProjectId == projectId).AnyAsync())
                     {
                         result = true;
                     }

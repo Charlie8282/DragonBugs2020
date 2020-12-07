@@ -11,39 +11,47 @@
     <title>
         Whack-A-Bug
     </title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/css/Custom.css" rel="stylesheet" />
     <link src="~/favicon.ico" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/css/site.css" />*@
+    <link href="~/css/Custom.css" rel="stylesheet" />
+
 </head>
-<body class="landing jumbotron">
-   
-   
+<body>
+    <header>
+        <div class="lander">
+            <br /><br /><br /><br />
+            <br /><br /><br /><br />
+            <br /><br /><br /><br />
+            <img src="~/img/whack-a-bug.png" class="responsive-image" />
+            <p class="land-text">Issue Tracking System</p><br /><br />
+        </div>
+    </header>
+
+
     <section>
-        <img src="~/img/cloud-title.PNG" />
         <div class="container">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <form>
                         <button class="button-three" asp-area="Identity" asp-page="/Account/Register">Register</button>
                     </form>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <form>
                         <button class="button-three" asp-area="Identity" asp-page="/Account/Login">Login</button>
                     </form>
                 </div>
             </div>
         </div>
+        <br /><br /><br />
+        <br /><br /><br />
+        <br /><br /><br />
     </section>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - DragonBugs2020 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
 
 </body>
 </html>

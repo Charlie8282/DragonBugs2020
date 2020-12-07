@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DragonBugs2020.Data;
 using DragonBugs2020.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace DragonBugs2020.Controllers
 {
@@ -14,11 +15,13 @@ namespace DragonBugs2020.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public TicketCommentsController(ApplicationDbContext context, UserManager<BTUser> userManager)
+        public TicketCommentsController(ApplicationDbContext context, UserManager<BTUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         // GET: TicketComments
@@ -71,6 +74,15 @@ namespace DragonBugs2020.Controllers
                 ticketComment.UserId = _userManager.GetUserId(User);
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
+
+                var currentTicket = _context.Tickets.Find(ticketComment.TicketId);
+                var devUser = _context.Users.Find(currentTicket.DeveloperUserId);
+                var commentCreator = _context.Users.Find(ticketComment.UserId);
+                //string devEmail = devUser.Email;
+                //string subject = "New Ticket Comment";
+                //string message = $"Someone commented on a ticket: {commentCreator.FullName}";
+                //await _emailSender.SendEmailAsync(devEmail, subject, message);
+
                 return RedirectToAction("Details", "tickets", new {id = ticketComment.TicketId});
             }
             else

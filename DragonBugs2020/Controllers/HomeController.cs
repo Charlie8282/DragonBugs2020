@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using DragonBugs2020.Models;
 using Microsoft.AspNetCore.Authorization;
 using DragonBugs2020.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using DragonBugs2020.Models.ViewModels;
 
 namespace DragonBugs2020.Controllers
@@ -18,51 +18,108 @@ namespace DragonBugs2020.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
 
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<BTUser> userManager)
         {
             _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
-        
-        //public async Task<IActionResult> Dashboard(string userId)
-        //{
-            
-        //    var applicationDbContext = _context.Tickets
-        //        .Include(t => t.DeveloperUser)
-        //        .Include(t => t.OwnerUser)
-        //        .Include(t => t.Project)
-        //        .Include(t => t.TicketPriority)
-        //        .Include(t => t.TicketStatus)
-        //        .Include(t => t.TicketType);
-        //    return View(await applicationDbContext.ToListAsync());
-            
-        //}
 
-        public async Task<IActionResult> Dashboard(string userId)
+        public async Task<IActionResult> Dashboard()
         {
-            var vm = new ProjectTicketsViewModel();
-            //var projectIds = new List<int>();
-            //var tickets = _context.Tickets.ToList();
-            //var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
-            //var projects = _context.Projects.ToList();
-            //foreach (var record in userProjects)
-            //{
-            //    projectIds.Add(_context.Projects.Find(record.ProjectId).Id);
-            //    projects.Add(record.Project);
+            var model = new List<Ticket>();
+            var userId = _userManager.GetUserId(User);
 
-            //}
-            //foreach (var id in projectIds)
+            if (User.IsInRole("Admin"))
+            {
+                model = _context.Tickets
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+            }
+            else if (User.IsInRole("ProjectManager"))
+            {
+                model = _context.Tickets
+                    .Where(t => t.DeveloperUserId == userId)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+
+
+                var projectIds = new List<int>();
+                var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
+
+
+                foreach (var record in userProjects)
+                {
+                    projectIds.Add(record.ProjectId);
+                }
+                foreach (var id in projectIds)
+                {
+                    var tickets = _context.Tickets.Where(t => t.ProjectId == id)
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+                    model.AddRange(tickets);
+                }
+
+            }
+            else if (User.IsInRole("Developer"))
+            {
+                model = _context.Tickets
+                    .Where(t => t.DeveloperUserId == userId)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+            }
+            else if (User.IsInRole("Submitter"))
+            {
+                model = _context.Tickets
+                    .Where(t => t.OwnerUserId == userId)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+            }
+            else if (User.IsInRole("NewUser"))
+            {
+                model = _context.Tickets
+                    .Where(t => t.OwnerUserId == userId)
+                    .Include(t => t.OwnerUser)
+                    .Include(t => t.Project)
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType).ToList();
+            }
+            else
+            {
+                return NotFound();
+            }
+            return View(model);
+
+            //var vm = new ProjectTicketsViewModel
             //{
-            //    var ticket = _context.Tickets.Where(t => t.ProjectId == id).ToList();
-            //    tickets.AddRange(ticket);
-            //}
-            vm.Tickets = _context.Tickets.ToList();
-            vm.Projects = _context.Projects.ToList();
-            return View(vm);
+            //    Tickets = _context.Tickets.ToList(),
+            //    Projects = _context.Projects.ToList()
+            //};
+            //return View(vm);
         }
-            [AllowAnonymous]
+
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

@@ -19,9 +19,10 @@ namespace DragonBugs2020.Models
         }
         public int Id { get; set; }
         [Required]
-        [StringLength(50)]
+        
         public string Title { get; set; }
         [Required]
+        
         public string Description { get; set; }
         [DataType(DataType.Date)]
         public DateTimeOffset Created { get; set; }
@@ -41,6 +42,10 @@ namespace DragonBugs2020.Models
         public TicketStatus TicketStatus { get; set; }
         public BTUser OwnerUser { get; set; }
         public BTUser DeveloperUser { get; set; }
+        public string Property { get; set; }
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
+        public virtual BTUser User { get; set; }
         public virtual ICollection<TicketComment> Comments { get; set; }
         public virtual ICollection<TicketAttachment> Attachments { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }

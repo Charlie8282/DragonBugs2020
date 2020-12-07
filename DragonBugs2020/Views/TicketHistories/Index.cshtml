@@ -1,14 +1,24 @@
 ﻿@model IEnumerable<DragonBugs2020.Models.TicketHistory>
+@using DragonBugs2020.Services
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<BTUser> userManager
+@inject IBTAccessService accessService
+
+
+
 
 @{
     ViewData["Title"] = "Index";
+    var userId = userManager.GetUserId(User);
+    var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
+
 }
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
 <table class="table">
     <thead>
         <tr>
@@ -24,9 +34,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ticket)
-            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Ticket)
+                </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.User)
             </th>
@@ -34,33 +44,37 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Property)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OldValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NewValue)
-            </td>
-            <td>
-                @*@Html.DisplayFor(modelItem => item.Created)*@
-                @item.Created.ToString("MM/dd/yyyy")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ticket.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Property)
+                </td>
+                <td>
+                    @Html.Raw(item.OldValue)
+                </td>
+                <td>
+                    @Html.Raw(item.NewValue)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Created)*@
+                    @item.Created.ToString("MM/dd/yyyy")
+                </td>
+                @*<td>
+                        @Html.Raw(item.Ticket.Description)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
