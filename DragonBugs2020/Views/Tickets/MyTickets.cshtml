@@ -25,8 +25,8 @@
         <div class="col-12">
             <div class="card">
                 <table id="responsive-datatable" class="table">
-                    <thead>
-                        <tr>
+                    <thead class="dash">
+                        <tr class="dash">
                             <th>@Html.DisplayNameFor(model => model.Title)</th>
                             <th>@Html.DisplayNameFor(model => model.Description)</th>
                             <th>@Html.DisplayNameFor(model => model.Created)</th>
@@ -44,7 +44,7 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.Title)</td>
                                 <td>
                                     <div class="modal fade" id="description-@item.Id" tabindex="-1" role="dialog"
                                          aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-animation="makeway">
@@ -66,17 +66,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#description-@item.Id">Scrollable</button>
+                                    <button type="button" class="btn-descrip waves-effect waves-light" data-toggle="modal" data-target="#description-@item.Id">Description</button>
 
                                 </td>
-                                <td>@Html.DisplayFor(modelItem => item.Created)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Project.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
-                                <td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.Created)</td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.Project.Name)</td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
+                                <td class="dash">@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
+                                <td class="dash">
                                     @if (await accessService.CanInteractTicket(userId, item.Id, roles))
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>

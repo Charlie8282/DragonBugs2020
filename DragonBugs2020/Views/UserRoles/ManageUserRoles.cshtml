@@ -1,44 +1,66 @@
 ﻿@model IEnumerable<DragonBugs2020.Models.ViewModels.ManageUserRolesViewModel>
+@using DragonBugs2020.Services
+@inject IBTRolesService rService
+<span class="over-div">Manage User Roles</span>
+@*<div class="container">
+        <div class="row">
 
-<h2>Manage User Roles</h2>
-<div class="container">
-    <div class="row">
+            @foreach (var btuser in Model)
+            {
+                <div class="col-md-3 dash-radius padder">
+                    <h3>@btuser.User.FullName</h3><hr />
 
-        @foreach (var btuser in Model)
-        {
-            <div class="col-md-3 dash-radius padder">
-                <h3>@btuser.User.FullName</h3><hr />
-
-                <form asp-controller="UserRoles" asp-action="ManageUserRoles" method="post">
-                    <div asp-validation-summary="ModelOnly"></div>
-                    <input type="hidden" asp-for="@btuser.User.Id">
-                    <div class="form-group multi">
-                        <select asp-for="@btuser.SelectedRoles" class="form-control" asp-items="@btuser.Roles" multiple="multiple"></select>
-
-                        @*<div class="col-xl-2">
-                            <label class="container">
-                                <input type="radio" value="@btuser.Roles" checked="checked" class="radio-warning form-control" asp-for="@btuser.SelectedRoles" />
-                                <span class="dripicons-checkmark"></span>
-                            </label>
-                        </div>*@
-
-                    </div>
-                    <div>
-                        <input type="submit" value="Assign Roles" class="btn btn-bordered-primary" />
-                        <a class="btn btn-danger" asp-controller="Users" asp-action="Index">Cancel</a>
-                    </div>
-                </form>
-            </div>
-        }
-        @*@foreach (var btuser in Model)
-        {
-        <div class="col-xl-2">
-            <label class="container">
-                <input type="radio" value="@btuser.Roles" checked="checked" class="radio-warning form-control" asp-for="@btuser.SelectedRoles" />
-                <span class="dripicons-checkmark"></span>
-            </label>
+                    <form asp-controller="UserRoles" asp-action="ManageUserRoles" method="post">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <input type="hidden" asp-for="@btuser.User.Id">
+                        <div class="form-group multi">
+                            <select asp-for="@btuser.SelectedRole" class="form-control" asp-items="@btuser.Roles"></select>
+                        </div>
+                        <div>
+                            <input type="submit" value="Assign Roles" class="btn btn-bordered-primary" />
+                            <a class="btn btn-danger" asp-controller="Users" asp-action="Index">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            }
         </div>
-        }*@
+    </div>*@
+
+<div id="wrapper">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card">
+                <table id="responsive-datatable" class="table">
+                    <thead class="dash">
+                        <tr class="dash">
+                            <th>Name</th>
+                            <th>Current Role</th>
+                            @*<th>Save New Role</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var btuser in Model)
+                        {
+                            <tr class="dash">
+                                <td class="dash">@btuser.User.FullName</td>
+                                <td class="dash" data-sort="@String.Join(" ", (await rService.ListUserRoles(btuser.User)).ToList())">
+                                    <form asp-controller="UserRoles" asp-action="ManageUserRoles" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <input type="hidden" asp-for="@btuser.User.Id">
+                                        <div class="form-group multi">
+                                            <select asp-for="@btuser.SelectedRole" class="form-control" asp-items="@btuser.Roles"></select>
+                                            <input type="submit" value="Assign Roles" class="btn-descrip" />
+                                        </div>
+                                    </form>
+                                </td>
+                                <!--<td class="dash">-->
+                                @*<a class="btn btn-danger" asp-controller="Users" asp-action="Index">Cancel</a>*@
+                                <!--</td>-->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-

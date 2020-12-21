@@ -37,7 +37,7 @@ namespace DragonBugs2020.Data
             await SeedProjectUsersAsync(context, userManager);
             await SeedTicketsAsync(context, userManager);
         }
-            
+
         private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
@@ -227,14 +227,15 @@ namespace DragonBugs2020.Data
             //We will target this Demo role in order to demo this project without giving the abilty to this demo users to access the database
             //Below is the password for all of the demo users
             string demoPassword = "Dragon@2020";
+            //Anthony Stark
             #region Demo Seed Admin
 
             defaultAdmin = new BTUser
             {
-                UserName = "democharlie@mailinator.com",
-                Email = "democharlie@mailinator.com",
-                FirstName = "CharlieDemo",
-                LastName = "Tincher",
+                UserName = "anthony@mailinator.com",
+                Email = "anthony@mailinator.com",
+                FirstName = "Anthony",
+                LastName = "Stark",
                 EmailConfirmed = true
             };
             try
@@ -256,15 +257,15 @@ namespace DragonBugs2020.Data
 
             }
             #endregion
-
+            //Harley Keener
             #region Demo Seed Project Manager
 
             defaultProjectManager = new BTUser
             {
-                UserName = "demokensrue@mailinator.com",
-                Email = "demokensrue@mailinator.com",
-                FirstName = "DustinDemo",
-                LastName = "Kensrue",
+                UserName = "harley@mailinator.com",
+                Email = "harley@mailinator.com",
+                FirstName = "Harley",
+                LastName = "Keener",
                 EmailConfirmed = true
             };
             try
@@ -314,15 +315,15 @@ namespace DragonBugs2020.Data
             }
 
             #endregion
-
+            //Carol Danvers
             #region Demo Seed Developer
 
             defaultDeveloper = new BTUser
             {
-                UserName = "demobobbylong@mailinator.com",
-                Email = "demobobbylong@mailinator.com",
-                FirstName = "BobbyDemo",
-                LastName = "Long",
+                UserName = "carol@mailinator.com",
+                Email = "carol@mailinator.com",
+                FirstName = "Carol",
+                LastName = "Danvers",
                 EmailConfirmed = true
             };
             try
@@ -344,15 +345,15 @@ namespace DragonBugs2020.Data
 
             }
             #endregion
-
+            //Clint Barton
             #region Demo Seed Submitter
 
             defaultSubmitter = new BTUser
             {
-                UserName = "demochriscornell@mailinator.com",
-                Email = "demochriscornell@mailinator.com",
-                FirstName = "ChrisDemo",
-                LastName = "Cornell",
+                UserName = "clint@mailinator.com",
+                Email = "clint@mailinator.com",
+                FirstName = "Clint",
+                LastName = "Barton",
                 EmailConfirmed = true
             };
             try
@@ -374,15 +375,15 @@ namespace DragonBugs2020.Data
 
             }
             #endregion
-
+            //James Gunn
             #region Demo Seed New User
 
             defaultNewUser = new BTUser
             {
-                UserName = "demojamestaylor@mailinator.com",
-                Email = "demojamestaylor@mailinator.com",
+                UserName = "james@mailinator.com",
+                Email = "james@mailinator.com",
                 FirstName = "James",
-                LastName = "Taylor",
+                LastName = "Gunn",
                 EmailConfirmed = true
             };
             try
@@ -436,6 +437,7 @@ namespace DragonBugs2020.Data
             }
         }
         #endregion
+
         #region Ticket Status
         private static async Task SeedDefaultTicketStatusAsync(ApplicationDbContext context)
         {
@@ -465,6 +467,7 @@ namespace DragonBugs2020.Data
             }
         }
         #endregion
+
         #region TicketPriority
         private static async Task SeedDefaultTicketPriorityAsync(ApplicationDbContext context)
         {
@@ -494,6 +497,7 @@ namespace DragonBugs2020.Data
             }
         }
         #endregion
+
         #region Projects
         private static async Task SeedProjectsAsync(ApplicationDbContext context)
         {
@@ -563,14 +567,15 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("ex.Message");
                 Debug.WriteLine("*******************************");
             };
-            #endregion
         }
+        #endregion
+        
         private static async Task SeedProjectUsersAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
         {
-            string adminId = (await userManager.FindByEmailAsync("democharlie@mailinator.com")).Id;
-            string projectManagerId = (await userManager.FindByEmailAsync("demokensrue@mailinator.com")).Id;
-            string developerId = (await userManager.FindByEmailAsync("demobobbylong@mailinator.com")).Id;
-            string submitterId = (await userManager.FindByEmailAsync("demochriscornell@mailinator.com")).Id;
+            string adminId = (await userManager.FindByEmailAsync("anthony@mailinator.com")).Id;
+            string projectManagerId = (await userManager.FindByEmailAsync("harley@mailinator.com")).Id;
+            string developerId = (await userManager.FindByEmailAsync("carol@mailinator.com")).Id;
+            string submitterId = (await userManager.FindByEmailAsync("clint@mailinator.com")).Id;
             int project1Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Blog Project")).Id;
             int project2Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Bug Tracker Project")).Id;
             int project3Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Financial Portal Project")).Id;
@@ -839,18 +844,26 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
             };
         }
+      
+       
         private static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
         {
-            string submitterId = (await userManager.FindByEmailAsync("demochriscornell@mailinator.com")).Id;
-            string developerId = (await userManager.FindByEmailAsync("demobobbylong@mailinator.com")).Id;
-            string projectManagerId = (await userManager.FindByEmailAsync("demokensrue@mailinator.com")).Id;
-            string adminId = (await userManager.FindByEmailAsync("democharlie@mailinator.com")).Id;
+            string submitterId = (await userManager.FindByEmailAsync("anthony@mailinator.com")).Id;
+            string developerId = (await userManager.FindByEmailAsync("harley@mailinator.com")).Id;
+            string projectManagerId = (await userManager.FindByEmailAsync("carol@mailinator.com")).Id;
+            string adminId = (await userManager.FindByEmailAsync("clint@mailinator.com")).Id;
             int project1Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Blog Project")).Id;
             int project2Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Bug Tracker Project")).Id;
             int project3Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Financial Portal Project")).Id;
-            int typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
-            int statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Open")).Id;
-            int priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "High")).Id;
+            int type1Id = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
+            int type2Id = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Backend")).Id;
+            int type3Id = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Runtime")).Id;
+            int status1Id = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "New")).Id;
+            int status2Id = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Open")).Id;
+            int status3Id = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Closed")).Id;
+            int priority1Id = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Low")).Id;
+            int priority2Id = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "High")).Id;
+            int priority3Id = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Urgent")).Id;
 
             Ticket ticket = new Ticket
             {
@@ -858,16 +871,16 @@ namespace DragonBugs2020.Data
                 Description = "Most of the secondary pages are still in there original scaffolded state.  This is not acceptable for production software.  Please be aware of the changes that need to be made before you do so.",
                 Created = DateTimeOffset.Now.AddDays(-20),
                 Updated = DateTimeOffset.Now.AddHours(-18),
-                ProjectId = project2Id,
-                TicketPriorityId = priorityId,
-                TicketTypeId = typeId,
-                TicketStatusId = statusId,
+                ProjectId = project1Id,
+                TicketTypeId = type1Id,
+                TicketStatusId = status1Id,
+                TicketPriorityId = priority1Id,
                 DeveloperUserId = developerId,
                 OwnerUserId = projectManagerId
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Need more blog posts");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Styling Issues");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);
@@ -883,24 +896,17 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
             };
 
-            submitterId = (await userManager.FindByEmailAsync("demochriscornell@mailinator.com")).Id;
-            developerId = (await userManager.FindByEmailAsync("demobobbylong@mailinator.com")).Id;
-            projectManagerId = (await userManager.FindByEmailAsync("demokensrue@mailinator.com")).Id;
-            adminId = (await userManager.FindByEmailAsync("democharlie@mailinator.com")).Id;
-            statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Open")).Id;
-            typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Backend")).Id;
-            priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Urgent")).Id;
-
+            //ticket 2
             ticket = new Ticket
             {
                 Title = "Navbar links missing",
                 Description = "Our uses currently cannot move foward from the landing page because the links in the navbar are not present.  It's been requested that you fix this immediately so that our users can gain access to your recent blogs and leave comments that you need to have.",
                 Created = DateTimeOffset.Now.AddDays(-22),
                 Updated = DateTimeOffset.Now.AddHours(-20),
-                ProjectId = project1Id,
-                TicketPriorityId = priorityId,
-                TicketTypeId = typeId,
-                TicketStatusId = statusId,
+                ProjectId = project2Id,
+                TicketTypeId = type1Id,
+                TicketStatusId = status2Id,
+                TicketPriorityId = priority2Id,
                 DeveloperUserId = developerId,
                 OwnerUserId = submitterId
             };
@@ -922,24 +928,17 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
             };
 
-            submitterId = (await userManager.FindByEmailAsync("demochriscornell@mailinator.com")).Id;
-            developerId = (await userManager.FindByEmailAsync("demobobbylong@mailinator.com")).Id;
-            projectManagerId = (await userManager.FindByEmailAsync("demokensrue@mailinator.com")).Id;
-            adminId = (await userManager.FindByEmailAsync("democharlie@mailinator.com")).Id;
-            statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "New")).Id;
-            typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Runtime")).Id;
-            priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Urgent")).Id;
-
+            //ticket3
             ticket = new Ticket
             {
                 Title = "Security issues",
                 Description = "New Users still have access to edit and delete buttons in the tickets section.  They should only be able to view tickets and make commments on them as well.  Probably best to remove from the project all delete actions because by spec, no one can delete a ticket or project, only archive them.",
                 Created = DateTimeOffset.Now.AddDays(-30),
                 Updated = DateTimeOffset.Now.AddHours(-28),
-                ProjectId = project1Id,
-                TicketPriorityId = priorityId,
-                TicketTypeId = typeId,
-                TicketStatusId = statusId,
+                ProjectId = project3Id,
+                TicketTypeId = type2Id,
+                TicketStatusId = status3Id,
+                TicketPriorityId = priority3Id,
                 DeveloperUserId = developerId,
                 OwnerUserId = adminId
             };
@@ -961,30 +960,23 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
             };
 
-            submitterId = (await userManager.FindByEmailAsync("demochriscornell@mailinator.com")).Id;
-            developerId = (await userManager.FindByEmailAsync("demobobbylong@mailinator.com")).Id;
-            projectManagerId = (await userManager.FindByEmailAsync("demokensrue@mailinator.com")).Id;
-            adminId = (await userManager.FindByEmailAsync("democharlie@mailinator.com")).Id;
-            statusId = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Open")).Id;
-            typeId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Runtime")).Id;
-            priorityId = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Low")).Id;
-
+            //ticket4
             ticket = new Ticket
             {
-                Title = "Too much loading",
+                Title = "Too Much Loading",
                 Description = "We have complaints that the landing page is taking an unusually long time to load.  Can you please look into this?",
-                Created = DateTimeOffset.Now.AddDays(-32),
+                Created = DateTimeOffset.Now.AddDays(-33),
                 Updated = DateTimeOffset.Now.AddHours(-30),
-                ProjectId = project3Id,
-                TicketPriorityId = priorityId,
-                TicketTypeId = typeId,
-                TicketStatusId = statusId,
+                ProjectId = project1Id,
+                TicketTypeId = type3Id,
+                TicketStatusId = status2Id,
+                TicketPriorityId = priority3Id,
                 DeveloperUserId = developerId,
                 OwnerUserId = submitterId
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Finish styling");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Too Much Loading");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);

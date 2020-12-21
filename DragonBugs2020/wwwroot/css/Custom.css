@@ -390,7 +390,7 @@ body {
 
 .dash {
     background-color: black;
-    opacity: 0.7;
+    opacity: 0.8;
     color: white;
     padding: .4rem;
 }
@@ -398,7 +398,7 @@ body {
 .dash-nav {
     color: white;
     background-color: black;
-    opacity: 0.7;
+    opacity: 0.8;
     padding: .4rem;
     font-size: .7rem;
 }
@@ -413,7 +413,7 @@ body {
 
 .dash-radius {
     background-color: black;
-    opacity: 0.7;
+    opacity: 0.8;
     color: white;
     padding: .4rem;
     border-radius: .5rem;
@@ -456,9 +456,9 @@ body {
 }
 
 .dash-radius-t {
-    background-color: black;
+    background-color: #303030;
     /*opacity: 0.7;*/
-    color: white;
+    color: #ddd;
     padding: .4rem;
     border-radius: .5rem;
 }
@@ -466,3 +466,95 @@ body {
 .padder {
     margin: 1.5rem;
 }
+
+.mytable {
+    color: white;
+}
+
+
+.btn-descrip {
+    background-image: linear-gradient(silver, #e15503);
+    border: none;
+    border-radius: .2rem;
+    margin-top: .5rem;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-family: 'Bodoni MT', sans-serif;
+    font-size: 1rem;
+    box-shadow: 0 0 10px 5px;
+}
+
+    .btn-descrip:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
+    }
+
+    .btn-descrip:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        transition: all 0.8s
+    }
+
+    .btn-descrip:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+.card {
+    padding: 1rem;
+}
+
+
+
+.demo-log {
+    /* position: relative;*/
+    background-image: linear-gradient(silver, #e15503);
+    border: none;
+    border-radius: .4rem;
+    width: 300px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-family: 'Bodoni MT', sans-serif;
+    font-size: 1.5rem;
+    
+}
+
+    .demo-log:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
+    }
+
+    .demo-log:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        transition: all 0.8s
+    }
+
+    .demo-log:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+    .comment {
+        color: white;
+        font-family: 'Bodoni MT', sans-serif;
+        font-size: 1.2rem;
+    }

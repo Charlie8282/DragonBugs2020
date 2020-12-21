@@ -2,7 +2,7 @@
 
 namespace DragonBugs2020.Migrations
 {
-    public partial class Seeding : Migration
+    public partial class Initial_5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragonBugs2020.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201206144117_Seeding")]
-    partial class Seeding
+    [Migration("20201214143644_Initial_3")]
+    partial class Initial_3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -307,6 +307,9 @@ namespace DragonBugs2020.Migrations
 
                     b.Property<int>("TicketId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");

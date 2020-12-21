@@ -41,8 +41,8 @@ namespace DragonBugs2020.Controllers
             {
                 ManageUserRolesViewModel vm = new ManageUserRolesViewModel();
                 vm.User = user;
-                var selected = await _rolesService.ListUserRoles(user);
-                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);
+                var selected = (await _rolesService.ListUserRoles(user)).FirstOrDefault();
+                vm.Roles = new SelectList(_context.Roles, "Name", "Name", selected);
                 model.Add(vm);
             }
 
@@ -57,13 +57,13 @@ namespace DragonBugs2020.Controllers
 
             IEnumerable<string> roles = await _rolesService.ListUserRoles(user);
             await _userManager.RemoveFromRolesAsync(user, roles);
-            var userRoles = btuser.SelectedRoles;
+            var userRoles = btuser.SelectedRole;
 
             foreach (var role in userRoles)
             {
-                if (Enum.TryParse(role, out Roles roleValue))
+                if (Enum.TryParse(userRoles, out Roles roleValue))
                 {
-                    await _rolesService.AddUserToRole(user, role);
+                    await _rolesService.AddUserToRole(user, userRoles);
                     //return RedirectToAction("ManageUserRoles");
                 }
             }

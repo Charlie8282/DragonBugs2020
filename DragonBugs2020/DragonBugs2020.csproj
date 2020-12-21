@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Projects\Delete.cshtml" />
+    <Content Remove="Views\TicketAttachments\Create.cshtml" />
     <Content Remove="Views\Tickets\Delete.cshtml" />
   </ItemGroup>
 

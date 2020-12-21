@@ -25,71 +25,6 @@
 @*<form asp-controller="Tickets" asp-action="Create">
     <button class="button-three">Create new ticket</button>
 </form>*@
-
-
-<div class="row">
-    <div class="col-md-12 dash">
-
-        <div id="accordion2">
-            @foreach (var item in Model)
-            {
-                <div class="card mb-1">
-                    <a class="ml-2" data-toggle="collapse" href="#collapseTicket1-@item.Id">
-                        <div id="headingOne">
-                            <h5>
-                                <span class="accordion-title">@Html.DisplayFor(modelItem => item.Title)</span>
-                                <span style="align-content:flex-end"> | </span>
-
-                                <span class="created">Created: @Html.DisplayFor(modelItem => item.Created)</span>
-                                <span> | </span>
-                                <span class="author">By: @Html.DisplayFor(modelItem => item.OwnerUser.FullName)</span>
-                            </h5>
-                        </div>
-                        @*<div class="row">
-                            <div class="col-lg-4">
-                                <h5 class="font-600 m-b-5">Type: @Html.DisplayFor(model => model.TicketType.Name)</h5>
-                            </div>
-                            <div class="col-lg-4">
-                                <h5 class="font-600 m-b-5">Priority: @Html.DisplayFor(model => model.TicketPriority.Name)</h5>
-                            </div>
-                            <div class="col-lg-4">
-                                <h5 class="font-600 m-b-5">Status: @Html.DisplayFor(model => model.TicketStatus.Name)</h5>
-                            </div>
-
-                        </div>*@
-                    </a>
-                    <div id="collapseTicket1-@item.Id" class="collapse" aria-labelledby="collapseTicket1-@item.Id" data-parent="#accordion2">
-                        <div class="card-body">
-
-                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
-                            {
-                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a><span> | </span>
-                                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            }
-
-                            <p class="ticket-label descrip">Description:</p>
-                            <p>@Html.Raw(item.Description)</p>
-                            <span class="created">Project: </span>
-                            <span class="ticket-label">
-                                @Html.DisplayFor(modelItem => item.Project.Name)
-                            </span>
-                            <br />
-                            <span class="created">Developer: </span>
-                            <span class="ticket-label">
-                                @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
-                            </span>
-                            <br />
-
-                            <a class="nav-link my-nav" asp-area="" asp-controller="Home" asp-action="Dashboard">
-                                <span>Close</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</div>
 <div class="row">
     <div class="col-xl-4 dash">
         <h3 class="text-center">Tickets by Priority</h3>
@@ -140,6 +75,75 @@
                     <h5 style="color: #c2d6d6;">Backend: <span id="backend"></span></h5>
                 </li>
             </ul>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 dash">
+
+        <div id="accordion2">
+            @foreach (var item in Model)
+            {
+                <div class="card mb-1">
+                    <a class="ml-2" data-toggle="collapse" href="#collapseTicket1-@item.Id">
+                        <div id="headingOne">
+                            <h5>
+                                <span class="accordion-title">@Html.DisplayFor(modelItem => item.Title)</span>
+                                <span style="align-content:flex-end"> | </span>
+
+                                <span class="created">Created: @Html.DisplayFor(modelItem => item.Created)</span>
+                                <span> | </span>
+                                <span class="author">@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</span>
+                            </h5>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-lg-4">
+                                <h5 class="font-600 m-b-5">Type: @Html.DisplayFor(model => model.TicketType.Name)</h5>
+                            </div>
+                            <div class="col-lg-4">
+                                <h5 class="font-600 m-b-5">Priority: @Html.DisplayFor(model => model.TicketPriority.Name)</h5>
+                            </div>
+                            <div class="col-lg-4">
+                                <h5 class="font-600 m-b-5">Status: @Html.DisplayFor(model => model.TicketStatus.Name)</h5>
+                            </div>
+
+                        </div>*@
+                    </a>
+                    <div id="collapseTicket1-@item.Id" class="collapse" aria-labelledby="collapseTicket1-@item.Id" data-parent="#accordion2">
+                        <div class="card-body">
+
+                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                            {
+                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a><span> | </span>
+                                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            }
+
+                            <p class="ticket-label descrip">Description:</p>
+                            <p>@Html.Raw(item.Description)</p>
+                            <span class="created">Project: </span>
+                            <span class="ticket-label">
+                                @Html.DisplayFor(modelItem => item.Project.Name)
+                            </span>
+                            <br />
+                            <span class="created">Developer: </span>
+                            <span class="ticket-label">
+                                @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                            </span>
+                            <br />
+
+                            <a class="nav-link my-nav" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                                <span>Close</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

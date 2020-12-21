@@ -83,7 +83,7 @@ namespace DragonBugs2020.Controllers
                 //string message = $"Someone commented on a ticket: {commentCreator.FullName}";
                 //await _emailSender.SendEmailAsync(devEmail, subject, message);
 
-                return RedirectToAction("Details", "tickets", new {id = ticketComment.TicketId});
+                return RedirectToAction("Details", "Tickets", new {id = ticketComment.TicketId});
             }
             else
             {
@@ -117,7 +117,7 @@ namespace DragonBugs2020.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,Created,TicketId,UserId,Updated")] TicketComment ticketComment)
         {
             if (id != ticketComment.Id)
             {
@@ -128,6 +128,8 @@ namespace DragonBugs2020.Controllers
             {
                 try
                 {
+                    ticketComment.Updated = DateTime.Now;
+                    ticketComment.UserId = _userManager.GetUserId(User);
                     _context.Update(ticketComment);
                     await _context.SaveChangesAsync();
                 }
@@ -142,7 +144,7 @@ namespace DragonBugs2020.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId});
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
