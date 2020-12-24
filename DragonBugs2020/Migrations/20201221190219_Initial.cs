@@ -381,6 +381,7 @@ namespace DragonBugs2020.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Comment = table.Column<string>(nullable: true),
                     Created = table.Column<DateTimeOffset>(nullable: false),
+                    Updated = table.Column<DateTime>(nullable: true),
                     TicketId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },

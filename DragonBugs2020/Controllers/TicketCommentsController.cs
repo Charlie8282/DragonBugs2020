@@ -68,26 +68,35 @@ namespace DragonBugs2020.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Comment,TicketId")] TicketComment ticketComment)
         {
-            if (ModelState.IsValid)
+            if (!User.IsInRole("Demo"))
             {
-                ticketComment.Created = DateTime.Now;
-                ticketComment.UserId = _userManager.GetUserId(User);
-                _context.Add(ticketComment);
-                await _context.SaveChangesAsync();
+                if (ModelState.IsValid)
+                {
+                    ticketComment.Created = DateTime.Now;
+                    ticketComment.UserId = _userManager.GetUserId(User);
+                    _context.Add(ticketComment);
+                    await _context.SaveChangesAsync();
 
-                var currentTicket = _context.Tickets.Find(ticketComment.TicketId);
-                var devUser = _context.Users.Find(currentTicket.DeveloperUserId);
-                var commentCreator = _context.Users.Find(ticketComment.UserId);
-                //string devEmail = devUser.Email;
-                //string subject = "New Ticket Comment";
-                //string message = $"Someone commented on a ticket: {commentCreator.FullName}";
-                //await _emailSender.SendEmailAsync(devEmail, subject, message);
+                    var currentTicket = _context.Tickets.Find(ticketComment.TicketId);
+                    var devUser = _context.Users.Find(currentTicket.DeveloperUserId);
+                    var commentCreator = _context.Users.Find(ticketComment.UserId);
+                    //string devEmail = devUser.Email;
+                    //string subject = "New Ticket Comment";
+                    //string message = $"Someone commented on a ticket: {commentCreator.FullName}";
+                    //await _emailSender.SendEmailAsync(devEmail, subject, message);
 
-                return RedirectToAction("Details", "Tickets", new {id = ticketComment.TicketId});
+                    return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
+                }
+                else
+                {
+                    return NotFound();
+                }
+
             }
             else
             {
-                return NotFound();
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
+                return RedirectToAction("Details", "Tickets");
             }
             //ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
             //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
@@ -144,7 +153,7 @@ namespace DragonBugs2020.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId});
+                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);

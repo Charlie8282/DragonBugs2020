@@ -18,49 +18,48 @@
     <link src="~/favicon.ico" />
 </head>
 <body>
-    <section class="bg">
-        <br /><br /><br /><br />
-        <div class="container">
-            <span class="over-div">@ViewData["Title"]</span>
-            <div class="row">
-                <div class="col-md-4 dash-radius">
-                    <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                        <h4>Create a new account.</h4>
-                        <hr />
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Input.FirstName"></label>
-                            <input asp-for="Input.FirstName" class="form-control" />
-                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Input.LastName"></label>
-                            <input asp-for="Input.LastName" class="form-control" />
-                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Input.Email"></label>
-                            <input asp-for="Input.Email" class="form-control" />
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Input.Password"></label>
-                            <input asp-for="Input.Password" class="form-control" />
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Input.ConfirmPassword"></label>
-                            <input asp-for="Input.ConfirmPassword" class="form-control" />
-                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Register</button><br />
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                    </form>
-                </div>
+
+    <br /><br /><br /><br />
+    <div class="container">
+        <span class="over-div">@ViewData["Title"]</span>
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <input asp-for="Input.Password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button><br />
+                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                </form>
             </div>
         </div>
-        <br /><br /><br /><br /><br />
-    </section>
+    </div>
+    <br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br />
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2020 - DragonBugs2020 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

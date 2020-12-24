@@ -848,10 +848,10 @@ namespace DragonBugs2020.Data
        
         private static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
         {
-            string submitterId = (await userManager.FindByEmailAsync("anthony@mailinator.com")).Id;
-            string developerId = (await userManager.FindByEmailAsync("harley@mailinator.com")).Id;
-            string projectManagerId = (await userManager.FindByEmailAsync("carol@mailinator.com")).Id;
-            string adminId = (await userManager.FindByEmailAsync("clint@mailinator.com")).Id;
+            string submitterId = (await userManager.FindByEmailAsync("clint@mailinator.com")).Id;
+            string developerId = (await userManager.FindByEmailAsync("carol@mailinator.com")).Id;
+            string projectManagerId = (await userManager.FindByEmailAsync("harley@mailinator.com")).Id;
+            string adminId = (await userManager.FindByEmailAsync("anthony@mailinator.com")).Id;
             int project1Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Blog Project")).Id;
             int project2Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Bug Tracker Project")).Id;
             int project3Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Financial Portal Project")).Id;
@@ -908,7 +908,7 @@ namespace DragonBugs2020.Data
                 TicketStatusId = status2Id,
                 TicketPriorityId = priority2Id,
                 DeveloperUserId = developerId,
-                OwnerUserId = submitterId
+                OwnerUserId = developerId
             };
             try
             {

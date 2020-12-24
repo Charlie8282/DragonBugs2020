@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragonBugs2020.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201214143644_Initial_3")]
-    partial class Initial_3
+    [Migration("20201223022612_Initial_1")]
+    partial class Initial_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
