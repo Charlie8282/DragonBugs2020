@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using DragonBugs2020.Data;
+using DragonBugs2020.Services;
+using DragonBugs2020.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace DragonBugs2020.Areas.Identity.Pages.Account
 {
@@ -25,17 +28,20 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
         private readonly UserManager<BTUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IImageService _imageService;
 
         public RegisterModel(
             UserManager<BTUser> userManager,
             SignInManager<BTUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _imageService = imageService;
         }
 
         [BindProperty]
@@ -48,11 +54,13 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [StringLength(50)]
+            [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
-            [StringLength(50)]
+            [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             [Required]
@@ -61,7 +69,7 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -70,6 +78,11 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "Avatar")]
+            [MaxFileSize(2 * 1024 * 1024)]
+            [AllowedExtensions(new string[] { ".jpg", ".png", ".gif" })]
+            public IFormFile FormFile { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -85,7 +98,21 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
 
-                var user = new BTUser { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Email, Email = Input.Email };
+                var user = new BTUser 
+                { FirstName = Input.FirstName, 
+                    LastName = Input.LastName, 
+                    UserName = Input.Email, 
+                    Email = Input.Email,
+                    FileName = "defaultavatar.jpg",
+                    FileData = await _imageService.AssignAvatarAsync("defaultavatar.jpg")
+                };
+
+                if (Input.FormFile != null)
+                {
+                    user.FileName = Input.FormFile.FileName;
+                    user.FileData = _imageService.ConvertFileToByteArray(Input.FormFile);
+                };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

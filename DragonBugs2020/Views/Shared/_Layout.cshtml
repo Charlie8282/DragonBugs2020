@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using DragonBugs2020.Utilities
 @inject UserManager<BTUser> userManager
 
 
@@ -39,31 +40,26 @@
             <!-- Topbar Start -->
             <div class="navbar-custom">
                 <ul class="list-unstyled topnav-menu float-right mb-0">
-                    @*<li class="nav-item">
-                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                <button type="submit">Logout</button>
-                            </form>
-                        </li>*@
                     <li>
                         <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                             <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item notify-item mt-2">Logout</a>
                         </form>
                     </li>
-                    <li class="dropdown notification-list">
-                        <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <!--<li class="dropdown notification-list">
+                        <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">-->
                             <!--<img src="assets/images/users/user-1.jpg" alt="user-image" class="rounded-circle">-->
 
-                        </a>
+                        <!--</a>
                     </li>
                     <li class="dropdown notification-list">
                         <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect">
                             <i class="fe-settings noti-icon"></i>
                         </a>
-                    </li>
+                    </li>-->
                 </ul>
 
                 <!--LOGO BOX-->
-                <div class="logo-box nav-bg">
+                @*<div class="logo-box nav-bg">
                     <a href="index.html" class="logo logo-dark text-center">
                         <span class="logo-lg">
                             <img src="assets/images/logo-dark.png" alt="" height="16">
@@ -80,7 +76,7 @@
                             <img src="assets/images/logo-sm.png" alt="" height="24">
                         </span>
                     </a>
-                </div>
+                </div>*@
                 <ul class="list-unstyled topnav-menu topnav-menu-left mb-0">
                     <li>
                         <button class="button-menu-mobile disable-btn waves-effect">
@@ -95,73 +91,80 @@
             <!-- end Topbar -->
             <!-- ========== Left Sidebar Start ========== -->
             <div class="left-side-menu">
-
-                <div class="slimscroll-menu">
-
-                    <!-- User box -->
-                    <div class="user-box text-center dash-nav">
-                        <img src="~/img/user-1.jpg" alt="user-img" title="@userManager.GetUserAsync(User).Result.FullName" class="rounded-circle img-thumbnail avatar-md"><br />
-                        <a class="over-div" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@userManager.GetUserAsync(User).Result.FullName</a>
-                        
-                        <!--ADD USER ROLE HERE-->
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <a href="#" class="text-muted">
-                                    <i class="mdi mdi-cog"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="mdi mdi-power"></i>
-                                </a>
-                            </li>
-                        </ul>
+                <!-- User box -->
+                <div class="user-box text-center dash-nav">
+                    <div class="image">
+                        @if ((await userManager.GetUserAsync(User)).FileData == null)
+                        {
+                            <img src="~/img/defaultavatar.jpg" class="img-circle elevation-2" alt="User Image" />
+                        }
+                        else
+                        {
+                            <img src=@ImageHelper.DecodeImage((await userManager.GetUserAsync(User)).FileData, (await userManager.GetUserAsync(User)).FileName) class="img-circle elevation-2" alt="User Image" />
+                        }
                     </div>
-                    <!--- Sidemenu -->
-                    <div id="sidebar-menu" class="dash-nav">
-                        <ul class="metismenu" id="side-menu">
-                            <li class="nav-link my-nav">
-                                <a asp-area="" asp-controller="Home" asp-action="Dashboard">
-                                    <img src="~/img/home-nav-32.png" class="mdi-invert-colors" />
-                                    <span class="nav-items nav-title"> Dashboard </span>
-                                </a>
-                            </li>
-                            <li class="nav-link my-nav">
-                                <a asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">
-                                    <img src="~/img/team-nav-32.png" />
-                                    <span class="nav-items nav-title">The Team</span>
-                                </a>
-                            </li>
-                            <li class="nav-link my-nav">
-                                <a asp-area="" asp-controller="Projects" asp-action="Index">
-                                    <img src="~/img/projects-nav-32.png" />
-                                    <span class="nav-items nav-title">All Projects</span>
-                                </a>
-                            </li>
-                            <li class="nav-link my-nav">
-                                <a asp-area="" asp-controller="Projects" asp-action="MyProjects">
-                                    <img src="~/img/projects-nav-32.png" />
-                                    <span class="nav-items nav-title">My Projects</span>
-                                </a>
-                            </li>
-                            <li class="nav-link my-nav">
-                                <a asp-area="" asp-controller="Tickets" asp-action="Index">
-                                    <img src="~/img/tickets-nav-32.png" />
-                                    <span class="nav-items nav-title">All Tickets</span>
-                                </a>
-                            </li>
-                            <li class="nav-link my-nav">
-                                <a asp-area="" asp-controller="Tickets" asp-action="MyTickets">
-                                    <img src="~/img/tickets-nav-32.png" />
-                                    <span class="nav-items nav-title">My Tickets</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="clearfix"></div>
+                    @*<img src="~/img/user-1.jpg" alt="user-img" title="@userManager.GetUserAsync(User).Result.FullName" class="rounded-circle img-thumbnail avatar-md"><br />*@
+                    <a class="over-div" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@userManager.GetUserAsync(User).Result.FullName</a>
+
+                    <!--ADD USER ROLE HERE-->
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a href="#" class="text-muted">
+                                <i class="mdi mdi-cog"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">
+                                <i class="mdi mdi-power"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+                <!--- Sidemenu -->
+                <div id="sidebar-menu" class="dash-nav">
+                    <ul class="metismenu" id="side-menu">
+                        <li class="nav-link my-nav">
+                            <a asp-area="" asp-controller="Home" asp-action="Dashboard">
+                                <img src="~/img/home-nav-32.png" class="mdi-invert-colors" />
+                                <span class="nav-items nav-title"> Dashboard </span>
+                            </a>
+                        </li>
+                        <li class="nav-link my-nav">
+                            <a asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">
+                                <img src="~/img/team-nav-32.png" />
+                                <span class="nav-items nav-title">The Team</span>
+                            </a>
+                        </li>
+                        <li class="nav-link my-nav">
+                            <a asp-area="" asp-controller="Projects" asp-action="Index">
+                                <img src="~/img/projects-nav-32.png" />
+                                <span class="nav-items nav-title">All Projects</span>
+                            </a>
+                        </li>
+                        <li class="nav-link my-nav">
+                            <a asp-area="" asp-controller="Projects" asp-action="MyProjects">
+                                <img src="~/img/projects-nav-32.png" />
+                                <span class="nav-items nav-title">My Projects</span>
+                            </a>
+                        </li>
+                        <li class="nav-link my-nav">
+                            <a asp-area="" asp-controller="Tickets" asp-action="Index">
+                                <img src="~/img/tickets-nav-32.png" />
+                                <span class="nav-items nav-title">All Tickets</span>
+                            </a>
+                        </li>
+                        <li class="nav-link my-nav">
+                            <a asp-area="" asp-controller="Tickets" asp-action="MyTickets">
+                                <img src="~/img/tickets-nav-32.png" />
+                                <span class="nav-items nav-title">My Tickets</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
             </div>
         </div>
+
     </header>
     <!--RENDER BODY OF ALL OTHER PAGES-->
     <div class="content-page">

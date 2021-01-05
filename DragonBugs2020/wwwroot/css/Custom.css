@@ -563,3 +563,12 @@ body {
         font-family: 'Bodoni MT', sans-serif;
         font-size: 1.2rem;
     }
+
+    .img-circle {
+        max-height: 10rem;
+        max-width: 10rem;
+        border-radius: .3rem;
+        border: solid;
+        border-width: .2rem;
+        border-color: darkorange;
+    }

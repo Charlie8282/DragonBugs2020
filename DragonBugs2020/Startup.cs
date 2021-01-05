@@ -50,6 +50,8 @@ namespace DragonBugs2020
 
             services.AddScoped<IBTAccessService, BTAccessService>();
 
+            services.AddScoped<IImageService, AvatarService>();
+
             //services.Configure<AdminSettings>(Configuration.GetSection("AdminSettings"));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));

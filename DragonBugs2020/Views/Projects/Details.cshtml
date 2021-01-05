@@ -27,7 +27,6 @@
 @if (await accessService.CanInteractProject(userId, Model.Id, roles))
 {
 <div>
-    
     <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a><br />
     <a asp-action="RemoveUsers" asp-route-id="@Model.Id">Remove Team Members</a><br />
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
@@ -42,7 +41,7 @@
             @foreach (var user in Model.ProjectUsers)
             {
                 @user.User.FullName
-                <br />
+                <br /><br />
             }
         </div>
         <div class="col-xl-6">
