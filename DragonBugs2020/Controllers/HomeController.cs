@@ -27,15 +27,17 @@ namespace DragonBugs2020.Controllers
             _context = context;
             _userManager = userManager;
         }
-
+        
         public async Task<IActionResult> Dashboard()
         {
+            var viewModel = new ProjectTicketsViewModel();
             var model = new List<Ticket>();
             var userId = _userManager.GetUserId(User);
 
             if (User.IsInRole("Admin"))
             {
                 model = _context.Tickets
+                    //.Include(u => u.User)
                     .Include(t => t.DeveloperUser)
                     .Include(t => t.OwnerUser)
                     .Include(t => t.Project)
@@ -53,10 +55,8 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.TicketStatus)
                     .Include(t => t.TicketType).ToList();
 
-
                 var projectIds = new List<int>();
                 var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
-
 
                 foreach (var record in userProjects)
                 {
@@ -73,7 +73,6 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.TicketType).ToList();
                     model.AddRange(tickets);
                 }
-
             }
             else if (User.IsInRole("Developer"))
             {
@@ -109,7 +108,10 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-            return View(model);
+            viewModel.Tickets = model;
+            var projects = _context.Projects.ToList();
+            viewModel.Projects = projects;
+            return View(viewModel);
 
             //var vm = new ProjectTicketsViewModel
             //{
@@ -119,7 +121,7 @@ namespace DragonBugs2020.Controllers
             //return View(vm);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Index()
         {
             return View();

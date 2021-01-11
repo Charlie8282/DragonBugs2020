@@ -14,27 +14,35 @@
 }
 
 
-<span class="over-div">Ticket Details | </span>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="MyTickets">Back to List</a>
+<span class="over-div">Ticket Details | <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> </span>
+<hr />
+
+<div class="container-fluid">
+
 </div>
-
-
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
         <div class="dash-radius task-detail">
 
             <div class="media mb-3">
-                <img class="d-flex mr-3 rounded-circle avatar-md" alt="64x64" src="~/img/user-1.jpg">
                 <div class="media-body">
                     <h4 class="media-heading mt-0"></h4>
                     @*<span class="badge badge-danger">Urgent</span>*@
                 </div>
             </div>
 
-            <h4>@Html.DisplayFor(model => model.Title) | @Html.DisplayFor(model => model.OwnerUser.FullName) @*| Project: @Html.DisplayFor(model => model.Project.Name)*@</h4>
+            <h4>@Html.DisplayFor(model => model.Title) | @Html.DisplayFor(model => model.OwnerUser.FullName) @*| Project: @Html.DisplayFor(model => model.Project.Name)*@</h4><hr />
+            <div class="row task-dates mb-0 mt-2">
+                <div class="col-lg-6">
+                    <h5 class="font-600 m-b-5">Created:</h5>
+                    <p><small class="text-muted">@Model.Created.ToString("MMM dd, yyyy | h:mm tt")</small></p>
+                </div>
+                <div class="col-lg-6">
+                    <h5 class="font-600 m-b-5">Updated:</h5>
+                    <p><small class="text-muted">@Model.Updated?.ToString("MMM dd, yyyy | h:mm tt")</small></p>
+                </div>
+            </div>
             <p class="text-muted">
                 @Html.Raw(Model.Description)
             </p>
@@ -48,106 +56,93 @@
                 <div class="col-lg-4">
                     <h5 class="font-600 m-b-5">Status: @Html.DisplayFor(model => model.TicketStatus.Name)</h5>
                 </div>
-
-            </div>
-            <div class="row task-dates mb-0 mt-2">
-                <div class="col-lg-6">
-                    <h5 class="font-600 m-b-5">Created:</h5>
-                    <p><small class="text-muted">@Model.Created.ToString("MMM dd, yyyy | h:mm tt")</small></p>
-                </div>
-                <div class="col-lg-6">
-                    <h5 class="font-600 m-b-5">Updated:</h5>
-                    <p><small class="text-muted">@Model.Updated?.ToString("MMM dd, yyyy | h:mm tt")</small></p>
-                </div>
             </div><hr />
-
-            <label class="text-center">Add Attachment:</label>
-            <div class="clearfix"></div>
-            <div class="attached-files mt-4">
-                <ul class="list-inline files-list">
-                    <li class="list-inline-item file-box">
-                        <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="@Model.Id" name="TicketId">
-                            <div>
-                                <label>
-                                    <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="" placeholder="Type description here..." />
-                                </label>
-                                <label class="btn btn-outline-primary">
-                                    <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" />
-                                </label>
-                                <button type="submit" class="btn btn-outline-primary">Submit</button>
-                            </div>
-                        </form>
-                    </li>
-                    <li>
-                        <h5>Attached Files: </h5>
-                        <div class="row clearfix">
-                            @foreach (TicketAttachment item in Model.Attachments)
-                            {
-                                <div class="col-sm-2">
-                                    <div class="dash">
-                                        <div class="file">
-                                            <a asp-controller="TicketAttachments" asp-action="DownloadFile" asp-route-id="@item.Id" target="_blank">
-                                                <div class="icon">
-                                                    <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
-                                                </div>
-                                                <div class="file-name">
-                                                    <p class="m-b-5 text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
-                                                    <small>Size: @BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div><!-- end col -->
-    <div class="col-md-4">
-        <div class="dash-radius">
-            <h4 class="descrip">Comments</h4>
-            <div>
-                <div class="media mb-3">
-                    <div class="d-flex mr-3"></div>
-                    <div class="media-body">
-                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
-                        {
-                            <!--REPLACE WITH AVATAR BELOW-->
-                            @*<img src="~/img/user-1.jpg" />*@
-                            <h3 class="mt-0">@comment.User?.FullName</h3><br />
-
-                        <span class="created">Created: @comment.Created.ToString("MMM dd, yyyy | h:mm tt")</span><br />
-                        <span class="created">Updated: @comment.Updated?.ToString("MMM dd, yyyy | h:mm tt")</span>
-                            <p class="comment">@comment.Comment</p>
-                            <a asp-action="Edit" asp-controller="TicketComments" asp-route-id="@comment.Id">Edit</a>
-                            <hr />
-                        }
-                    </div>
-                </div>
-                <div class="media mb-3">
-                    <form asp-controller="TicketComments" asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="btn btn-dark"></div>
-                        @Html.Hidden("TicketId", Model.Id)
-                        <div class="form-group">
-                            <input name="Comment" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-primary" />
-                        </div>
+            <div class="row">
+                <div class="col-md">
+                    <div class="title-2">Add Attachment:</div>
+                    <div>Description:</div>
+                    <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <input type="hidden" asp-for="@Model.Id" name="TicketId">
+                        <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control bg-dark" placeholder="Type description here..." />
+                        <label class="btn btn-light">
+                            <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" class="form-control bg-dark" />
+                        </label>
+                        <button type="submit" class="btn create">Submit</button>
                     </form>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md create-bar dash-radius">
+                    <div class="">Attached Files: </div><hr />
+                    <div class="row">
+                        @foreach (TicketAttachment item in Model.Attachments)
+                        {
+                            <a asp-controller="TicketAttachments" asp-action="DownloadFile" asp-route-id="@item.Id" target="_blank">
+                                <div>
+                                    <p class="text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
+                                    <small>Size: @BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
+                                </div>
+                                <div>
+                                    <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div><!-- end col -->
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="MyTickets">Back to List</a>
-</div>
+    <div class="col-md-6">
+
+        <h4 class="descrip">Comments</h4>
+        <div>
+            <form asp-controller="TicketComments" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="btn btn-dark"></div>
+                @Html.Hidden("TicketId", Model.Id)
+                <div class="form-group">
+                    <textarea name="Comment" class="form-control" id="mytextarea"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <div class="">
+                @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+                {
+                    <!--REPLACE WITH AVATAR BELOW-->
+                    @*<img src="~/img/user-1.jpg" />*@
+                    <h3 class="mt-0">@comment.User?.FullName</h3><br />
+
+                    <span class="created">
+                        Created: @comment.Created.ToString("MMM dd, yyyy | h:mm tt")
+                    </span><br />
+
+                    <span class="created">
+                        Updated: @comment.Updated?.ToString("MMM dd, yyyy | h:mm tt")
+                    </span>
+
+                    <div class="comment">
+                        <p>
+                            @comment.Comment
+                        </p>
+                        @if (User.IsInRole("Admin") || (User.IsInRole("ProjectManager")))
+                        {
+                            <a asp-action="Edit" asp-controller="TicketComments" asp-route-id="@comment.Id">
+                                Edit
+                            </a>
+                        }
+                    </div>
+                    <hr />
+                }
+            </div>
+
+        </div>
+    </div>
+</div><!-- end col -->
+
 
 <div class="row">
     <div class="col-md-8">
@@ -216,3 +211,15 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    tinymce.init({
+        selector: '#mytextarea',
+        content_css: 'dark'
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

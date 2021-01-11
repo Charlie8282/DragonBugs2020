@@ -18,35 +18,38 @@
 
 </head>
 <body>
-    <header>
-        <div class="lander">
-            <br /><br /><br /><br />
-            <br /><br /><br /><br />
-            <br /><br /><br /><br />
-            <img src="~/img/whack-a-bug.png" class="responsive-image" />
-            <p class="land-text">Issue Tracking System</p><br /><br />
-        </div>
-    </header>
-
-
     <section>
         <div class="container">
+            <br /><br /><br /><br />
+            <img src="~/img/whack-a-bug.png" class="responsive-image" />
             <div class="row">
-                <div class="col-sm-3">
-                    <form>
-                        <button class="button-three" asp-area="Identity" asp-page="/Account/Register">Register</button>
-                    </form>
+                <div class="col-md-6">
+                    <p class="land-text">Issue Tracking System</p><br /><br />
                 </div>
-                <div class="col-sm-3">
-                    <form>
-                        <button class="button-three" asp-area="Identity" asp-page="/Account/Login">Login</button>
-                    </form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-sm">
+                            <form>
+                                <button class="button-three" asp-area="Identity" asp-page="/Account/Login">Login(demo available)</button>
+                            </form>
+                            <form>
+                                <button class="button-three" asp-area="Identity" asp-page="/Account/Register">Register as a new user</button>
+                            </form>
+                            <div class="col-sm">
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                        </div>
+                        <div class="col-sm">
+                        </div>
+                    </div>
+                    <div class="col-md site-description">
+                        Welcome to Whack-A-Bug, the last issue tracking system you will ever need.  Click on the Login button where you can try any of the demo user buttons to browse through the functionality of this application, and see how it will look from each of your team member's perspective.  Different roles have different access so feel free to explore each one.  After logging in as a demo user you will find a few example projects and tickets to help you get a feel of what it will look like when you start using Whack-A-Bug yourself.
+                    </div>
                 </div>
             </div>
         </div>
-        <br /><br /><br />
-        <br /><br /><br />
-        <br /><br /><br />
     </section>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

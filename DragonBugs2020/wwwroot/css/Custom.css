@@ -16,16 +16,17 @@
     /* position: relative;*/
     background-image: linear-gradient(silver, #e15503);
     border: none;
-    border-radius: .7rem;
-    width: 200px;
+    border-radius: .3rem;
+    width: 20rem;
     text-align: center;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     text-decoration: none;
     overflow: hidden;
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
     font-size: 1.5rem;
     box-shadow: 0 0 10px 5px;
+    margin-top: 1rem;
 }
 
     .button-three:hover {
@@ -78,14 +79,14 @@ footer {
 
 .nav-items {
     color: white;
-    font-family: 'Bodoni MT','Agency FB', sans-serif;
+    font-family: Arial Narrow,'Agency FB', sans-serif;
     font-weight: bolder;
     font-size: 20px;
 }
 
 .nav-items-small {
     color: navajowhite;
-    font-family: 'Bodoni MT','Agency FB', sans-serif;
+    font-family: Arial Narrow,'Agency FB', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
 }
@@ -282,41 +283,40 @@ footer {
 
 .land-text {
     font-style: italic;
-    font-family: 'Bodoni MT';
+    font-family: Arial ;
     font-size: 2rem;
     color: white;
 }
 
 .log-reg {
     color: white;
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
 }
 
 
-.my-button {
+.details {
     position: relative;
-    background-image: linear-gradient(#fff, #f39c12);
+    /*background-image: linear-gradient(#fff, #f39c12);*/
+    background-color: #5b69bc;
     border: none;
     border-radius: .3rem;
-    width: 200px;
+    width: 6rem;
     text-align: center;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     text-decoration: none;
     overflow: hidden;
-    font-family: 'Bodoni MT', sans-serif;
-    padding: 1rem;
-    margin-top: .5rem;
-    margin-left: 3rem;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
 }
 
-    .my-button:hover {
+    .details:hover {
         background: #fff;
         box-shadow: 0px 2px 10px 5px #97B1BF;
         color: #000;
     }
 
-    .my-button:after {
+    .details:after {
         content: "";
         background: #f1c40f;
         display: block;
@@ -325,7 +325,7 @@ footer {
         transition: all 0.8s
     }
 
-    .my-button:active:after {
+    .details:active:after {
         padding: 0;
         margin: 0;
         opacity: 1;
@@ -343,7 +343,7 @@ footer {
     transition-duration: 0.4s;
     text-decoration: none;
     overflow: hidden;
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
     padding: 1rem;
 }
 
@@ -375,18 +375,17 @@ footer {
 }
 
 body {
-    background: url('../img/orange-bg-3.jpg') fixed no-repeat;
+    /*background: url('../img/orange-bg-3.jpg') fixed no-repeat;*/
+    background-color: black;
     background-size: cover;
 }
 
 .login-cons {
     margin: auto;
-    
 }
 
 .lander {
     margin-left: 1rem;
-  
 }
 
 .nav-bg {
@@ -395,10 +394,17 @@ body {
 
 .dash {
     background-color: black;
+    color: white;
+    padding: .4rem;
+}
+
+.dashSpecial {
+    background-color: black;
     opacity: 0.8;
     color: white;
     padding: .4rem;
 }
+
 
 .dash-nav {
     color: white;
@@ -412,7 +418,7 @@ body {
     color: white;
     font-weight: bold;
     font-size: 1.5rem;
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
     font-style: italic;
 }
 
@@ -437,7 +443,7 @@ body {
 .accordion-title {
     color: white;
     font-size: 1.5rem;
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
 }
 
 .ticket-label {
@@ -446,16 +452,15 @@ body {
 }
 
 .dropdown-item {
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
     font-size: 1.5rem;
     font-style: italic;
 }
 
 .over-div {
     color: white;
-    font-family: 'Bodoni MT',sans-serif;
+    font-family: Arial Narrow, sans-serif;
     font-size: 2rem;
-    font-style: italic;
     margin-top: 4rem;
     margin-bottom: 5rem;
 }
@@ -487,7 +492,7 @@ body {
     transition-duration: 0.4s;
     text-decoration: none;
     overflow: hidden;
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
     font-size: 1rem;
     box-shadow: 0 0 10px 5px;
 }
@@ -516,9 +521,19 @@ body {
 
 .card {
     padding: 1rem;
+    color: white;
 }
 
-
+.create-bar {
+    border: solid;
+    border-width: .1rem;
+    border-color: silver;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-family: Arial Narrow, sans-serif;
+    font-size: 1.4rem;
+    color: white;
+}
 
 .demo-log {
     /* position: relative;*/
@@ -531,9 +546,8 @@ body {
     transition-duration: 0.4s;
     text-decoration: none;
     overflow: hidden;
-    font-family: 'Bodoni MT', sans-serif;
+    font-family: Arial Narrow, sans-serif;
     font-size: 1.5rem;
-    
 }
 
     .demo-log:hover {
@@ -558,17 +572,260 @@ body {
         transition: 0s
     }
 
-    .comment {
-        color: white;
-        font-family: 'Bodoni MT', sans-serif;
-        font-size: 1.2rem;
+.comment {
+    background-color: #323a46;
+    border-radius: .3rem;
+    border: solid;
+    border-color: silver;
+    border-width: .1rem;
+    color: white;
+    font-family: Arial Narrow, sans-serif;
+    font-size: 1.2rem;
+    padding: .7rem;
+}
+
+.img-circle {
+    max-height: 10rem;
+    max-width: 10rem;
+    border-radius: .3rem;
+    border: solid;
+    border-width: .2rem;
+    border-color: darkorange;
+}
+
+.site-description {
+    background-color: #adabab;
+    border-radius: .4rem;
+    color: black;
+    padding: 1rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    box-shadow: 0 0 10px 5px;
+}
+
+.projects {
+    border: solid;
+    border-width: .1rem;
+    border-color: silver;
+    align-content: center;
+    background-color: black;
+    opacity: 0.8;
+    color: white;
+    padding: .8rem;
+    border-radius: .5rem;
+}
+
+
+.edit {
+    position: relative;
+    /*background-image: linear-gradient(#fff, #045bae);*/
+    background-color: #5b69bc;
+    border: none;
+    width: 5rem;
+    border-radius: .3rem;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+}
+
+    .edit:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
     }
 
-    .img-circle {
-        max-height: 10rem;
-        max-width: 10rem;
-        border-radius: .3rem;
-        border: solid;
-        border-width: .2rem;
-        border-color: darkorange;
+    .edit:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        transition: all 0.8s
     }
+
+    .edit:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+
+.create {
+    position: relative;
+    background-color: #328b08;
+    border: none;
+    border-radius: .3rem;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-size: 1rem;
+    font-family: Arial Narrow, sans-serif;
+}
+
+    .create:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
+    }
+
+    .create:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        transition: all 0.8s
+    }
+
+    .create:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+.assign {
+    position: relative;
+    background-color: #10c469;
+    border: none;
+    border-radius: .3rem;
+    width: 13rem;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-size: 1rem;
+    font-family: Arial Narrow, sans-serif;
+}
+
+    .assign:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
+    }
+
+    .assign:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        transition: all 0.8s
+    }
+
+    .assign:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+
+.remove {
+    position: relative;
+    background-color: #e15503;
+    border: none;
+    border-radius: .3rem;
+    width: 15rem;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-size: 1rem;
+    font-family: Arial Narrow, sans-serif;
+}
+
+    .remove:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
+    }
+
+    .remove:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        transition: all 0.8s
+    }
+
+    .remove:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+.createTicket {
+    position: relative;
+    background-color: #328b08;
+    border: none;
+    border-radius: .3rem;
+    width: 13rem;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    font-size: .8rem;
+    font-family: Arial Narrow, sans-serif;
+}
+
+    .createTicket:hover {
+        background: #fff;
+        box-shadow: 0px 2px 10px 5px #97B1BF;
+        color: #000;
+    }
+
+    .createTicket:after {
+        content: "";
+        background: #f1c40f;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        transition: all 0.8s
+    }
+
+    .createTicket:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s
+    }
+
+.dashProjects {
+    font-size: 1rem;
+    text-align: center;
+}
+
+.title-2 {
+    font-family: Arial, sans-serif;
+    font-size: 2rem;
+}
+
+.ticketAvatar {
+   width: 4rem;
+   height: 4rem;
+   float: right;
+   border: solid;
+   border-color: orangered;
+   border-width: .1rem;
+}
+
+.navPageTitle {
+    color: #e85004;
+    font-family: Arial Narrow, sans-serif;
+    font-size: 1.5rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}

@@ -13,5 +13,6 @@ namespace DragonBugs2020.Models.ChartModels
         public string Status { get; set; }
         public string Type { get; set; }
         public int Count { get; set; }
+        public int ProjectId { get; set; }
     }
 }

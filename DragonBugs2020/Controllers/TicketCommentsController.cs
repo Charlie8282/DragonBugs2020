@@ -110,8 +110,8 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-
             var ticketComment = await _context.TicketComments.FindAsync(id);
+           
             if (ticketComment == null)
             {
                 return NotFound();
@@ -139,6 +139,7 @@ namespace DragonBugs2020.Controllers
                 {
                     ticketComment.Updated = DateTime.Now;
                     ticketComment.UserId = _userManager.GetUserId(User);
+                    
                     _context.Update(ticketComment);
                     await _context.SaveChangesAsync();
                 }

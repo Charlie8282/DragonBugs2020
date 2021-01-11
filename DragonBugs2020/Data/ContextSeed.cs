@@ -1,4 +1,5 @@
 ﻿using DragonBugs2020.Models;
+using DragonBugs2020.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace DragonBugs2020.Data
 {
@@ -26,10 +28,11 @@ namespace DragonBugs2020.Data
         public static async Task RunSeedMethods(
             RoleManager<IdentityRole> roleManager,
             UserManager<BTUser> userManager,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IImageService imageService)
         {
             await SeedRolesAsync(roleManager);
-            await SeedDefaultUsersAsync(userManager);
+            await SeedDefaultUsersAsync(userManager, imageService);
             await SeedDefaultTicketTypeAsync(context);
             await SeedDefaultTicketStatusAsync(context);
             await SeedDefaultTicketPriorityAsync(context);
@@ -49,7 +52,7 @@ namespace DragonBugs2020.Data
         }
 
 
-        private static async Task SeedDefaultUsersAsync(UserManager<BTUser> userManager)
+        private static async Task SeedDefaultUsersAsync(UserManager<BTUser> userManager, IImageService imageService)
         {
             #region Seed Admin
 
@@ -59,6 +62,8 @@ namespace DragonBugs2020.Data
                 Email = "charlie@mailinator.com",
                 FirstName = "Charlie",
                 LastName = "Tincher",
+                FileName = "defaultavatar.jpg",
+                FileData = await imageService.AssignAvatarAsync("defaultavatar.jpg"),
                 EmailConfirmed = true
             };
             try

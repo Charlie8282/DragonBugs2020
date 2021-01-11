@@ -11,44 +11,59 @@
     var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
 
-<div id="accordion" class="mb-3 dash-radius">
-<span class="over-div">All Projects | </span>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 
-
-    @foreach (var item in Model)
-    {
-        <div class="card mb-1">
-
-            <a class="text-dark" data-toggle="collapse" href="#collapseProject-@item.Id">
-                <div class="card-header" id="projectHead">
-
-                    <h5 class="m-0">
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </h5>
-
-                </div>
+<div class="container">
+    <div class="row">
+        <span class="over-div mt-1">
+            All Projects |
+            <a class="btn btn-light" asp-area="" asp-controller="Projects" asp-action="MyProjects">
+                Go to My Projects
             </a>
+        </span>
+    </div>
+    <div class="row">
+        <div id="wrapper">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <table id="responsive-datatable" class="table">
+                            <thead class="dash">
+                                <tr class="dash">
+                                    <th>Project Title</th>
+                                    <th>Project Team</th>
+                                    <th>Total Tickets</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
 
-            <div id="collapseProject-@item.Id" class="collapse" aria-labelledby="collapseProject-@item.Id" data-parent="#accordion">
-                <div class="card-body">
-                    <a class="nav-link my-nav" asp-area="" asp-controller="Projects" asp-action="Index">
-                        <span>Close</span>
-                    </a>
-                    @Html.Raw(item.Name)
-                    @if (await accessService.CanInteractProject(userId, item.Id, roles))
-                    {
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    }
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <td class="dash">@Html.DisplayFor(modelItem => item.Name)</td>
+                                        <td class="dash">@Html.DisplayFor(modelItem => item.ProjectUsers)</td>
+                                        <td class="dash">@Html.DisplayFor(modelItem => item.Tickets.Count)</td>
+                                        <td class="dash">
+                                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
+                                                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
         </div>
-    }
+    </div>
 </div>
 
+@section Scripts {
 
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 

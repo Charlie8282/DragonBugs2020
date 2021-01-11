@@ -320,6 +320,7 @@ namespace DragonBugs2020.Controllers
 
                 Ticket oldTicket = await _context.Tickets
                     //.Where(t => t.Id == ticket.Id)
+                    .Include(o => o.OwnerUser)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
                     .Include(t => t.TicketType)

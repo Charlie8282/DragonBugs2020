@@ -5,6 +5,7 @@
 @inject DragonBugs2020.Services.IBTProjectService _projectService
 @inject IBTAccessService accessService
 
+
 @{
     ViewData["Title"] = "Details";
     var userId = userManager.GetUserId(User);
@@ -12,39 +13,100 @@
 }
 
 
-<div class="container-fluid dash">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-md">
             <span class="over-div">
                 @Html.DisplayFor(model => model.Name)
-                @*@Html.DisplayFor(model => model.ImagePath)
-                @Html.DisplayFor(model => model.ImageData)*@
+                @*<a class="btn btn-light" asp-action="MyProjects">Back to Projects</a>*@
             </span>
         </div>
     </div>
 </div>
-
+<hr />
+@*<div class="row">
+    <div class="col-xl-4 dashSpecial">
+        <h3 class="text-center">Tickets by Priority</h3>
+        <div id="projectPriorityDonut" class="morris-chart" style="height: 175px;"></div>
+        <div class="text-center">
+            <ul class="list-inline chart-detail-list">
+                <li class="list-inline-item">
+                    <h5 style="color: #35b8e0;">Low: <span id="low"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #ff9933;">High: <span id="high"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #ff3333;">Urgent: <span id="urgent"></span></h5>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xl-4 dashSpecial">
+        <h3 class="text-center">Tickets by Status</h3>
+        <div id="projectStatusDonut" class="morris-chart" style="height: 175px;"></div>
+        <div class="text-center">
+            <ul class="list-inline chart-detail-list">
+                <li class="list-inline-item">
+                    <h5 style="color: #ff8533;">New: <span id="new"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #ffff99;">Open: <span id="open"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #339933;">Resolved: <span id="resolved"></span></h5>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xl-4 dashSpecial">
+        <h3 class="text-center">Tickets by Type</h3>
+        <div id="projectTypeDonut" class="morris-chart" style="height: 175px;"></div>
+        <div class="text-center">
+            <ul class="list-inline chart-detail-list">
+                <li class="list-inline-item">
+                    <h5 style="color: #d5ff80;">Backend: <span id="runtime"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #0099cc;">UI: <span id="ui"></span></h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 style="color: #c2d6d6;">Runtime: <span id="backend"></span></h5>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>*@
 @if (await accessService.CanInteractProject(userId, Model.Id, roles))
 {
-<div>
-    <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a><br />
-    <a asp-action="RemoveUsers" asp-route-id="@Model.Id">Remove Team Members</a><br />
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <a class="btn assign" asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a>
+                </div>
+                <div class="col-sm-3">
+                    <a class="btn remove" asp-action="RemoveUsers" asp-route-id="@Model.Id">Remove Team Members</a>
+                </div>
+                <div class="col-sm-3">
+                    <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
-<div class="dash">
+<div class="dash-radius">
     <div class="row">
-        <div class="col-sm-6">
-            <h5>Team Members:</h5><br />
+        <div class="col-md-4">
+            <p class="descrip">Team Members:</p><br />
             @foreach (var user in Model.ProjectUsers)
             {
                 @user.User.FullName
                 <br /><br />
             }
         </div>
-        <div class="col-xl-6">
+        <div class="col-md-8">
             <p class="descrip">Tickets on this project:</p>
             @if (!User.IsInRole("NewUser"))
             {
@@ -53,7 +115,7 @@
                 </p>
             }
 
-            <div id="accordion2" class="mb-3 dash-radius">
+            <div id="accordion2" class="mb-3">
                 @foreach (var item in Model.Tickets)
                 {
                     <div class="card mb-1">
@@ -74,8 +136,6 @@
                                 </a><hr />
                                 <p class="ticket-label">Description:</p>
                                 <p>@Html.Raw(item.Description)</p>
-                                <p class="ticket-label">Project:</p>
-                                <p>@Html.DisplayFor(modelItem => item.Project.Name)</p>
                                 <p class="ticket-label"></p>
                                 <p>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</p><hr />
 
@@ -83,7 +143,6 @@
                                 {
                                     <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                     <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    @*<a asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                                 }
                             </div>
                         </div>
@@ -93,5 +152,100 @@
         </div><!-- end col -->
     </div>
 </div>
+
+<div class="row">
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+         var Url = '@Url.Action("PriorityDonutChart", "Charts")';
+
+        $.post(Url).then(function (response) {
+            new Morris.Donut({
+
+                // ID of the element in which to draw the chart.
+                element: 'projectPriorityDonut',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: response,
+                colors: ["#ff3333", "#ff9933", "#35b8e0"],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'Label',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value']
+            });
+            document.getElementById("low").innerHTML = response[2].value;
+            document.getElementById("high").innerHTML = response[1].value;
+            document.getElementById("urgent").innerHTML = response[0].value;
+            console.log(response)
+        });
+
+    </script>
+    <script>
+
+         var Url = '@Url.Action("StatusDonutChart", "Charts")';
+
+        $.post(Url).then(function (response) {
+            new Morris.Donut({
+
+                // ID of the element in which to draw the chart.
+                element: 'projectStatusDonut',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: response,
+                colors: ["#339933", "#ffff99", "#ff8533"],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'Label',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value']
+            });
+            document.getElementById("new").innerHTML = response[2].value;
+            document.getElementById("open").innerHTML = response[1].value;
+            document.getElementById("resolved").innerHTML = response[0].value;
+            console.log(response)
+        });
+
+    </script>
+    <script>
+
+         var Url = '@Url.Action("TypeDonutChart", "Charts")';
+
+        $.post(Url).then(function (response) {
+            new Morris.Donut({
+
+                // ID of the element in which to draw the chart.
+                element: 'projectTypeDonut',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: response,
+                colors: ["#c2d6d6", "#0099cc", "#d5ff80"],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'Label',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value']
+            });
+            document.getElementById("runtime").innerHTML = response[2].value;
+            document.getElementById("ui").innerHTML = response[1].value;
+            document.getElementById("backend").innerHTML = response[0].value;
+            console.log(response)
+        });
+
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}
 
 

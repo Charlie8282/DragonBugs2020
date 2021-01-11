@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\NotificationsController.cs" />
+    <Compile Remove="Migrations\20210108164430_Initial_4.cs" />
+    <Compile Remove="Migrations\20210108164430_Initial_4.Designer.cs" />
     <Compile Remove="Services\AttachmentsService.cs" />
   </ItemGroup>
 

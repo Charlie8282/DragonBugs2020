@@ -16,9 +16,9 @@
 <span class="over-div">All Tickets | </span>
 @if (!User.IsInRole("NewUser"))
 {
-    <span>
-        <a asp-action="Create">Create New</a>
-    </span>
+<a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
+    Create new ticket
+</a>
 }
 
 <div id="wrapper">
@@ -29,7 +29,7 @@
                     <thead class="dash">
                         <tr class="dash">
                             <th>@Html.DisplayNameFor(model => model.Title)</th>
-                            <th>@Html.DisplayNameFor(model => model.Description)</th>
+                            @*<th>@Html.DisplayNameFor(model => model.Description)</th>*@
                             <th>@Html.DisplayNameFor(model => model.Created)</th>
                             <th>@Html.DisplayNameFor(model => model.Project)</th>
                             <th>@Html.DisplayNameFor(model => model.TicketType)</th>
@@ -46,9 +46,9 @@
                         {
                             <tr>
                                 <td class="dash">@Html.DisplayFor(modelItem => item.Title)</td>
-                                <td>
+                                @*<td class="dash">
                                     <div class="modal" id="description-@item.Id" tabindex="-1" role="dialog"
-                                         aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-animation="makeway" data-plugin="custommodal">
+                                         aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-plugin="custommodal">
                                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -62,14 +62,13 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <button type="button" class="btn-descrip waves-effect waves-light" data-toggle="modal" data-target="#description-@item.Id">Description</button>
 
-                                </td>
+                                </td>*@
                                 <td class="dash">@Html.DisplayFor(modelItem => item.Created)</td>
                                 <td class="dash">@Html.DisplayFor(modelItem => item.Project.Name)</td>
                                 <td class="dash">@Html.DisplayFor(modelItem => item.TicketType.Name)</td>

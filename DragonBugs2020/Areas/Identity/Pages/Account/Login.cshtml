@@ -20,80 +20,84 @@
 </head>
 <body>
     <section>
-        <br /><br /><br /><br /><br /><br />
-        <div class="row">
-            <div class="col-md-4 login-cons text-center">
-        <div class="lander log-reg text-center">
-            <img src="~/img/whack-a-bug.png" class="responsive-image" />
-            <span class="over-div">@ViewData["Title"]</span>
+        <div class="container">
+            <br />
+            @*<img src="~/img/whack-a-bug.png" class="responsive-image" />*@
+            <img src="~/img/issue-web.png" class="responsive-image" />
         </div>
-                <form id="account" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Input.Email" class="log-reg"></label>
-                        <input asp-for="Input.Email" class="form-control" />
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+        <div class="container dash-radius create-bar">
+            <div class="row">
+                <div class="col-md-4 login-cons text-center">
+                    <div class="lander text-center">
+                        <span class="over-div">@ViewData["Title"]</span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Input.Password" class="log-reg"></label>
-                        <input asp-for="Input.Password" class="form-control" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label asp-for="Input.RememberMe" class="log-reg">
-                                <input asp-for="Input.RememberMe" />
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="button-three">Log in</button>
-                    </div>
-                    <div class="form-group">
-                        <p>
-                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                        </p>
-                        <p>
-                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                        </p>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-4 login-cons">
-                <div class="log-reg text-center">
-                    <span class="over-div">Demo Users</span>
-                    <p class="mytable dash-radius-t">Logging in as a demo user will allow you to explore the site without interacting with the database.  Simply go through the motions of how you would like to use an application to organize problems and those best to find the solutions.  Each demo user holds the same restrictions as a registered users when accessing sections of the application.</p>
-
                     <form id="account" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
-                            <button type="submit" name="demoEmail" value="DemoAdminEmail" class="demo-log">Demo Admin</button>
+                            @*<label asp-for="Input.Email" class="log-reg"></label>*@
+                            <input asp-for="Input.Email" class="form-control bg-dark" placeholder="Email..." />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
-                    </form>
-                    <form id="account" method="post">
                         <div class="form-group">
-                            <button type="submit" name="demoEmail" value="DemoPMEmail" class="demo-log">Demo Project Manager</button>
+                            @*<label asp-for="Input.Password" class="log-reg"></label>*@
+                            <input asp-for="Input.Password" class="form-control" placeholder="Password..." />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
-                    </form>
-                    <form id="account" method="post">
                         <div class="form-group">
-                            <button type="submit" name="demoEmail" value="DemoDevEmail" class="demo-log">Demo Developer</button>
+                            <div class="checkbox">
+                                <label asp-for="Input.RememberMe" class="log-reg">
+                                    <input asp-for="Input.RememberMe" />
+                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                </label>
+                            </div>
                         </div>
-                    </form>
-                    <form id="account" method="post">
                         <div class="form-group">
-                            <button type="submit" name="demoEmail" value="DemoSubEmail" class="demo-log">Demo Submitter</button>
+                            <button type="submit" class="button-three">Log in</button>
                         </div>
-                    </form>
-                    <form id="account" method="post">
                         <div class="form-group">
-                            <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="demo-log">Demo New User</button>
+                            <p>
+                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                            </p>
+                            <p>
+                                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                            </p>
                         </div>
                     </form>
                 </div>
+                <div class="col-md-4 login-cons">
+                    <div class="log-reg text-center">
+                        <span class="over-div">Demo Users</span>
+
+                        <form id="account" method="post">
+                            <div class="form-group">
+                                <button type="submit" name="demoEmail" value="DemoAdminEmail" class="demo-log">Demo Admin</button>
+                            </div>
+                        </form>
+                        <form id="account" method="post">
+                            <div class="form-group">
+                                <button type="submit" name="demoEmail" value="DemoPMEmail" class="demo-log">Demo Project Manager</button>
+                            </div>
+                        </form>
+                        <form id="account" method="post">
+                            <div class="form-group">
+                                <button type="submit" name="demoEmail" value="DemoDevEmail" class="demo-log">Demo Developer</button>
+                            </div>
+                        </form>
+                        <form id="account" method="post">
+                            <div class="form-group">
+                                <button type="submit" name="demoEmail" value="DemoSubEmail" class="demo-log">Demo Submitter</button>
+                            </div>
+                        </form>
+                        <form id="account" method="post">
+                            <div class="form-group">
+                                <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="demo-log">Demo New User</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br /><br />
+                <br /><br /><br /><br /><br />
             </div>
-            <br /><br />
-            <br /><br /><br /><br /><br />
         </div>
     </section>
 

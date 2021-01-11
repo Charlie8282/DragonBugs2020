@@ -11,8 +11,8 @@
 }
 <h1 class="descrip">Edit Ticket</h1>
 <div>
-    <a asp-controller="Tickets" asp-action="Edit">Edit</a> |
-    <a asp-action="MyTickets">Back to List</a>
+    <a asp-controller="Tickets" asp-action="Edit">Edit</a>
+   
 </div>
 <hr />
 <div class="row">
@@ -20,7 +20,6 @@
         <form asp-action="Edit" enctype="multipart/form-data">
             <div class="dash-radius task-detail">
                 <div class="media mb-3">
-                    <img class="d-flex mr-3 rounded-circle avatar-md" alt="64x64" src="~/img/user-1.jpg">
                     <div class="media-body">
                         <h4 class="media-heading mt-0"></h4>
                     </div>
@@ -72,9 +71,7 @@
         </form>
     </div>
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 <script src="https://cdn.tiny.cloud/1/l7peclxd2nqv523591f18wsp3j66odysd1mpur7xqsih9wm2/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 

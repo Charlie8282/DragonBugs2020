@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DragonBugs2020.Data;
 using DragonBugs2020.Models;
+using DragonBugs2020.Services;
 using DragonBugs2020.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -27,10 +28,11 @@ namespace DragonBugs2020
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
+                    var imageService = services.GetRequiredService<IImageService>();
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<UserManager<BTUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    await ContextSeed.RunSeedMethods(roleManager, userManager, context);
+                    await ContextSeed.RunSeedMethods(roleManager, userManager, context, imageService);
 
                 }
                 catch (Exception ex)

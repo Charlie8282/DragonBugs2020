@@ -126,7 +126,7 @@ namespace DragonBugs2020.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, ProjectManager")]
-        public async Task<IActionResult> Create([Bind("Id,Name,ImagePath,ImageData")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Project project)
         {
             if (!User.IsInRole("Demo"))
             {
@@ -137,7 +137,8 @@ namespace DragonBugs2020.Controllers
                     ProjectUser record = new ProjectUser { UserId = _userManager.GetUserId(User), ProjectId = project.Id };
                     _context.ProjectUsers.Add(record);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(MyProjects));
+                    return RedirectToAction("Dashboard", "Home");
+
                 }
 
                 return View(project);
@@ -146,7 +147,9 @@ namespace DragonBugs2020.Controllers
             {
                 TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
 
-                return RedirectToAction(nameof(MyProjects));
+                return RedirectToAction("Dashboard", "Home");
+
+
             }
         }
 
@@ -275,14 +278,14 @@ namespace DragonBugs2020.Controllers
             var model = new ManageProjectUsersViewModel();
             var project = _context.Projects.Find(id);
 
-            
-            
-                model.Project = project;
-                List<BTUser> members = (List<BTUser>)await _btProjectService.UsersOnProject(id);
-                model.Users = new MultiSelectList(members, "Id", "FullName");
-                return View(model);
-            
-            
+
+
+            model.Project = project;
+            List<BTUser> members = (List<BTUser>)await _btProjectService.UsersOnProject(id);
+            model.Users = new MultiSelectList(members, "Id", "FullName");
+            return View(model);
+
+
         }
 
 

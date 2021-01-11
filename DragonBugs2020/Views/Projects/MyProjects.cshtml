@@ -11,43 +11,68 @@
     var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
 
-<div id="accordion" class="mb-3 dash-radius">
-<span class="over-div">My Project</span>
+<div class="container">
 
-@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-{
-    <p>
-        <a asp-controller="Projects" asp-action="Create">Create New</a>
-    </p>
-}
-    @foreach (var item in Model)
+    <span class="over-div mt-1">
+        My Projects |
+        <a class="btn btn-light" asp-area="" asp-controller="Projects" asp-action="Index">
+            Go to All Projects
+        </a>
+    </span>
+    <hr />
+
+    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
     {
-        <div class="card mb-1">
-
-            <a class="text-dark" data-toggle="collapse" href="#collapseProject-@item.Id">
-                <div class="card-header" id="projectHead">
-
-                    <h5 class="m-0">
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </h5>
-
-                </div>
-            </a>
-
-            <div id="collapseProject-@item.Id" class="collapse" aria-labelledby="collapseProject-@item.Id" data-parent="#accordion">
-                <div class="card-body">
-                    <a class="nav-link my-nav" asp-area="" asp-controller="Projects" asp-action="MyProjects">
-                        <span>Close</span>
-                    </a>
-                    @Html.Raw(item.Name)
-                    @if (await accessService.CanInteractProject(userId, item.Id, roles))
-                    {
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    }
+        <h4>
+            Add a New Project:
+        </h4>
+        <form asp-action="Create">
+            <div class="container-fluid dash-radius-t create-bar">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input name="Name" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <input type="submit" value="Create" class="btn create mt-4" />
+                        </div>
+                    </div>
                 </div>
             </div>
+        </form>
 
-        </div>
+        @*<form>
+                <button class="create" asp-controller="Projects" asp-action="Create">+ New Project</button>
+            </form><br />*@
     }
+    <br />
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card-box projects">
+                    <h2 class="text-center">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </h2>
+                    <form>
+                        <button class="details" asp-action="Details" asp-route-id="@item.Id">Details</button>
+                        @if (await accessService.CanInteractProject(userId, item.Id, roles))
+                        {
+                            <button class="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</button>
+                        }
+                    </form>
+
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
