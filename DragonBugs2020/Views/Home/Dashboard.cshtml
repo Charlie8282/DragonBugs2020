@@ -18,6 +18,8 @@
     ViewData["Title"] = "Dashboard";
     var userId = userManager.GetUserId(User);
     var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
+    var nextpage = Model.Page + 1;
+    var previouspage = Model.Page - 1;
 
 }
 
@@ -79,7 +81,7 @@
 </div>
 <div class="row">
     <div class="col-md-8 dash">
-        <h2 class="title-2">Tickets:</h2>
+        <h2 class="over-div">Tickets:</h2>
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">All</a>
@@ -93,12 +95,12 @@
             @if (!User.IsInRole("NewUser"))
             {
                 <li>
-                    @*<button class="btn createTicket ml-2" title="button" data-toggle="modal" data-target="#createTicket">
-                            Create new ticket
-                        </button>*@
-                    <a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
+                    <button class="btn createTicket ml-2" title="button" data-toggle="modal" data-target="#createTicket">
                         Create new ticket
-                    </a>
+                    </button>
+                    @*<a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
+                            Create new ticket
+                        </a>*@
                 </li>
             }
         </ul>
@@ -160,17 +162,17 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
-                            <div>
-                                @if (item.OwnerUser.FileData != null)
-                                {
-                                    <img src=@ImageHelper.DecodeImage(item.OwnerUser.FileData, item.OwnerUser.FileName) class="avatar mt-1" alt="User Image" />
-                                }
+                                <div>
+                                    @if (item.OwnerUser.FileData != null)
+                                    {
+                                        <img src=@ImageHelper.DecodeImage(item.OwnerUser.FileData, item.OwnerUser.FileName) class="avatar mt-1" alt="User Image" />
+                                    }
 
-                                <span class="mt-1">
-                                    by: @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
-                                </span>
-                            </div>
+                                    <span class="mt-1">
+                                        by: @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                                    </span>
+                                </div>
+                            </a>
                             <div id="collapseAllTicket-@item.Id" class="collapse" aria-labelledby="collapseAllTicket-@item.Id" data-parent="#allTicketAccordion">
                                 <div class="card-body">
                                     <span>
@@ -183,9 +185,9 @@
                                                 Edit
                                             </a>
                                         }
-                                        <a class="nav-link my-nav float-right" asp-area="" asp-controller="Home" asp-action="Dashboard">
-                                            <img src="~/img/close.png" />
-                                        </a>
+                                        @*<a class="nav-link my-nav float-right" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                                                <img src="~/img/close.png" />
+                                            </a>*@
                                     </span>
                                     <br />
                                     <span class="created"> Project: </span>
@@ -422,9 +424,26 @@
                 </div>
             </div>
         </div>
+        <div>
+            @if (Model.Page > 1)
+            {
+                <form asp-controller="Home" asp-action="Dashboard" method="get">
+                    <input type="hidden" name="page" value="@previouspage" />
+                    <button class="btn btn-light" type="submit">Previous page</button>
+                </form>
+            }
+            @if (Model.Remainder > 0)
+            {
+                <form asp-controller="Home" asp-action="Dashboard" method="get">
+                    <input type="hidden" name="page" value="@nextpage" />
+                    <button class="btn btn-light" type="submit">Next page</button>
+                </form>
+            }
+
+        </div>
     </div>
     <div class="col-md-4 dash">
-        <h2 class="title-2">Projects:</h2>
+        <h2 class="over-div">Projects:</h2>
         @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
         {
             <form asp-controller="Projects" asp-action="Create">
@@ -464,7 +483,7 @@
     </div>
 </div>
 
-@*CREATE TICKET MODAL
+@*CREATE TICKET MODAL*@
 <div class="modal fade" id="createTicket" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-animation="makeway">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -479,18 +498,13 @@
                 <form asp-controller="Tickets" asp-action="Create" enctype="multipart/form-data">
 
                     <div class="dash-radius task-detail">
-                        <div class="media mb-3">
-                            <div class="media-body">
-                                <h4 class="media-heading mt-0"></h4>
-                                <span class="badge badge-danger">Urgent</span>
-                            </div>
-                        </div>
+
                         <div class="form-group">
-                            <input name="Name" type="text" class="form-control" placeholder="Ticket Name..." />
+                            <input name="Title" type="text" class="form-control" placeholder="Ticket Name..." />
                         </div>
                         <div class="form-group">
                             <label name="Description" class="control-label"></label>
-                            <input name="Description" class="form-control" id="ticketDescription" />
+                            <textarea name="Description" class="form-control" id="ticketDescription"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <div class="row ml-2">
@@ -536,7 +550,7 @@
             </div>
         </div>
     </div>
-</div>*@
+</div>
 
 
 
@@ -629,11 +643,11 @@
 
     </script>
     @*<script>
-        tinymce.init({
-            selector: '#ticketDescription',
-            content_css: 'dark'
-        });
-    </script>*@
+            tinymce.init({
+                selector: '#ticketDescription',
+                content_css: 'dark'
+            });
+        </script>*@
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

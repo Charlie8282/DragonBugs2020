@@ -44,21 +44,30 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (!User.IsInRole("Demo"))
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                }
 
-            var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
-            if (!disable2faResult.Succeeded)
+                var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
+                if (!disable2faResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{_userManager.GetUserId(User)}'.");
+                }
+
+                _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
+                StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
+                return RedirectToPage("./TwoFactorAuthentication");
+            }
+            else
             {
-                throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{_userManager.GetUserId(User)}'.");
-            }
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
+                return RedirectToPage("./TwoFactorAuthentication");
 
-            _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
-            StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
-            return RedirectToPage("./TwoFactorAuthentication");
+            }
         }
     }
 }

@@ -96,7 +96,7 @@ namespace DragonBugs2020.Controllers
             else
             {
                 TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
-                return RedirectToAction("Details", "Tickets");
+                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
             }
             //ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
             //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
@@ -111,7 +111,7 @@ namespace DragonBugs2020.Controllers
                 return NotFound();
             }
             var ticketComment = await _context.TicketComments.FindAsync(id);
-           
+
             if (ticketComment == null)
             {
                 return NotFound();
@@ -132,32 +132,39 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            if (!User.IsInRole("Demo"))
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    ticketComment.Updated = DateTime.Now;
-                    //ticketComment.UserId = _userManager.GetUserId(User);
-                    _context.Update(ticketComment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TicketCommentExists(ticketComment.Id))
+                    try
                     {
-                        return NotFound();
+                        ticketComment.Updated = DateTime.Now;
+                        //ticketComment.UserId = _userManager.GetUserId(User);
+                        _context.Update(ticketComment);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!TicketCommentExists(ticketComment.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
                 }
+                ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
+                return View(ticketComment);
+            }
+            else
+            {
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
                 return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
             }
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
-            return View(ticketComment);
         }
 
         // GET: TicketComments/Delete/5

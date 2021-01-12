@@ -67,32 +67,40 @@ namespace DragonBugs2020.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FormFile,Description,TicketId")] TicketAttachment ticketAttachment)
         {
-            if (ModelState.IsValid)
+            if (!User.IsInRole("Demo"))
             {
-                MemoryStream ms = new MemoryStream();
-                await ticketAttachment.FormFile.CopyToAsync(ms);
-
-                ticketAttachment.ContentType = ticketAttachment.FormFile.ContentType;
-                ticketAttachment.FileData = await _fileService.ConvertFileToByteArrayAsync(ticketAttachment.FormFile);
-                ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
-                ticketAttachment.Created = DateTimeOffset.Now;
-                ticketAttachment.UserId = _userManager.GetUserId(User);
-
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Add(ticketAttachment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    TempData["Error"] = ex.Message;
-                }
+                    MemoryStream ms = new MemoryStream();
+                    await ticketAttachment.FormFile.CopyToAsync(ms);
 
+                    ticketAttachment.ContentType = ticketAttachment.FormFile.ContentType;
+                    ticketAttachment.FileData = await _fileService.ConvertFileToByteArrayAsync(ticketAttachment.FormFile);
+                    ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
+                    ticketAttachment.Created = DateTimeOffset.Now;
+                    ticketAttachment.UserId = _userManager.GetUserId(User);
+
+                    try
+                    {
+                        _context.Add(ticketAttachment);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["Error"] = ex.Message;
+                    }
+
+                    return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+                }
+                ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
+                return View(ticketAttachment);
+            }
+            else
+            {
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
                 return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
             }
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
-            return View(ticketAttachment);
         }
 
         // GET: TicketAttachments/Edit/5

@@ -77,39 +77,47 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (!User.IsInRole("Demo"))
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                await LoadAsync(user);
-                return Page();
-            }
-
-            if (Input.FormFile != null)
-            {
-                user.FileName = Input.FormFile.FileName;
-                user.FileData = _imageService.ConvertFileToByteArray(Input.FormFile);
-            };
-            await _context.SaveChangesAsync();
-
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 }
-            }
 
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
+                if (!ModelState.IsValid)
+                {
+                    await LoadAsync(user);
+                    return Page();
+                }
+
+                if (Input.FormFile != null)
+                {
+                    user.FileName = Input.FormFile.FileName;
+                    user.FileData = _imageService.ConvertFileToByteArray(Input.FormFile);
+                };
+                await _context.SaveChangesAsync();
+
+                var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+                if (Input.PhoneNumber != phoneNumber)
+                {
+                    var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                    if (!setPhoneResult.Succeeded)
+                    {
+                        StatusMessage = "Unexpected error when trying to set phone number.";
+                        return RedirectToPage();
+                    }
+                }
+
+                await _signInManager.RefreshSignInAsync(user);
+                StatusMessage = "Your profile has been updated";
+                return RedirectToPage();
+            }
+            else
+            {
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
+                return RedirectToPage();
+            }
         }
     }
 }

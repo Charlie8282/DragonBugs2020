@@ -75,19 +75,25 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account.Manage
             }
 
             var addPasswordResult = await _userManager.AddPasswordAsync(user, Input.NewPassword);
-            if (!addPasswordResult.Succeeded)
+            if (!User.IsInRole("Demo"))
             {
-                foreach (var error in addPasswordResult.Errors)
+                if (!addPasswordResult.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    foreach (var error in addPasswordResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return Page();
                 }
+                await _signInManager.RefreshSignInAsync(user);
+                StatusMessage = "Your password has been set.";
+                return RedirectToPage();
+            }
+            else
+            {
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
                 return Page();
             }
-
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your password has been set.";
-
-            return RedirectToPage();
         }
     }
 }

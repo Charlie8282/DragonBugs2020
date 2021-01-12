@@ -10,6 +10,7 @@ using DragonBugs2020.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using DragonBugs2020.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DragonBugs2020.Controllers
 {
@@ -28,11 +29,20 @@ namespace DragonBugs2020.Controllers
             _userManager = userManager;
         }
         
-        public async Task<IActionResult> Dashboard()
+        public async Task<IActionResult> Dashboard(int? page)
         {
             var viewModel = new ProjectTicketsViewModel();
             var model = new List<Ticket>();
             var userId = _userManager.GetUserId(User);
+            if (page == null)
+            {
+                viewModel.Page = 1;
+            }
+            else
+            {
+                viewModel.Page = (int)page;
+            }
+            var skip = 5 * (viewModel.Page - 1);
 
             if (User.IsInRole("Admin"))
             {
@@ -43,7 +53,12 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.Project)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType).ToList();
+                    .Include(t => t.TicketType)
+                    .OrderByDescending(t => t.Created)
+                    .Skip(skip)
+                    .Take(5)
+                    .ToList();
+                viewModel.Remainder = _context.Tickets.Skip(skip + 5).Count();
             }
             else if (User.IsInRole("ProjectManager"))
             {
@@ -53,7 +68,10 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.Project)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType).ToList();
+                    .Include(t => t.TicketType)
+                    .OrderByDescending(t => t.Created)
+                    .ToList();
+
 
                 var projectIds = new List<int>();
                 var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
@@ -70,8 +88,13 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.Project)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType).ToList();
+                    .Include(t => t.TicketType)
+                    .OrderByDescending(t => t.Created)
+                    .ToList();
+
                     model.AddRange(tickets);
+                    viewModel.Remainder = model.Skip(skip + 5).Count();
+                    model.OrderByDescending(t => t.Created).Skip(skip).Take(5);
                 }
             }
             else if (User.IsInRole("Developer"))
@@ -82,7 +105,13 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.Project)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType).ToList();
+                    .Include(t => t.TicketType)
+                    .OrderByDescending(t => t.Created)
+                    .Skip(skip)
+                    .Take(5)
+                    .ToList();
+                viewModel.Remainder = _context.Tickets.Where(t => t.DeveloperUserId == userId).Skip(skip + 5).Count();
+
             }
             else if (User.IsInRole("Submitter"))
             {
@@ -92,7 +121,13 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.Project)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType).ToList();
+                    .Include(t => t.TicketType)
+                    .OrderByDescending(t => t.Created)
+                    .Skip(skip)
+                    .Take(5)
+                    .ToList();
+                viewModel.Remainder = _context.Tickets.Where(t => t.OwnerUserId == userId).Skip(skip + 5).Count();
+
             }
             else if (User.IsInRole("NewUser"))
             {
@@ -102,12 +137,25 @@ namespace DragonBugs2020.Controllers
                     .Include(t => t.Project)
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType).ToList();
+                    .Include(t => t.TicketType)
+                    .OrderByDescending(t => t.Created)
+                    .Skip(skip)
+                    .Take(5)
+                    .ToList();
+                viewModel.Remainder = _context.Tickets.Where(t => t.OwnerUserId == userId).Skip(skip + 5).Count();
+
             }
             else
             {
                 return NotFound();
             }
+
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
             viewModel.Tickets = model;
             var projects = _context.Projects.ToList();
             viewModel.Projects = projects;

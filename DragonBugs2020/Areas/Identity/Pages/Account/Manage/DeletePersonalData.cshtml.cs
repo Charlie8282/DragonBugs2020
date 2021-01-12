@@ -51,34 +51,42 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (!User.IsInRole("Demo"))
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            RequirePassword = await _userManager.HasPasswordAsync(user);
-            if (RequirePassword)
-            {
-                if (!await _userManager.CheckPasswordAsync(user, Input.Password))
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Incorrect password.");
-                    return Page();
+                    return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 }
-            }
 
-            var result = await _userManager.DeleteAsync(user);
-            var userId = await _userManager.GetUserIdAsync(user);
-            if (!result.Succeeded)
+                RequirePassword = await _userManager.HasPasswordAsync(user);
+                if (RequirePassword)
+                {
+                    if (!await _userManager.CheckPasswordAsync(user, Input.Password))
+                    {
+                        ModelState.AddModelError(string.Empty, "Incorrect password.");
+                        return Page();
+                    }
+                }
+
+                var result = await _userManager.DeleteAsync(user);
+                var userId = await _userManager.GetUserIdAsync(user);
+                if (!result.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
+                }
+
+                await _signInManager.SignOutAsync();
+
+                _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+
+                return Redirect("~/");
+            }
+            else
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
+                return Redirect("~/");
             }
-
-            await _signInManager.SignOutAsync();
-
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
-
-            return Redirect("~/");
         }
     }
 }

@@ -20,6 +20,8 @@ namespace DragonBugs2020.Models.ViewModels
             Attachments = new List<TicketAttachment>();
         }
 
+        public int Remainder { get; set; }
+        public int Page { get; set; }
         public List<Ticket> Tickets { get; set; }
         public List<Project> Projects { get; set; }
         public int ProjectId { get; set; }
