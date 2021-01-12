@@ -21,6 +21,12 @@
 <body>
     <section>
         <div class="container">
+            @if (TempData["ConfirmEmail"] != null)
+            {
+                <h1>
+                    @TempData["ConfirmEmail"]
+                </h1>
+            }
             <br />
             @*<img src="~/img/whack-a-bug.png" class="responsive-image" />*@
             <img src="~/img/issue-web.png" class="responsive-image" />

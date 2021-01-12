@@ -131,7 +131,8 @@ namespace DragonBugs2020.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        TempData["ConfirmEmail"] = "Please verify your email";
+                        return RedirectToPage("/Account/Login", new { area = "Identity" });
                     }
                     else
                     {

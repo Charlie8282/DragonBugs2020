@@ -93,6 +93,8 @@ namespace DragonBugs2020.Data
                 Email = "kensrue@mailinator.com",
                 FirstName = "DustinPM",
                 LastName = "Kensrue",
+                FileName = "defaultavatar.jpg",
+                FileData = await imageService.AssignAvatarAsync("defaultavatar.jpg"),
                 EmailConfirmed = true
             };
             try
@@ -148,6 +150,8 @@ namespace DragonBugs2020.Data
                 Email = "bobbylong@mailinator.com",
                 FirstName = "BobbyDev",
                 LastName = "Long",
+                FileName = "defaultavatar.jpg",
+                FileData = await imageService.AssignAvatarAsync("defaultavatar.jpg"),
                 EmailConfirmed = true
             };
             try
@@ -177,6 +181,8 @@ namespace DragonBugs2020.Data
                 Email = "chriscornell@mailinator.com",
                 FirstName = "Chris",
                 LastName = "Cornell",
+                FileName = "defaultavatar.jpg",
+                FileData = await imageService.AssignAvatarAsync("defaultavatar.jpg"),
                 EmailConfirmed = true
             };
             try
@@ -206,6 +212,8 @@ namespace DragonBugs2020.Data
                 Email = "jamestaylor@mailinator.com",
                 FirstName = "James",
                 LastName = "Taylor",
+                FileName = "defaultavatar.jpg",
+                FileData = await imageService.AssignAvatarAsync("defaultavatar.jpg"),
                 EmailConfirmed = true
             };
             try
@@ -241,6 +249,8 @@ namespace DragonBugs2020.Data
                 Email = "anthony@mailinator.com",
                 FirstName = "Anthony",
                 LastName = "Stark",
+                FileName = "stark.jpg",
+                FileData = await imageService.AssignAvatarAsync("stark.jpg"),
                 EmailConfirmed = true
             };
             try
@@ -271,6 +281,8 @@ namespace DragonBugs2020.Data
                 Email = "harley@mailinator.com",
                 FirstName = "Harley",
                 LastName = "Keener",
+                FileName = "harley-keener.jpg",
+                FileData = await imageService.AssignAvatarAsync("harley-keener.jpg"),
                 EmailConfirmed = true
             };
             try
@@ -292,32 +304,32 @@ namespace DragonBugs2020.Data
 
             }
 
-            defaultProjectManager = new BTUser
-            {
-                UserName = "demojakesmith@mailinator.com",
-                Email = "demojakesmith@mailinator.com",
-                FirstName = "JakeDemo",
-                LastName = "Smith",
-                EmailConfirmed = true
-            };
-            try
-            {
-                var user = await userManager.FindByEmailAsync(defaultProjectManager.Email);
-                if (user == null)
-                {
-                    await userManager.CreateAsync(defaultProjectManager, demoPassword);
-                    await userManager.AddToRoleAsync(defaultProjectManager, Roles.ProjectManager.ToString());
-                    await userManager.AddToRoleAsync(defaultProjectManager, Roles.Demo.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("************ ERROR ************");
-                Debug.WriteLine("Error Seeding Default Project Manager User.");
-                Debug.WriteLine("ex.Message");
-                Debug.WriteLine("*******************************");
+            //defaultProjectManager = new BTUser
+            //{
+            //    UserName = "demojakesmith@mailinator.com",
+            //    Email = "demojakesmith@mailinator.com",
+            //    FirstName = "JakeDemo",
+            //    LastName = "Smith",
+            //    EmailConfirmed = true
+            //};
+            //try
+            //{
+            //    var user = await userManager.FindByEmailAsync(defaultProjectManager.Email);
+            //    if (user == null)
+            //    {
+            //        await userManager.CreateAsync(defaultProjectManager, demoPassword);
+            //        await userManager.AddToRoleAsync(defaultProjectManager, Roles.ProjectManager.ToString());
+            //        await userManager.AddToRoleAsync(defaultProjectManager, Roles.Demo.ToString());
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine("************ ERROR ************");
+            //    Debug.WriteLine("Error Seeding Default Project Manager User.");
+            //    Debug.WriteLine("ex.Message");
+            //    Debug.WriteLine("*******************************");
 
-            }
+            //}
 
             #endregion
             //Carol Danvers
@@ -329,6 +341,8 @@ namespace DragonBugs2020.Data
                 Email = "carol@mailinator.com",
                 FirstName = "Carol",
                 LastName = "Danvers",
+                FileName = "carol.png",
+                FileData = await imageService.AssignAvatarAsync("carol.png"),
                 EmailConfirmed = true
             };
             try
@@ -359,6 +373,8 @@ namespace DragonBugs2020.Data
                 Email = "clint@mailinator.com",
                 FirstName = "Clint",
                 LastName = "Barton",
+                FileName = "clint.jpg",
+                FileData = await imageService.AssignAvatarAsync("clint.jpg"),
                 EmailConfirmed = true
             };
             try
@@ -389,6 +405,8 @@ namespace DragonBugs2020.Data
                 Email = "james@mailinator.com",
                 FirstName = "James",
                 LastName = "Gunn",
+                FileName = "james.jpg",
+                FileData = await imageService.AssignAvatarAsync("james.jpg"),
                 EmailConfirmed = true
             };
             try

@@ -1,5 +1,6 @@
 ﻿using DragonBugs2020.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,8 +12,20 @@ namespace DragonBugs2020.Models.ViewModels
 {
     public class ProjectTicketsViewModel
     {
+        public ProjectTicketsViewModel()
+        {
+            Tickets = new List<Ticket>();
+            Projects = new List<Project>();
+            ProjectUser = new List<ProjectUser>();
+            Attachments = new List<TicketAttachment>();
+        }
+
         public List<Ticket> Tickets { get; set; }
         public List<Project> Projects { get; set; }
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
+        public string DeveloperUserId { get; set; }
+        public BTUser DeveloperUser { get; set; }
         public List<ProjectUser> ProjectUser { get; set; }
         public List<TicketAttachment> Attachments { get; set; }
         public string Description { get; set; }

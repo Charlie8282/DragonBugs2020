@@ -90,7 +90,7 @@
                 <!-- User box -->
                 <div class="user-box text-center">
                     <div class="image">
-                        @if ((await userManager.GetUserAsync(User)).FileData == null)
+                        @if ((await userManager.GetUserAsync(User)).FileData == null && User.Identity.IsAuthenticated)
                         {
                             <img src="~/img/defaultavatar.jpg" class="img-circle elevation-2" alt="User Image" />
                         }
@@ -100,8 +100,8 @@
                         }
                     </div>
                     @*<img src="~/img/user-1.jpg" alt="user-img" title="@userManager.GetUserAsync(User).Result.FullName" class="rounded-circle img-thumbnail avatar-md"><br />*@
-                    <a class="over-div" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@userManager.GetUserAsync(User).Result.FullName</a>
-
+                    <a class="over-div" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@userManager.GetUserAsync(User).Result.FullName</a><br />
+                    <!--add user role here!!-->
                 </div>
                 <!--- Sidemenu -->
                 <div id="sidebar-menu" class="dash-nav">
@@ -184,7 +184,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
-                    2020 &copy; Whack-A-Bug by Charlie Tincher
+                    2020 &copy; Issue Web by Charlie Tincher
                 </div>
                 <div class="col-md-6">
                     @*<div class="text-md-right footer-links d-none d-sm-block">

@@ -13,14 +13,43 @@
 
 
 <div class="container">
-    <div class="row">
-        <span class="over-div mt-1">
-            All Projects |
-            <a class="btn btn-light" asp-area="" asp-controller="Projects" asp-action="MyProjects">
-                Go to My Projects
-            </a>
-        </span>
-    </div>
+    <span class="over-div mt-1">
+        All Projects
+        @if (!User.IsInRole("Admin"))
+        {
+            <span> |
+                <a class="btn btn-light" asp-area="" asp-controller="Projects" asp-action="MyProjects">
+                    Go to My Projects
+                </a>
+            </span>
+        }
+    </span>
+    <hr />
+
+    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+    {
+        <h4>
+            Add a New Project:
+        </h4>
+        <form asp-action="Create">
+            <div class="container-fluid dash-radius-t create-bar">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input name="Name" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <input type="submit" value="Create" class="btn create mt-4" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+    <br />
     <div class="row">
         <div id="wrapper">
             <div class="row">
@@ -30,8 +59,8 @@
                             <thead class="dash">
                                 <tr class="dash">
                                     <th>Project Title</th>
-                                    <th>Project Team</th>
-                                    <th>Total Tickets</th>
+                                    @*<th>Project Team</th>
+                                        <th>Total Tickets</th>*@
                                     <th></th>
                                 </tr>
                             </thead>
@@ -42,14 +71,14 @@
                                     <tr>
 
                                         <td class="dash">@Html.DisplayFor(modelItem => item.Name)</td>
-                                        <td class="dash">@Html.DisplayFor(modelItem => item.ProjectUsers)</td>
-                                        <td class="dash">@Html.DisplayFor(modelItem => item.Tickets.Count)</td>
+                                        @*<td class="dash">@Html.DisplayFor(modelItem => item.ProjectUsers)</td>
+                                            <td class="dash">@Html.DisplayFor(modelItem => item.Tickets.Count)</td>*@
                                         <td class="dash">
                                             @if (await accessService.CanInteractTicket(userId, item.Id, roles))
                                             {
                                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
-                                                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                                             }
+                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                                         </td>
                                     </tr>
                                 }

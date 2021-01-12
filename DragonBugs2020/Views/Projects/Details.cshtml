@@ -1,6 +1,7 @@
 ﻿@model DragonBugs2020.Models.Project
 @using DragonBugs2020.Services
 @using Microsoft.AspNetCore.Identity
+@using DragonBugs2020.Utilities
 @inject UserManager<BTUser> userManager
 @inject DragonBugs2020.Services.IBTProjectService _projectService
 @inject IBTAccessService accessService
@@ -17,88 +18,76 @@
     <div class="row">
         <div class="col-md">
             <span class="over-div">
-                @Html.DisplayFor(model => model.Name)
+                @Html.DisplayFor(model => model.Name) |
                 @*<a class="btn btn-light" asp-action="MyProjects">Back to Projects</a>*@
+                @if (await accessService.CanInteractProject(userId, Model.Id, roles))
+                {
+                    <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">Edit Project</a>
+                    <a class="btn assign" asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a>
+                    <a class="btn remove" asp-action="RemoveUsers" asp-route-id="@Model.Id">Remove Team Members</a>
+                }
             </span>
         </div>
     </div>
 </div>
 <hr />
 @*<div class="row">
-    <div class="col-xl-4 dashSpecial">
-        <h3 class="text-center">Tickets by Priority</h3>
-        <div id="projectPriorityDonut" class="morris-chart" style="height: 175px;"></div>
-        <div class="text-center">
-            <ul class="list-inline chart-detail-list">
-                <li class="list-inline-item">
-                    <h5 style="color: #35b8e0;">Low: <span id="low"></span></h5>
-                </li>
-                <li class="list-inline-item">
-                    <h5 style="color: #ff9933;">High: <span id="high"></span></h5>
-                </li>
-                <li class="list-inline-item">
-                    <h5 style="color: #ff3333;">Urgent: <span id="urgent"></span></h5>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="col-xl-4 dashSpecial">
-        <h3 class="text-center">Tickets by Status</h3>
-        <div id="projectStatusDonut" class="morris-chart" style="height: 175px;"></div>
-        <div class="text-center">
-            <ul class="list-inline chart-detail-list">
-                <li class="list-inline-item">
-                    <h5 style="color: #ff8533;">New: <span id="new"></span></h5>
-                </li>
-                <li class="list-inline-item">
-                    <h5 style="color: #ffff99;">Open: <span id="open"></span></h5>
-                </li>
-                <li class="list-inline-item">
-                    <h5 style="color: #339933;">Resolved: <span id="resolved"></span></h5>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="col-xl-4 dashSpecial">
-        <h3 class="text-center">Tickets by Type</h3>
-        <div id="projectTypeDonut" class="morris-chart" style="height: 175px;"></div>
-        <div class="text-center">
-            <ul class="list-inline chart-detail-list">
-                <li class="list-inline-item">
-                    <h5 style="color: #d5ff80;">Backend: <span id="runtime"></span></h5>
-                </li>
-                <li class="list-inline-item">
-                    <h5 style="color: #0099cc;">UI: <span id="ui"></span></h5>
-                </li>
-                <li class="list-inline-item">
-                    <h5 style="color: #c2d6d6;">Runtime: <span id="backend"></span></h5>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>*@
-@if (await accessService.CanInteractProject(userId, Model.Id, roles))
-{
-    <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-3">
-                    <a class="btn assign" asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a>
-                </div>
-                <div class="col-sm-3">
-                    <a class="btn remove" asp-action="RemoveUsers" asp-route-id="@Model.Id">Remove Team Members</a>
-                </div>
-                <div class="col-sm-3">
-                    <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                </div>
+        <div class="col-xl-4 dashSpecial">
+            <h3 class="text-center">Tickets by Priority</h3>
+            <div id="projectPriorityDonut" class="morris-chart" style="height: 175px;"></div>
+            <div class="text-center">
+                <ul class="list-inline chart-detail-list">
+                    <li class="list-inline-item">
+                        <h5 style="color: #35b8e0;">Low: <span id="low"></span></h5>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 style="color: #ff9933;">High: <span id="high"></span></h5>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 style="color: #ff3333;">Urgent: <span id="urgent"></span></h5>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
-}
+        <div class="col-xl-4 dashSpecial">
+            <h3 class="text-center">Tickets by Status</h3>
+            <div id="projectStatusDonut" class="morris-chart" style="height: 175px;"></div>
+            <div class="text-center">
+                <ul class="list-inline chart-detail-list">
+                    <li class="list-inline-item">
+                        <h5 style="color: #ff8533;">New: <span id="new"></span></h5>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 style="color: #ffff99;">Open: <span id="open"></span></h5>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 style="color: #339933;">Resolved: <span id="resolved"></span></h5>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-xl-4 dashSpecial">
+            <h3 class="text-center">Tickets by Type</h3>
+            <div id="projectTypeDonut" class="morris-chart" style="height: 175px;"></div>
+            <div class="text-center">
+                <ul class="list-inline chart-detail-list">
+                    <li class="list-inline-item">
+                        <h5 style="color: #d5ff80;">Backend: <span id="runtime"></span></h5>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 style="color: #0099cc;">UI: <span id="ui"></span></h5>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 style="color: #c2d6d6;">Runtime: <span id="backend"></span></h5>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>*@
 
-<div class="dash-radius">
+<div class="container dash-radius">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 dash-radius create-bar">
             <p class="descrip">Team Members:</p><br />
             @foreach (var user in Model.ProjectUsers)
             {
@@ -107,55 +96,401 @@
             }
         </div>
         <div class="col-md-8">
-            <p class="descrip">Tickets on this project:</p>
+
+            <h2 class="title-2">Tickets on this Project:</h2>
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">All</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">New</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Urgent</a>
+                </li>
+                @if (!User.IsInRole("NewUser"))
+                {
+                    <li>
+                        @*<button class="btn createTicket ml-2" title="button" data-toggle="modal" data-target="#createTicket">
+                        Create new ticket
+                    </button>*@
+                        <a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
+                            Create new ticket
+                        </a>
+                    </li>
+                }
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div id="allTicketAccordion">
+                        @foreach (var item in Model.Tickets)
+                        {
+                            <div class="card mb-1">
+                                <a class="ml-2" data-toggle="collapse" href="#collapseAllTicket-@item.Id">
+                                    <div id="headingOne">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span class="accordion-title">@Html.DisplayFor(modelItem => item.Title)</span>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="float-right">
+                                                    @if (item.TicketType.Name == "Runtime")
+                                                    {
+                                                        <span class="runtime">Runtime</span>
+                                                    }
+                                                    @if (item.TicketType.Name == "UI")
+                                                    {
+                                                        <span class="ui">UI</span>
+                                                    }
+                                                    @if (item.TicketType.Name == "Backend")
+                                                    {
+                                                        <span class="backend">Backend</span>
+                                                    }
+                                                </div>
+                                                <div class="float-right">
+                                                    @if (item.TicketStatus.Name == "New")
+                                                    {
+                                                        <span class="new">New</span>
+                                                    }
+                                                    @if (item.TicketStatus.Name == "Open")
+                                                    {
+                                                        <span class="open">Open</span>
+                                                    }
+                                                    @if (item.TicketStatus.Name == "Closed")
+                                                    {
+                                                        <span class="closed">Closed</span>
+                                                    }
+                                                </div>
+                                                <div class="float-right">
+                                                    @if (item.TicketPriority.Name == "Low")
+                                                    {
+                                                        <span class="low">Low</span>
+                                                    }
+                                                    @if (item.TicketPriority.Name == "High")
+                                                    {
+                                                        <span class="high">High</span>
+                                                    }
+                                                    @if (item.TicketPriority.Name == "Urgent")
+                                                    {
+                                                        <span class="urgent">Urgent</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div>
+                                    @if (item.OwnerUser.FileData != null)
+                                    {
+                                        <img src=@ImageHelper.DecodeImage(item.OwnerUser.FileData, item.OwnerUser.FileName) class="avatar mt-1" alt="User Image" />
+                                    }
+
+                                    <span class="mt-1">
+                                        by: @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                                    </span>
+                                </div>
+                                <div id="collapseAllTicket-@item.Id" class="collapse" aria-labelledby="collapseAllTicket-@item.Id" data-parent="#allTicketAccordion">
+                                    <div class="card-body">
+                                        <span>
+                                            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id" class="btn details">
+                                                Details
+                                            </a>
+                                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                            {
+                                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id" class="btn edit">
+                                                    Edit
+                                                </a>
+                                            }
+                                            <a class="nav-link my-nav float-right" asp-area="" asp-controller="Projects" asp-action="Details">
+                                                <img src="~/img/close.png" />
+                                            </a>
+                                        </span>
+                                        <br />
+                                        <span class="created"> Project: </span>
+                                        <span class="ticket-label">
+                                            @Html.DisplayFor(modelItem => item.Project.Name)
+                                        </span><br />
+                                        <span class="created">
+                                            Created: @Html.DisplayFor(modelItem => item.Created)
+                                        </span><br />
+                                        <span class="created">Developer: </span>
+                                        <span class="ticket-label">
+                                            @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                                        </span>
+                                        <p class="ticket-label descrip">Description:</p>
+                                        <p>@Html.Raw(item.Description)</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <div id="newTicketAccordion">
+                        @foreach (var item in Model.Tickets.Where(p => p.TicketStatus.Name == "New"))
+                        {
+
+                            <div class="card mb-1">
+                                <a class="ml-2" data-toggle="collapse" href="#collapseAllTicket-@item.Id">
+                                    <div id="headingOne">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span class="accordion-title">@Html.DisplayFor(modelItem => item.Title)</span>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="float-right">
+                                                    @if (item.TicketType.Name == "Runtime")
+                                                    {
+                                                        <span class="runtime">Runtime</span>
+                                                    }
+                                                    @if (item.TicketType.Name == "UI")
+                                                    {
+                                                        <span class="ui">UI</span>
+                                                    }
+                                                    @if (item.TicketType.Name == "Backend")
+                                                    {
+                                                        <span class="backend">Backend</span>
+                                                    }
+                                                </div>
+                                                <div class="float-right">
+                                                    @if (item.TicketStatus.Name == "New")
+                                                    {
+                                                        <span class="new">New</span>
+                                                    }
+                                                    @if (item.TicketStatus.Name == "Open")
+                                                    {
+                                                        <span class="open">Open</span>
+                                                    }
+                                                    @if (item.TicketStatus.Name == "Closed")
+                                                    {
+                                                        <span class="closed">Closed</span>
+                                                    }
+                                                </div>
+                                                <div class="float-right">
+                                                    @if (item.TicketPriority.Name == "Low")
+                                                    {
+                                                        <span class="low">Low</span>
+                                                    }
+                                                    @if (item.TicketPriority.Name == "High")
+                                                    {
+                                                        <span class="high">High</span>
+                                                    }
+                                                    @if (item.TicketPriority.Name == "Urgent")
+                                                    {
+                                                        <span class="urgent">Urgent</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div>
+                                    @if (item.OwnerUser.FileData != null)
+                                    {
+                                        <img src=@ImageHelper.DecodeImage(item.OwnerUser.FileData, item.OwnerUser.FileName) class="avatar mt-1" alt="User Image" />
+                                    }
+
+                                    <span class="mt-1">
+                                        by: @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                                    </span>
+                                </div>
+                                <div id="collapseAllTicket-@item.Id" class="collapse" aria-labelledby="collapseAllTicket-@item.Id" data-parent="#allTicketAccordion">
+                                    <div class="card-body">
+                                        <span>
+                                            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id" class="btn details">
+                                                Details
+                                            </a>
+                                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                            {
+                                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id" class="btn edit">
+                                                    Edit
+                                                </a>
+                                            }
+                                            <a class="nav-link my-nav float-right" asp-area="" asp-controller="Projects" asp-action="Details">
+                                                <img src="~/img/close.png" />
+                                            </a>
+                                        </span>
+                                        <br />
+                                        <span class="created"> Project: </span>
+                                        <span class="ticket-label">
+                                            @Html.DisplayFor(modelItem => item.Project.Name)
+                                        </span><br />
+                                        <span class="created">
+                                            Created: @Html.DisplayFor(modelItem => item.Created)
+                                        </span><br />
+                                        <span class="created">Developer: </span>
+                                        <span class="ticket-label">
+                                            @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                                        </span>
+                                        <p class="ticket-label descrip">Description:</p>
+                                        <p>@Html.Raw(item.Description)</p>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                    <div id="urgentTicketAccordion">
+                        @foreach (var item in Model.Tickets.Where(p => p.TicketPriority.Name == "Urgent"))
+                        {
+                            <div class="card mb-1">
+                                <a class="ml-2" data-toggle="collapse" href="#collapseAllTicket-@item.Id">
+                                    <div id="headingOne">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span class="accordion-title">@Html.DisplayFor(modelItem => item.Title)</span>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="float-right">
+                                                    @if (item.TicketType.Name == "Runtime")
+                                                    {
+                                                        <span class="runtime">Runtime</span>
+                                                    }
+                                                    @if (item.TicketType.Name == "UI")
+                                                    {
+                                                        <span class="ui">UI</span>
+                                                    }
+                                                    @if (item.TicketType.Name == "Backend")
+                                                    {
+                                                        <span class="backend">Backend</span>
+                                                    }
+                                                </div>
+                                                <div class="float-right">
+                                                    @if (item.TicketStatus.Name == "New")
+                                                    {
+                                                        <span class="new">New</span>
+                                                    }
+                                                    @if (item.TicketStatus.Name == "Open")
+                                                    {
+                                                        <span class="open">Open</span>
+                                                    }
+                                                    @if (item.TicketStatus.Name == "Closed")
+                                                    {
+                                                        <span class="closed">Closed</span>
+                                                    }
+                                                </div>
+                                                <div class="float-right">
+                                                    @if (item.TicketPriority.Name == "Low")
+                                                    {
+                                                        <span class="low">Low</span>
+                                                    }
+                                                    @if (item.TicketPriority.Name == "High")
+                                                    {
+                                                        <span class="high">High</span>
+                                                    }
+                                                    @if (item.TicketPriority.Name == "Urgent")
+                                                    {
+                                                        <span class="urgent">Urgent</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div>
+                                    @if (item.OwnerUser.FileData != null)
+                                    {
+                                        <img src=@ImageHelper.DecodeImage(item.OwnerUser.FileData, item.OwnerUser.FileName) class="avatar mt-1" alt="User Image" />
+                                    }
+
+                                    <span class="mt-1">
+                                        by: @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                                    </span>
+                                </div>
+                                <div id="collapseAllTicket-@item.Id" class="collapse" aria-labelledby="collapseAllTicket-@item.Id" data-parent="#allTicketAccordion">
+                                    <div class="card-body">
+                                        <span>
+                                            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id" class="btn details">
+                                                Details
+                                            </a>
+                                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                            {
+                                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id" class="btn edit">
+                                                    Edit
+                                                </a>
+                                            }
+                                            <a class="nav-link my-nav float-right" asp-area="" asp-controller="Projects" asp-action="Details">
+                                                <img src="~/img/close.png" />
+                                            </a>
+                                        </span>
+                                        <br />
+                                        <span class="created"> Project: </span>
+                                        <span class="ticket-label">
+                                            @Html.DisplayFor(modelItem => item.Project.Name)
+                                        </span><br />
+                                        <span class="created">
+                                            Created: @Html.DisplayFor(modelItem => item.Created)
+                                        </span><br />
+                                        <span class="created">Developer: </span>
+                                        <span class="ticket-label">
+                                            @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                                        </span>
+                                        <p class="ticket-label descrip">Description:</p>
+                                        <p>@Html.Raw(item.Description)</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+            @*<span class="descrip">
+            Tickets on this project:
             @if (!User.IsInRole("NewUser"))
             {
-                <p>
-                    <a asp-controller="Tickets" asp-action="Create">Create New</a>
-                </p>
+                <a class="btn createTicket" asp-controller="Tickets" asp-action="Create">Create New Ticket</a>
             }
+        </span>
+        <div id="accordion2" class="mb-3">
+            @foreach (var item in Model.Tickets)
+            {
+                <div class="card mb-1">
+                    <a class="text-dark" data-toggle="collapse" href="#collapseTicket-@item.Id">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="m-0">
+                                @Html.DisplayFor(modelItem => item.Title)
+                                <span style="align-content:flex-end"></span>
+                                <span> | </span>
+                                <span class="created">Created: @Html.DisplayFor(modelItem => item.Created)</span>
+                            </h5>
+                        </div>
+                    </a>
+                    <div id="collapseTicket-@item.Id" class="collapse" aria-labelledby="collapseTicket-@item.Id" data-parent="#accordion2">
+                        <div class="card-body">
+                            <a class="nav-link my-nav" asp-area="" asp-controller="Projects" asp-action="Details">
+                                <span>Close</span>
+                            </a><hr />
+                            <p class="ticket-label">Description:</p>
+                            <p>@Html.Raw(item.Description)</p>
+                            <p class="ticket-label"></p>
+                            <p>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</p><hr />
 
-            <div id="accordion2" class="mb-3">
-                @foreach (var item in Model.Tickets)
-                {
-                    <div class="card mb-1">
-                        <a class="text-dark" data-toggle="collapse" href="#collapseTicket-@item.Id">
-                            <div class="card-header" id="headingOne">
-                                <h5 class="m-0">
-                                    @Html.DisplayFor(modelItem => item.Title)
-                                    <span style="align-content:flex-end"></span>
-                                    <span> | </span>
-                                    <span class="created">Created: @Html.DisplayFor(modelItem => item.Created)</span>
-                                </h5>
-                            </div>
-                        </a>
-                        <div id="collapseTicket-@item.Id" class="collapse" aria-labelledby="collapseTicket-@item.Id" data-parent="#accordion2">
-                            <div class="card-body">
-                                <a class="nav-link my-nav" asp-area="" asp-controller="Projects" asp-action="Details">
-                                    <span>Close</span>
-                                </a><hr />
-                                <p class="ticket-label">Description:</p>
-                                <p>@Html.Raw(item.Description)</p>
-                                <p class="ticket-label"></p>
-                                <p>@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</p><hr />
-
-                                @if (await accessService.CanInteractTicket(userId, item.Id, roles))
-                                {
-                                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                }
-                            </div>
+                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                            {
+                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            }
                         </div>
                     </div>
-                }
-            </div>
-        </div><!-- end col -->
+                </div>
+            }
+        </div>*@
+        </div>
     </div>
 </div>
 
-<div class="row">
 
-</div>
+
+
+
 
 @section Scripts {
 

@@ -10,88 +10,101 @@
     var roles = userManager.GetRolesAsync(await userManager.GetUserAsync(User)).Result.FirstOrDefault();
 }
 
-<!-- ============================================================== -->
-<!-- Start Page Content here -->
-<!-- ============================================================== -->
-<span class="over-div">All Tickets | </span>
-@if (!User.IsInRole("NewUser"))
-{
-<a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
-    Create new ticket
-</a>
-}
 
-<div id="wrapper">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <table id="responsive-datatable" class="table">
-                    <thead class="dash">
-                        <tr class="dash">
-                            <th>@Html.DisplayNameFor(model => model.Title)</th>
-                            @*<th>@Html.DisplayNameFor(model => model.Description)</th>*@
-                            <th>@Html.DisplayNameFor(model => model.Created)</th>
-                            <th>@Html.DisplayNameFor(model => model.Project)</th>
-                            <th>@Html.DisplayNameFor(model => model.TicketType)</th>
-                            <th>@Html.DisplayNameFor(model => model.TicketPriority)</th>
-                            <th>@Html.DisplayNameFor(model => model.TicketStatus)</th>
-                            <th>@Html.DisplayNameFor(model => model.OwnerUser)</th>
-                            <th>@Html.DisplayNameFor(model => model.DeveloperUser)</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+<div class="container">
 
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td class="dash">@Html.DisplayFor(modelItem => item.Title)</td>
-                                @*<td class="dash">
-                                    <div class="modal" id="description-@item.Id" tabindex="-1" role="dialog"
-                                         aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-plugin="custommodal">
-                                        <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title" id="exampleModalScrollableTitle">Modal title</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    @Html.Raw(item.Description)
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+    <span class="over-div mt-1">
+        All Tickets
+        @if (!User.IsInRole("Admin"))
+        {
+            <span> |
+                <a class="btn btn-light" asp-area="" asp-controller="Tickets" asp-action="MyTickets">
+                    Go to My Tickets
+                </a>
+            </span>
+        }
+        @if (!User.IsInRole("NewUser"))
+        {
+            <a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
+                Create new ticket
+            </a>
+        }
+    </span>
+    <hr />
+
+    <div id="wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <table id="responsive-datatable" class="table">
+                        <thead class="dash">
+                            <tr class="dash">
+                                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                                <th>@Html.DisplayNameFor(model => model.Description)</th>
+                                <th>@Html.DisplayNameFor(model => model.Created)</th>
+                                <th>@Html.DisplayNameFor(model => model.Project)</th>
+                                <th>@Html.DisplayNameFor(model => model.TicketType)</th>
+                                <th>@Html.DisplayNameFor(model => model.TicketPriority)</th>
+                                <th>@Html.DisplayNameFor(model => model.TicketStatus)</th>
+                                <th>@Html.DisplayNameFor(model => model.OwnerUser)</th>
+                                <th>@Html.DisplayNameFor(model => model.DeveloperUser)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.Title)</td>
+                                    <td class="dash">
+                                        <div class="modal" id="description-@item.Id" tabindex="-1" role="dialog"
+                                             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-animation="makeway">
+                                            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h2 class="modal-title" id="exampleModalScrollableTitle">@item.Title</h2>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h5>Description</h5><br />
+                                                        @Html.Raw(item.Description)
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <button type="button" class="btn-descrip waves-effect waves-light" data-toggle="modal" data-target="#description-@item.Id">Description</button>
+                                        <button type="button" class="btn-descrip waves-effect waves-light" data-toggle="modal" data-target="#description-@item.Id">Description</button>
 
-                                </td>*@
-                                <td class="dash">@Html.DisplayFor(modelItem => item.Created)</td>
-                                <td class="dash">@Html.DisplayFor(modelItem => item.Project.Name)</td>
-                                <td class="dash">@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
-                                <td class="dash">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
-                                <td class="dash">@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>
-                                <td class="dash">@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
-                                <td class="dash">@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
-                                <td class="dash">
-                                    @if (await accessService.CanInteractTicket(userId, item.Id, roles))
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
-                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                    </td>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.Created)</td>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.Project.Name)</td>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
+                                    <td class="dash">@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
+                                    <td class="dash">
+                                        @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
+                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

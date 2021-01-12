@@ -49,26 +49,68 @@
             </form><br />*@
     }
     <br />
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4">
-                <div class="card-box projects">
-                    <h2 class="text-center">
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </h2>
-                    <form>
-                        <button class="details" asp-action="Details" asp-route-id="@item.Id">Details</button>
-                        @if (await accessService.CanInteractProject(userId, item.Id, roles))
-                        {
-                            <button class="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</button>
-                        }
-                    </form>
 
+    <div class="row">
+        <div id="wrapper">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <table id="responsive-datatable" class="table">
+                            <thead class="dash">
+                                <tr class="dash">
+                                    <th>Project Title</th>
+                                    @*<th>Project Team</th>
+                                        <th>Total Tickets</th>*@
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <td class="dash">@Html.DisplayFor(modelItem => item.Name)</td>
+                                        @*<td class="dash">@Html.DisplayFor(modelItem => item.ProjectUsers)</td>
+                                            <td class="dash">@Html.DisplayFor(modelItem => item.Tickets.Count)</td>*@
+                                        <td class="dash">
+                                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
+                                            }
+                                                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        }
+        </div>
     </div>
+
+
+    @*<div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card-box projects">
+                        <h2 class="text-center">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </h2>
+                        <form>
+                            <button class="details" asp-action="Details" asp-route-id="@item.Id">Details</button>
+                            @if (await accessService.CanInteractProject(userId, item.Id, roles))
+                            {
+                                <button class="edit" asp-action="Edit" asp-route-id="@item.Id">Edit</button>
+                            }
+                        </form>
+
+                    </div>
+                </div>
+            }
+        </div>*@
 </div>
 
 @section Scripts {

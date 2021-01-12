@@ -138,8 +138,7 @@ namespace DragonBugs2020.Controllers
                 try
                 {
                     ticketComment.Updated = DateTime.Now;
-                    ticketComment.UserId = _userManager.GetUserId(User);
-                    
+                    //ticketComment.UserId = _userManager.GetUserId(User);
                     _context.Update(ticketComment);
                     await _context.SaveChangesAsync();
                 }
