@@ -19,12 +19,12 @@
         <a class="btn btn-light" asp-area="" asp-controller="Tickets" asp-action="Index">
             Go to All Tickets
         </a>
-        @if (!User.IsInRole("NewUser"))
+        @*@if (!User.IsInRole("NewUser"))
         {
             <a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
                 Create new ticket
             </a>
-        }
+        }*@
     </span>
     <hr />
 
@@ -79,7 +79,7 @@
 
                                     </td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.Created)</td>
-                                    <td class="dash">@Html.DisplayFor(modelItem => item.Project.Name)</td>
+                                    <td class="dash"><a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">@Html.DisplayFor(modelItem => item.Project.Name)</a></td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>

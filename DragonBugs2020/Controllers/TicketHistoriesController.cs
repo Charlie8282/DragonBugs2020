@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DragonBugs2020.Data;
 using DragonBugs2020.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DragonBugs2020.Controllers
 {
+    [Authorize]
     public class TicketHistoriesController : Controller
     {
         private readonly ApplicationDbContext _context;

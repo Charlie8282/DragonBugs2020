@@ -17,8 +17,12 @@ namespace DragonBugs2020.Data
     {
         Admin,
         ProjectManager,
+        ProjectManager2,
         Developer,
+        Developer2,
         Submitter,
+        Submitter2,
+        Submitter3,
         NewUser,
         Demo
     }
@@ -304,32 +308,35 @@ namespace DragonBugs2020.Data
 
             }
 
-            //defaultProjectManager = new BTUser
-            //{
-            //    UserName = "demojakesmith@mailinator.com",
-            //    Email = "demojakesmith@mailinator.com",
-            //    FirstName = "JakeDemo",
-            //    LastName = "Smith",
-            //    EmailConfirmed = true
-            //};
-            //try
-            //{
-            //    var user = await userManager.FindByEmailAsync(defaultProjectManager.Email);
-            //    if (user == null)
-            //    {
-            //        await userManager.CreateAsync(defaultProjectManager, demoPassword);
-            //        await userManager.AddToRoleAsync(defaultProjectManager, Roles.ProjectManager.ToString());
-            //        await userManager.AddToRoleAsync(defaultProjectManager, Roles.Demo.ToString());
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine("************ ERROR ************");
-            //    Debug.WriteLine("Error Seeding Default Project Manager User.");
-            //    Debug.WriteLine("ex.Message");
-            //    Debug.WriteLine("*******************************");
+            //second PM
+            defaultProjectManager = new BTUser
+            {
+                UserName = "luis@mailinator.com",
+                Email = "luis@mailinator.com",
+                FirstName = "Luis",
+                LastName = "Pena",
+                FileName = "luis-pena.jpg",
+                FileData = await imageService.AssignAvatarAsync("luis-pena.jpg"),
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultProjectManager.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultProjectManager, demoPassword);
+                    await userManager.AddToRoleAsync(defaultProjectManager, Roles.ProjectManager.ToString());
+                    await userManager.AddToRoleAsync(defaultProjectManager, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding 2nd Default Project Manager User.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
 
-            //}
+            }
 
             #endregion
             //Carol Danvers
@@ -359,6 +366,36 @@ namespace DragonBugs2020.Data
             {
                 Debug.WriteLine("************ ERROR ************");
                 Debug.WriteLine("Error Seeding Default Developer User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("*******************************");
+
+            }
+
+            //2nd developer
+            defaultDeveloper = new BTUser
+            {
+                UserName = "chris@mailinator.com",
+                Email = "chris@mailinator.com",
+                FirstName = "Chris",
+                LastName = "Thunder",
+                FileName = "chris-thunder.png",
+                FileData = await imageService.AssignAvatarAsync("chris-thunder.png"),
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultDeveloper.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultDeveloper, demoPassword);
+                    await userManager.AddToRoleAsync(defaultDeveloper, Roles.Developer.ToString());
+                    await userManager.AddToRoleAsync(defaultDeveloper, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding 2nd Default Developer User.");
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine("*******************************");
 
@@ -395,6 +432,67 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
 
             }
+
+            //2nd submitter
+            defaultSubmitter = new BTUser
+            {
+                UserName = "paul@mailinator.com",
+                Email = "paul@mailinator.com",
+                FirstName = "Paul",
+                LastName = "Bettany",
+                FileName = "paul-bettany.jpg",
+                FileData = await imageService.AssignAvatarAsync("paul-bettany.jpg"),
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultSubmitter.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultSubmitter, demoPassword);
+                    await userManager.AddToRoleAsync(defaultSubmitter, Roles.Submitter.ToString());
+                    await userManager.AddToRoleAsync(defaultSubmitter, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding 2nd Default Submitter User.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+
+            }
+
+            //3rd submitter
+            defaultSubmitter = new BTUser
+            {
+                UserName = "shuri@mailinator.com",
+                Email = "shuri@mailinator.com",
+                FirstName = "Shuri",
+                LastName = "Wright",
+                FileName = "shuri-wright.jpg",
+                FileData = await imageService.AssignAvatarAsync("shuri-wright.jpg"),
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultSubmitter.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultSubmitter, demoPassword);
+                    await userManager.AddToRoleAsync(defaultSubmitter, Roles.Submitter.ToString());
+                    await userManager.AddToRoleAsync(defaultSubmitter, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding 3rd Default Submitter User.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+
+            }
+
             #endregion
             //James Gunn
             #region Demo Seed New User
@@ -597,8 +695,12 @@ namespace DragonBugs2020.Data
         {
             string adminId = (await userManager.FindByEmailAsync("anthony@mailinator.com")).Id;
             string projectManagerId = (await userManager.FindByEmailAsync("harley@mailinator.com")).Id;
+            string projectManager2Id = (await userManager.FindByEmailAsync("luis@mailinator.com")).Id;
             string developerId = (await userManager.FindByEmailAsync("carol@mailinator.com")).Id;
+            string developer2Id = (await userManager.FindByEmailAsync("chris@mailinator.com")).Id;
             string submitterId = (await userManager.FindByEmailAsync("clint@mailinator.com")).Id;
+            string submitter2Id = (await userManager.FindByEmailAsync("paul@mailinator.com")).Id;
+            string submitter3Id = (await userManager.FindByEmailAsync("shuri@mailinator.com")).Id;
             int project1Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Blog Project")).Id;
             int project2Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Bug Tracker Project")).Id;
             int project3Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Financial Portal Project")).Id;
@@ -668,28 +770,28 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("ex.Message");
                 Debug.WriteLine("*******************************");
             };
-            //projectUser = new ProjectUser
-            //{
-            //    UserId = projectManagerId,
-            //    ProjectId = project1Id
-            //};
-            //try
-            //{
-            //    var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == projectManagerId && r.ProjectId == project1Id);
-            //    if (record == null)
-            //    {
-            //        await context.ProjectUsers.AddAsync(projectUser);
-            //        await context.SaveChangesAsync();
+            projectUser = new ProjectUser
+            {
+                UserId = projectManagerId,
+                ProjectId = project1Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == projectManagerId && r.ProjectId == project1Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
 
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine("************ ERROR ************");
-            //    Debug.WriteLine("Error Seeding PM project 1.");
-            //    Debug.WriteLine("ex.Message");
-            //    Debug.WriteLine("*******************************");
-            //};
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding PM project 1.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
             projectUser = new ProjectUser
             {
                 UserId = projectManagerId,
@@ -734,28 +836,96 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("ex.Message");
                 Debug.WriteLine("*******************************");
             };
-            //projectUser = new ProjectUser
-            //{
-            //    UserId = developerId,
-            //    ProjectId = project1Id
-            //};
-            //try
-            //{
-            //    var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == developerId && r.ProjectId == project1Id);
-            //    if (record == null)
-            //    {
-            //        await context.ProjectUsers.AddAsync(projectUser);
-            //        await context.SaveChangesAsync();
 
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine("************ ERROR ************");
-            //    Debug.WriteLine("Error Seeding Developer project 1.");
-            //    Debug.WriteLine("ex.Message");
-            //    Debug.WriteLine("*******************************");
-            //};
+            //2nd PM
+            projectUser = new ProjectUser
+            {
+                UserId = projectManager2Id,
+                ProjectId = project1Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == projectManager2Id && r.ProjectId == project1Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding PM2 project 1.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = projectManager2Id,
+                ProjectId = project2Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == projectManager2Id && r.ProjectId == project2Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding PM2 project 2.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = projectManager2Id,
+                ProjectId = project3Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == projectManager2Id && r.ProjectId == project3Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding PM2 project 3.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = developerId,
+                ProjectId = project1Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == developerId && r.ProjectId == project1Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Developer project 1.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
             projectUser = new ProjectUser
             {
                 UserId = developerId,
@@ -797,6 +967,74 @@ namespace DragonBugs2020.Data
             {
                 Debug.WriteLine("************ ERROR ************");
                 Debug.WriteLine("Error Seeding Developer project 3.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+
+            //2nd developer
+            projectUser = new ProjectUser
+            {
+                UserId = developer2Id,
+                ProjectId = project1Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == developer2Id && r.ProjectId == project1Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Developer2 project 1.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = developer2Id,
+                ProjectId = project2Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == developer2Id && r.ProjectId == project2Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Developer2 project 2.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = developer2Id,
+                ProjectId = project3Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == developer2Id && r.ProjectId == project3Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Developer2 project 3.");
                 Debug.WriteLine("ex.Message");
                 Debug.WriteLine("*******************************");
             };
@@ -866,45 +1104,184 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("ex.Message");
                 Debug.WriteLine("*******************************");
             };
+
+            //2nd submitter
+            projectUser = new ProjectUser
+            {
+                UserId = submitter2Id,
+                ProjectId = project1Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == submitter2Id && r.ProjectId == project1Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Submitter2 project 1.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = submitter2Id,
+                ProjectId = project2Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == submitter2Id && r.ProjectId == project2Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Submitter2 project 2.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = submitter2Id,
+                ProjectId = project3Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == submitter2Id && r.ProjectId == project3Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Submitter2 project 3.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+
+            //3rd submitter
+            projectUser = new ProjectUser
+            {
+                UserId = submitter3Id,
+                ProjectId = project1Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == submitter3Id && r.ProjectId == project1Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Submitter3 project 1.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = submitter3Id,
+                ProjectId = project2Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == submitter3Id && r.ProjectId == project2Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Submitter3 project 2.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+            projectUser = new ProjectUser
+            {
+                UserId = submitter3Id,
+                ProjectId = project3Id
+            };
+            try
+            {
+                var record = await context.ProjectUsers.FirstOrDefaultAsync(r => r.UserId == submitter3Id && r.ProjectId == project3Id);
+                if (record == null)
+                {
+                    await context.ProjectUsers.AddAsync(projectUser);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Submitter3 project 3.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
         }
       
        
         private static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<BTUser> userManager)
         {
             string submitterId = (await userManager.FindByEmailAsync("clint@mailinator.com")).Id;
+            string submitter2Id = (await userManager.FindByEmailAsync("paul@mailinator.com")).Id;
+            string submitter3Id = (await userManager.FindByEmailAsync("shuri@mailinator.com")).Id;
             string developerId = (await userManager.FindByEmailAsync("carol@mailinator.com")).Id;
+            string developer2Id = (await userManager.FindByEmailAsync("chris@mailinator.com")).Id;
             string projectManagerId = (await userManager.FindByEmailAsync("harley@mailinator.com")).Id;
+            string projectManager2Id = (await userManager.FindByEmailAsync("luis@mailinator.com")).Id;
             string adminId = (await userManager.FindByEmailAsync("anthony@mailinator.com")).Id;
             int project1Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Blog Project")).Id;
             int project2Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Bug Tracker Project")).Id;
             int project3Id = (await context.Projects.FirstOrDefaultAsync(p => p.Name == "Financial Portal Project")).Id;
-            int type1UiId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
-            int type2BackId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Backend")).Id;
-            int type3RunId = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Runtime")).Id;
+            int type1Id = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "UI")).Id;
+            int type2Id = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Backend")).Id;
+            int type3Id = (await context.TicketTypes.FirstOrDefaultAsync(ts => ts.Name == "Runtime")).Id;
             int status1Id = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "New")).Id;
             int status2Id = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Open")).Id;
             int status3Id = (await context.TicketStatuses.FirstOrDefaultAsync(ts => ts.Name == "Closed")).Id;
             int priority1Id = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Low")).Id;
             int priority2Id = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "High")).Id;
             int priority3Id = (await context.TicketPriorities.FirstOrDefaultAsync(ts => ts.Name == "Urgent")).Id;
-            
-            //ticket 1
+
             Ticket ticket = new Ticket
             {
-                Title = "Navbar links missing",
-                Description = "Our users currently cannot move foward from the landing page because the links in the navbar are not present.  It's been requested that you fix this immediately so that our users can gain access to your recent blogs and leave comments that you need to have.",
-                Created = DateTimeOffset.Now.AddDays(-22),
-                Updated = DateTimeOffset.Now.AddHours(-20),
+                Title = "Styling Issues",
+                Description = "It's come to my attention that most of the secondary (and less used) views on Charlie's Blog have not been styled to match the rest of the finished views.  Focus group #1 - take care of the Blog secondary views.  Focus group #2 - take care of Post secondary views.  Please comment here if you have further questions on this issue.",
+                Created = DateTimeOffset.Now.AddDays(-20),
+                Updated = DateTimeOffset.Now.AddHours(-18),
                 ProjectId = project1Id,
-                TicketTypeId = type1UiId,
-                TicketStatusId = status2Id,
-                TicketPriorityId = priority2Id,
-                DeveloperUserId = developerId,
-                OwnerUserId = developerId
+                TicketTypeId = type1Id,
+                TicketStatusId = status1Id,
+                TicketPriorityId = priority1Id,
+                DeveloperUserId = developer2Id,
+                OwnerUserId = projectManagerId
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Navbar links missing");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Styling Issues");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);
@@ -920,23 +1297,24 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
             };
 
-            //ticket2
+            //ticket 2
+
             ticket = new Ticket
             {
-                Title = "Security issues",
-                Description = "New Users still have access to edit and delete buttons in the tickets section.  They should only be able to view tickets and make comments on them as well.  Probably best to remove from the project all delete actions because by spec, no one can delete a ticket or project, only archive them.",
-                Created = DateTimeOffset.Now.AddDays(-24),
-                Updated = DateTimeOffset.Now.AddHours(-28),
-                ProjectId = project2Id,
-                TicketTypeId = type2BackId,
-                TicketStatusId = status3Id,
-                TicketPriorityId = priority3Id,
+                Title = "Content Missing",
+                Description = "There are not as many posts as the users were expecting to see on The Blog application.  From what I understand there are plenty of posts available but they just aren't posted to the blog application?",
+                Created = DateTimeOffset.Now.AddDays(-21),
+                Updated = DateTimeOffset.Now.AddHours(-21),
+                ProjectId = project1Id,
+                TicketTypeId = type3Id,
+                TicketStatusId = status1Id,
+                TicketPriorityId = priority1Id,
                 DeveloperUserId = developerId,
-                OwnerUserId = adminId
+                OwnerUserId = submitterId
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Security issues");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Content Missing");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);
@@ -952,23 +1330,24 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
             };
 
-            //ticket3
+
+            //ticket 3
             ticket = new Ticket
             {
-                Title = "Too Much Loading",
-                Description = "We have complaints that the landing page is taking an unusually long time to load.  Can you please look into this?",
-                Created = DateTimeOffset.Now.AddDays(-25),
-                Updated = DateTimeOffset.Now.AddHours(-30),
-                ProjectId = project3Id,
-                TicketTypeId = type3RunId,
+                Title = "Ticket Creation",
+                Description = "Users have brought it to my attention that when creating a ticket as a PM, they are allowed to select projects that they are not assigned to.  Is there some way that we can adjust the UI so that tickets can only be created from the project details view and remove the option to choose the project?",
+                Created = DateTimeOffset.Now.AddDays(-22),
+                Updated = DateTimeOffset.Now.AddHours(-18),
+                ProjectId = project2Id,
+                TicketTypeId = type1Id,
                 TicketStatusId = status2Id,
-                TicketPriorityId = priority3Id,
-                DeveloperUserId = developerId,
-                OwnerUserId = submitterId
+                TicketPriorityId = priority2Id,
+                DeveloperUserId = developer2Id,
+                OwnerUserId = submitter2Id
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Too Much Loading");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Ticket Creation");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);
@@ -987,20 +1366,20 @@ namespace DragonBugs2020.Data
             //ticket4
             ticket = new Ticket
             {
-                Title = "Registration Redirect",
-                Description = "After a user clicks on the link that is sent to their registered email to confirm registration, it successfully confirms but does not send them to the login page with pre-filled email address section.  Please get with Denis about this ASAP",
-                Created = DateTimeOffset.Now.AddDays(-26),
-                Updated = DateTimeOffset.Now.AddHours(-30),
+                Title = "Security issues",
+                Description = "New Users still have access to edit and delete buttons in the tickets section.  They should only be able to view tickets and make commments on them as well.  Probably best to remove from the project all delete actions because by spec, no one can delete a ticket or project, only archive them.",
+                Created = DateTimeOffset.Now.AddDays(-23),
+                Updated = DateTimeOffset.Now.AddHours(-12),
                 ProjectId = project2Id,
-                TicketTypeId = type2BackId,
-                TicketStatusId = status1Id,
-                TicketPriorityId = priority2Id,
+                TicketTypeId = type2Id,
+                TicketStatusId = status3Id,
+                TicketPriorityId = priority3Id,
                 DeveloperUserId = developerId,
-                OwnerUserId = submitterId
+                OwnerUserId = adminId
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Registration Redirect");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Security issues");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);
@@ -1016,23 +1395,23 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("*******************************");
             };
 
-            //ticket 5
+            //ticket5
             ticket = new Ticket
             {
-                Title = "Styling Issues",
-                Description = "The landing page is just not getting good reviews from our users.  We need a more intuitive way to describe the application quickly, offer ability to login, click to move to the register page, AND select a Demo User.  Preferably having a brief description of the access granted to the user by each role.",
-                Created = DateTimeOffset.Now.AddDays(-28),
-                Updated = DateTimeOffset.Now.AddHours(-18),
+                Title = "Expand Email Notifications",
+                Description = "Currently, users are only getting notifications when they are assigned as a developer on a ticket.  Can this be expanded to alerting users when they have a change in role and when a ticket they have submitted is placed from new to open status?",
+                Created = DateTimeOffset.Now.AddDays(-22),
+                Updated = DateTimeOffset.Now.AddHours(-22),
                 ProjectId = project2Id,
-                TicketTypeId = type1UiId,
-                TicketStatusId = status1Id,
-                TicketPriorityId = priority1Id,
+                TicketTypeId = type2Id,
+                TicketStatusId = status2Id,
+                TicketPriorityId = priority3Id,
                 DeveloperUserId = developerId,
-                OwnerUserId = projectManagerId
+                OwnerUserId = projectManager2Id
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Styling Issues");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Expand Email Notifications");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);
@@ -1047,23 +1426,24 @@ namespace DragonBugs2020.Data
                 Debug.WriteLine("ex.Message");
                 Debug.WriteLine("*******************************");
             };
+
             //ticket6
             ticket = new Ticket
             {
-                Title = "Team Management Styling",
-                Description = "Overall, the look and feel of the UI on the Team Management view is lacking compared to the rest of the application.  We need to come up with a good way to make it user friendly and worth going to even if you aren't an admin.  Adding avatar pictures and maybe some information about their activity within the application.",
-                Created = DateTimeOffset.Now.AddDays(-30),
+                Title = "Too Much Loading",
+                Description = "We have complaints that the landing page is taking an unusually long time to load.  Can you please look into this?",
+                Created = DateTimeOffset.Now.AddDays(-24),
                 Updated = DateTimeOffset.Now.AddHours(-30),
-                ProjectId = project2Id,
-                TicketTypeId = type1UiId,
-                TicketStatusId = status1Id,
-                TicketPriorityId = priority2Id,
-                DeveloperUserId = developerId,
-                OwnerUserId = submitterId
+                ProjectId = project3Id,
+                TicketTypeId = type3Id,
+                TicketStatusId = status2Id,
+                TicketPriorityId = priority3Id,
+                DeveloperUserId = developer2Id,
+                OwnerUserId = submitter3Id
             };
             try
             {
-                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Team Management Styling");
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Too Much Loading");
                 if (newTicket == null)
                 {
                     await context.Tickets.AddAsync(ticket);
@@ -1075,6 +1455,70 @@ namespace DragonBugs2020.Data
             {
                 Debug.WriteLine("************ ERROR ************");
                 Debug.WriteLine("Error Seeding Ticket 6.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+
+            //ticket7
+            ticket = new Ticket
+            {
+                Title = "Modals Not Styled",
+                Description = "The modals on the dashboard are not styled in such a way to match the overall theme of the application.  They should have a darker background and similar text as that found on the dashboard and landing.",
+                Created = DateTimeOffset.Now.AddDays(-23),
+                Updated = DateTimeOffset.Now.AddHours(-30),
+                ProjectId = project3Id,
+                TicketTypeId = type1Id,
+                TicketStatusId = status3Id,
+                TicketPriorityId = priority1Id,
+                DeveloperUserId = developerId,
+                OwnerUserId = projectManagerId
+            };
+            try
+            {
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Modals Not Styled");
+                if (newTicket == null)
+                {
+                    await context.Tickets.AddAsync(ticket);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Ticket 7.");
+                Debug.WriteLine("ex.Message");
+                Debug.WriteLine("*******************************");
+            };
+
+            //ticket8
+            ticket = new Ticket
+            {
+                Title = "Modal Not Populating",
+                Description = "The Create Category Item modal on the dashboard is not populating, therefor the users cannot interact with this feature.",
+                Created = DateTimeOffset.Now.AddDays(-23),
+                Updated = DateTimeOffset.Now.AddHours(-33),
+                ProjectId = project3Id,
+                TicketTypeId = type2Id,
+                TicketStatusId = status1Id,
+                TicketPriorityId = priority2Id,
+                DeveloperUserId = developer2Id,
+                OwnerUserId = submitter3Id
+            };
+            try
+            {
+                var newTicket = await context.Tickets.FirstOrDefaultAsync(t => t.Title == "Modal Not Populating");
+                if (newTicket == null)
+                {
+                    await context.Tickets.AddAsync(ticket);
+                    await context.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR ************");
+                Debug.WriteLine("Error Seeding Ticket 8.");
                 Debug.WriteLine("ex.Message");
                 Debug.WriteLine("*******************************");
             };

@@ -31,7 +31,7 @@
         <h4>
             Add a New Project:
         </h4>
-        <form asp-action="Create">
+        <form asp-action="CreateProjectFromTable">
             <div class="container-fluid dash-radius-t create-bar">
                 <div class="row">
                     <div class="col-md-6">
@@ -74,7 +74,7 @@
                                         @*<td class="dash">@Html.DisplayFor(modelItem => item.ProjectUsers)</td>
                                             <td class="dash">@Html.DisplayFor(modelItem => item.Tickets.Count)</td>*@
                                         <td class="dash">
-                                            @if (await accessService.CanInteractTicket(userId, item.Id, roles))
+                                            @if (await accessService.CanInteractProject(userId, item.Id, roles))
                                             {
                                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
                                             }

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DragonBugs2020.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly UserManager<BTUser> _userManager;
@@ -109,7 +110,11 @@ namespace DragonBugs2020.Controllers
             {
                 return NotFound();
             }
-
+            List<BTUser> Users = _context.Users.ToList();
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
             return View(project);
         }
 
@@ -148,6 +153,36 @@ namespace DragonBugs2020.Controllers
                 TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
 
                 return RedirectToAction("Dashboard", "Home");
+
+
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
+        public async Task<IActionResult> CreateProjectFromTable([Bind("Id,Name")] Project project)
+        {
+            if (!User.IsInRole("Demo"))
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(project);
+                    await _context.SaveChangesAsync();
+                    ProjectUser record = new ProjectUser { UserId = _userManager.GetUserId(User), ProjectId = project.Id };
+                    _context.ProjectUsers.Add(record);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Projects");
+
+                }
+
+                return View(project);
+            }
+            else
+            {
+                TempData["DemoLockout"] = "Your changes will not be saved.  To make changes to the database please log in as a full user.";
+
+                return RedirectToAction("Index", "Projects");
 
 
             }
@@ -202,9 +237,10 @@ namespace DragonBugs2020.Controllers
                             throw;
                         }
                     }
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", "Projects", new { id = project.Id });
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Projects", new { id = project.Id });
+
             }
             return View(project);
         }
@@ -220,18 +256,14 @@ namespace DragonBugs2020.Controllers
         {
             var model = new ManageProjectUsersViewModel();
             var project = _context.Projects
-
                 .Include(p => p.ProjectUsers)
                 .ThenInclude(p => p.User)
                 .FirstAsync(p => p.Id == id);
-            if (!User.IsInRole("Demo"))
-            {
-                model.Project = await project;
-                List<BTUser> users = await _context.Users.ToListAsync();
-                List<BTUser> members = (List<BTUser>)await _btProjectService.UsersOnProject(id);
-                model.Users = new MultiSelectList(users, "Id", "FullName", members);
-                return View(model);
-            }
+
+            model.Project = await project;
+            List<BTUser> users = await _context.Users.ToListAsync();
+            List<BTUser> members = (List<BTUser>)await _btProjectService.UsersOnProject(id);
+            model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
 
@@ -249,10 +281,10 @@ namespace DragonBugs2020.Controllers
                         var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
                         List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
                         memberIds.ForEach(i => _btProjectService.AddUserToProject(i, model.Project.Id));
-                        foreach (string id in memberIds)
-                        {
-                            await _btProjectService.RemoveUserFromProject(id, model.Project.Id);
-                        }
+                        //foreach (string id in memberIds)
+                        //{
+                        //    await _btProjectService.RemoveUserFromProject(id, model.Project.Id);
+                        //}
                         foreach (string id in model.SelectedUsers)
                         {
                             await _btProjectService.AddUserToProject(id, model.Project.Id);
@@ -276,16 +308,15 @@ namespace DragonBugs2020.Controllers
         public async Task<IActionResult> RemoveUsers(int id)
         {
             var model = new ManageProjectUsersViewModel();
-            var project = _context.Projects.Find(id);
-
-
-
-            model.Project = project;
+            //var project = _context.Projects.Find(id);
+            var project = _context.Projects
+                .Include(p => p.ProjectUsers)
+                .ThenInclude(p => p.User)
+                .FirstAsync(p => p.Id == id);
+            model.Project = await project;
             List<BTUser> members = (List<BTUser>)await _btProjectService.UsersOnProject(id);
             model.Users = new MultiSelectList(members, "Id", "FullName");
             return View(model);
-
-
         }
 
 

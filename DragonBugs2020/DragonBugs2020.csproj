@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Try\**" />
     <Compile Remove="Views\Notifications\**" />
+    <Content Remove="Data\Try\**" />
     <Content Remove="Views\Notifications\**" />
+    <EmbeddedResource Remove="Data\Try\**" />
     <EmbeddedResource Remove="Views\Notifications\**" />
+    <None Remove="Data\Try\**" />
     <None Remove="Views\Notifications\**" />
   </ItemGroup>
 
@@ -22,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\Index.cshtml" />
     <Content Remove="Views\Projects\Delete.cshtml" />
     <Content Remove="Views\TicketAttachments\Create.cshtml" />
     <Content Remove="Views\Tickets\Delete.cshtml" />

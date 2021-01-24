@@ -10,7 +10,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-        Whack-A-Bug
+        Issue Web
     </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -19,57 +19,97 @@
 </head>
 <body>
 
-    <br /><br /><br /><br />
-    <div class="container">
-        <span class="over-div">@ViewData["Title"]</span>
-        <div class="row">
-            <div class="col-md-6">
-                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    <img src="~/img/issue-web-new.png" class="responsive-image" />
+                    <div class="row land-text">
+                        <div class="col-md-6 landing-pad">
+                            <p>
+                                Welcome to Issue Web.  Easily organize complex projects, track progress, and archive for records all in one easy to use application.
+                            </p>
+                            <p>
+                                Upon registration you will be set as a "New User" with no access or ability to interact with Issue Web.
+                            </p>
+                            <p>
+                                Feel free to contact the current Admin at zacksattention@gmail.com to request more access if you would like to test this application further that what the "Demo Users" are allowed. "
+                            </p>
+                        </div>
+                        <div class="col-md-6 land-text-right">
+                            <span class="over-div">@ViewData["Title"]</span>
+                            <div class="row">
+                                <div class="col-md">
+                                    <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                        <div asp-validation-summary="All" class="text-danger"></div>
+                                        <div class="form-group">
 
-                        <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
-                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
+                                            <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
+                                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
 
-                        <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
-                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
+                                            <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
+                                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
 
-                        <input asp-for="Input.Email" class="form-control" placeholder="Email" />
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
+                                            <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
 
-                        <input asp-for="Input.Password" class="form-control" placeholder="Password" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
+                                            <input asp-for="Input.Password" class="form-control" placeholder="Password" />
+                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
 
-                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" />
-                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                            <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Input.FormFile"></label>
+                                            <input asp-for="Input.FormFile" class="form-control" />
+                                            <span asp-validation-for="Input.FormFile" class="text-danger"></span>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Register</button><br />
+                                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Input.FormFile"></label>
-                        <input asp-for="Input.FormFile" class="form-control" />
-                        <span asp-validation-for="Input.FormFile" class="text-danger"></span>
+                </div>
+                <div class="col-md text-center landing-bar white">
+                    <div>
+                        <div class="text-center">
+                            <div class="over-div">
+                                Step 1:
+                            </div>
+                            <p>
+                                Fill in all of the fields(avatar can be chosen later if you wish), then click "Register".
+                            </p>
+                            <div class="over-div">
+                                Step 2:
+                            </div>
+                            <p>
+                                Check the email that you used to register and click the link to complete registration.
+                            </p>
+                            <div class="over-div">
+                                Step 3:
+                            </div>
+                            <p>
+                                Login and get in contact with the Admin at zacksattention@gmail.com @*<a href="zacksattention@gmail.com">Admin</a>*@ for the ability to do more with this application
+                            </p>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Register</button><br />
-                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-    <br /><br /><br /><br /><br />
-    <br /><br /><br /><br /><br />
+    </section>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - DragonBugs2020 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+
+
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
     }

@@ -9,9 +9,11 @@ using DragonBugs2020.Models;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
 using DragonBugs2020.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DragonBugs2020.Controllers
 {
+    [Authorize]
     public class TicketAttachmentsController : Controller
     {
         private readonly ApplicationDbContext _context;

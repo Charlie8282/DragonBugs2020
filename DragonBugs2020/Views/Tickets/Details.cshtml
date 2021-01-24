@@ -15,13 +15,19 @@
 
 
 
-<span class="over-div">Ticket Details | <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> </span>
+<span class="over-div">
+    Ticket Details
+    @if (await accessService.CanInteractTicket(userId, Model.Id, roles))
+    {
+        <span> | </span> <a class="btn edit" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    }
+</span>
 <hr />
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row description-dash">
         <div class="col-md-6">
-            <div class="dash-radius task-detail">
+            <div class="task-detail">
                 <div class="media mb-3">
                     <div class="media-body">
                         <h4 class="media-heading mt-0"></h4>
@@ -88,67 +94,47 @@
                         <p><small class="text-muted">@Model.Updated?.ToString("MMM dd, yyyy | h:mm tt")</small></p>
                     </div>
                 </div>
-                <p class="text-muted">
-                    @Html.Raw(Model.Description)
-                </p>
-                @*<div class="row">
-                    <div class="col-lg-4">
-                        <h5 class="font-600 m-b-5">
-                            Type:
-                            @if (Model.TicketType.Name == "UI")
-                            {
-                                <span class="ui">UI</span>
-                            }
-                        </h5>
-                    </div>
-                    <div class="col-lg-4">
-                        <h5 class="font-600 m-b-5">
-                            Priority: @Html.DisplayFor(model => model.TicketPriority.Name)
-                        </h5>
-                    </div>
-                    <div class="col-lg-4">
-                        <h5 class="font-600 m-b-5">
-                            Status: @Html.DisplayFor(model => model.TicketStatus.Name)
-                        </h5>
-                    </div>
-                </div><hr />*@
-                <div class="row">
-                    <div class="col-md">
-                        <div class="over-div">Add Attachment:</div>
-                        <div>Description:</div>
-                        <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
-                            <div asp-validation-summary="ModelOnly"></div>
-                            <input type="hidden" asp-for="@Model.Id" name="TicketId">
-                            <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control bg-dark" placeholder="Type description here..." />
-                            <label class="btn btn-light">
-                                <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" class="form-control bg-dark" />
-                            </label>
-                            <button type="submit" class="btn create">Submit</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md create-bar dash-radius">
-                        <div class="">Attached Files: </div><hr />
-                        <div class="row">
-                            @foreach (TicketAttachment item in Model.Attachments)
-                            {
-                                <a asp-controller="TicketAttachments" asp-action="DownloadFile" asp-route-id="@item.Id" target="_blank">
-                                    <div>
-                                        <p class="text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
-                                        <small>Size: @BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
-                                    </div>
-                                    <div>
-                                        <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
-                                    </div>
-                                </a>
-                            }
-                        </div>
-                    </div>
+                <div class="col-md description-dash">
+                    <p class="ticket-label descrip">Description:</p>
+                    
+                    <p class="text-muted">
+                        @Html.Raw(Model.Description)
+                    </p>
                 </div>
             </div>
-        </div><!-- end col -->
-        <div class="col-md-6">
+        </div>
+        <div class="col-md-6 attachment">
+            <div class="over-div">Add Attachment:</div>
+            <div>Description:</div>
+            <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="@Model.Id" name="TicketId">
+                <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control bg-dark" placeholder="Type description here..." />
+                <label class="btn btn-light">
+                    <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" class="form-control bg-dark" />
+                </label>
+                <button type="submit" class="btn create">Submit</button>
+            </form>
+            <div class="">Attached Files: </div><hr />
+            <div class="row">
+                @foreach (TicketAttachment item in Model.Attachments)
+                {
+                    <a asp-controller="TicketAttachments" asp-action="DownloadFile" asp-route-id="@item.Id" target="_blank">
+                        <div>
+                            <p class="text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
+                            <small>Size: @BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
+                        </div>
+                        <div>
+                            <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6 comment-details">
             <span class="over-div">Comments:</span>
             <div>
                 <form asp-controller="TicketComments" asp-action="Create">
@@ -162,7 +148,7 @@
                     </div>
                 </form>
             </div>
-            <div>
+            <div class="dash-radius task-detail">
                 <div class="">
                     @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
                     {
@@ -192,15 +178,10 @@
                         <hr />
                     }
                 </div>
-
             </div>
         </div>
-    </div><!-- end col -->
-
-
-    <div class="row">
-        <span class="over-div">Ticket History:</span>
-        <div class="col-md-12">
+        <div class="col-md">
+            <span class="over-div">Ticket History:</span>
             <div class="dash-radius task-detail">
                 <table class="table">
                     <thead>

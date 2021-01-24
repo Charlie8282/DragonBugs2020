@@ -25,6 +25,7 @@ namespace DragonBugs2020.Models
         public byte[] ImageData { get; set; }
 
         public List<ProjectUser> ProjectUsers { get; set; }
+        public List<BTUser> Users { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

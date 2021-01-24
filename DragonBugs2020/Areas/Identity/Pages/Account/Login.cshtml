@@ -11,7 +11,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-        Whack-A-Bug
+        Issue Web
     </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -20,100 +20,360 @@
 </head>
 <body>
     <section>
-        <div class="container">
-            @if (TempData["ConfirmEmail"] != null)
-            {
-                <h1>
-                    @TempData["ConfirmEmail"]
-                </h1>
-            }
-            <br />
-            @*<img src="~/img/whack-a-bug.png" class="responsive-image" />*@
-            <img src="~/img/issue-web.png" class="responsive-image" />
-        </div>
-        <div class="container dash-radius create-bar">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4 login-cons text-center">
-                    <div class="lander text-center">
-                        <span class="over-div">@ViewData["Title"]</span>
-                    </div>
-                    <form id="account" method="post">
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="form-group">
-                            @*<label asp-for="Input.Email" class="log-reg"></label>*@
-                            <input asp-for="Input.Email" class="form-control bg-dark" placeholder="Email..." />
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <div class="col-md-9">
+                    <img src="~/img/issue-web-new.png" class="responsive-image" />
+                    <div class="row land-text">
+                        <div class="col-md-6 landing-pad">
+                            <p>
+                                Welcome to Issue Web.  Easily organize complex projects, track progress, and archive for records all in one easy to use application.
+                            </p>
+                            <p>
+                                Click on any of the "Demo User" buttons to see the description of the role.  Log in as the role you wish to get to the dashboard, where you can browse through the functionality of this application, and see how it will look from each of your team member's perspective.
+                            </p>
+                            <p>
+                                After logging in as a demo user or registering as a new user, you will find a few example projects and tickets to help you get a feel of what it will look like when you start using Issue Web yourself.
+                            </p>
                         </div>
-                        <div class="form-group">
-                            @*<label asp-for="Input.Password" class="log-reg"></label>*@
-                            <input asp-for="Input.Password" class="form-control" placeholder="Password..." />
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label asp-for="Input.RememberMe" class="log-reg">
-                                    <input asp-for="Input.RememberMe" />
-                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
-                                </label>
+                        <div class="col-md-6 land-text-right">
+                            @if (TempData["ConfirmEmail"] != null)
+                            {
+                                <div class="confirm-email">
+                                    @TempData["ConfirmEmail"]
+                                </div>
+                            }
+                            <div>
+                                <span class="over-div">@ViewData["Title"]</span>
                             </div>
+                            <form id="account" method="post">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="Input.Email" class="log-reg"></label>
+                                    <input asp-for="Input.Email" class="form-control" placeholder="Email..." />
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Input.Password" class="log-reg"></label>
+                                    <input asp-for="Input.Password" class="form-control" placeholder="Password..." />
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label asp-for="Input.RememberMe" class="log-reg">
+                                            <input asp-for="Input.RememberMe" />
+                                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="button-three">Log in</button>
+                                </div>
+                                <div class="form-group">
+                                    <p>
+                                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                                    </p>
+                                    <p>
+                                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                                    </p>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="button-three">Log in</button>
-                        </div>
-                        <div class="form-group">
-                            <p>
-                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                            </p>
-                            <p>
-                                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                            </p>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                <div class="col-md-4 login-cons">
-                    <div class="log-reg text-center">
-                        <span class="over-div">Demo Users</span>
+                <div class="col-md text-center landing-bar">
+                    <div>
+                        @*<button class="btn button-three" title="button" data-toggle="modal" data-target="#loginModal">
+                            Login
+                        </button><br />
+                        <div class="mt-2">
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </div>*@
+                        <div class="mt-5 text-center">
+                            <span class="over-div">Demo Users:</span>
+                            <ul class="nav nav-pills mt-2" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="pills-admin-tab" data-toggle="pill" href="#pills-admin" role="tab" aria-controls="pills-admin" aria-selected="true">Admin</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-pm-tab" data-toggle="pill" href="#pills-pm" role="tab" aria-controls="pills-pm" aria-selected="false">Project Manager</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-dev-tab" data-toggle="pill" href="#pills-dev" role="tab" aria-controls="pills-dev" aria-selected="false">Developer</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-sub-tab" data-toggle="pill" href="#pills-sub" role="tab" aria-controls="pills-sub" aria-selected="false">Submitter</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-user-tab" data-toggle="pill" href="#pills-user" role="tab" aria-controls="pills-user" aria-selected="false">New User</a>
+                                </li>
+                            </ul>
+                            <form id="account" method="post">
+                                <div class="tab-content mt-2" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="pills-admin" role="tabpanel" aria-labelledby="pills-admin-tab">
+                                        <p class="role-descrip">
+                                            Administrators will have no restricted access.  They can create projects and tickets and edit others as well, assign/remove team members from any project or ticket, and promote/demote any member in role.
+                                        </p>
+                                        <button type="submit" name="demoEmail" value="DemoAdminEmail" class="demo-log">Login as Admin</button>
+                                    </div>
 
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoAdminEmail" class="demo-log">Demo Admin</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoPMEmail" class="demo-log">Demo Project Manager</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoDevEmail" class="demo-log">Demo Developer</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoSubEmail" class="demo-log">Demo Submitter</button>
-                            </div>
-                        </form>
-                        <form id="account" method="post">
-                            <div class="form-group">
-                                <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="demo-log">Demo New User</button>
-                            </div>
-                        </form>
+                                    <div class="tab-pane fade" id="pills-pm" role="tabpanel" aria-labelledby="pills-pm-tab">
+                                        <p class="role-descrip">
+                                            Project Managers will have access to team member roles on projects in which they are involved or created themselves.  They can create tickets, as well as edit any ticket or comment on a ticket that is on a project that they created.
+                                        </p>
+                                        <button type="submit" name="demoEmail" value="DemoPMEmail" class="demo-log">Login as Project Manager</button>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="pills-dev" role="tabpanel" aria-labelledby="pills-dev-tab">
+                                        <p class="role-descrip">
+                                            Developers can create a ticket for a project if they are set as the developer of said project.  They can edit a ticket or comment that they have created.  A Developer can view all tickets and projects but only interact with projects and their tickets if they are placed as a team member of the project.  They will not have access to team management for changing roles of other members.  They can leave comments only on a ticket that they have created but can view the details of any ticket or project regardless of team membership
+                                        </p>
+                                        </p>
+                                        <button type="submit" name="demoEmail" value="DemoDevEmail" class="demo-log">Login as Developer</button>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="pills-sub" role="tabpanel" aria-labelledby="pills-sub-tab">
+                                        <p class="role-descrip">
+                                            Submitters can only create tickets if they are on a project and are a bit more limited in options that describe the ticket like status and priority.  They also will not have access to team management for changing roles of other members.  They can leave comments only on a ticket that they have created but can view the details of any ticket or project regardless of team membership
+                                        </p>
+                                        <button type="submit" name="demoEmail" value="DemoSubEmail" class="demo-log">Login as Submitter</button>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="pills-user" role="tabpanel" aria-labelledby="pills-user-tab">
+                                        <p class="role-descrip">
+                                            New Users can only view the application with no interaction until an Administrator or Project Manager promotes them to a different role.
+                                        </p>
+                                        <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="demo-log">Login as New User</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <br /><br />
-                <br /><br /><br /><br /><br />
             </div>
         </div>
     </section>
 
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+ 
+    @*<div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-animation="makeway">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header dash">
+                    <h4 class="modal-title over-div" id="exampleModalScrollableTitle">Log In</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body dash text-center">
+                    <div class="container">
+                        <div class="text-center">
+                            <span class="over-div">@ViewData["Title"]</span>
+                        </div>
+                        <form id="account" method="post">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Input.Email" class="log-reg"></label>
+                                <input asp-for="Input.Email" class="form-control bg-dark" placeholder="Email..." />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Password" class="log-reg"></label>
+                                <input asp-for="Input.Password" class="form-control" placeholder="Password..." />
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label asp-for="Input.RememberMe" class="log-reg">
+                                        <input asp-for="Input.RememberMe" />
+                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="button-three">Log in</button>
+                            </div>
+                            <div class="form-group">
+                                <p>
+                                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                                </p>
+                                <p>
+                                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer dash">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--@if (TempData["ConfirmEmail"] != null)
+        {
+            <h1>
+                @TempData["ConfirmEmail"]
+            </h1>
+        }
+        <br />
+        <img src="~/img/issue-web.png" class="responsive-image" />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 login-cons text-center">
+                <div class="lander text-center">
+                    <span class="over-div">@ViewData["Title"]</span>
+                </div>
+                <form id="account" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">-->
+    @*<label asp-for="Input.Email" class="log-reg"></label>*@
+    <!--<input asp-for="Input.Email" class="form-control bg-dark" placeholder="Email..." />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">-->
+    @*<label asp-for="Input.Password" class="log-reg"></label>*@
+    <!--<input asp-for="Input.Password" class="form-control" placeholder="Password..." />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe" class="log-reg">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="button-three">Log in</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8 login-cons">
+                <div class="">
+                    <div>
+                        Welcome to Issue Web, the last issue tracking system you will ever need.  Click on any of the demo user buttons below, where you can browse through the functionality of this application, and see how it will look from each of your team member's perspective.  Different roles have different access so feel free to explore each one.  After logging in as a demo user you will find a few example projects and tickets to help you get a feel of what it will look like when you start using Issue Web yourself.
+                    </div>
+                    <span class="over-div">Demo Users</span>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoAdminEmail" class="demo-log">Admin</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoPMEmail" class="demo-log">Project Manager</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoDevEmail" class="demo-log">Developer</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoSubEmail" class="demo-log">Submitter</button>
+                        </div>
+                    </form>
+                    <form id="account" method="post">
+                        <div class="form-group">
+                            <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="demo-log">New User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br /><br />
+            <br /><br /><br /><br /><br />
+        </div>
+    </div>-->
+    @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
 </body>
 </html>

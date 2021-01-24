@@ -6,9 +6,9 @@
 <span class="over-div">Assign Project Users</span>
 <hr />
 <div class="row">
-    <div class="card col-6 dash-radius" style="margin:2px">
+    <div class="card col-6 dash-radius">
         <div>
-            @*<span class="descrip">Assign Users to @Model.Project.Name</span>*@
+            <span class="descrip">Assign Users to @Model.Project.Name</span>
             <hr />
             <form asp-controller="Projects" asp-action="AssignUsers" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -31,11 +31,22 @@
         </div>
     </div>
 </div>
-@*<div>
-        <a asp-action="AddProjectUsers" asp-route-id="@Model.Id">Add Project Users</a>
-        <a asp-action="Edit" asp-route-id="@Model.Id"></a>
-        <a asp-action="Index">Back to List</a>
-    </div>*@
+
+
+<div class="container">
+    <div class="row">
+        <span class="descrip">Assign Users to @Model.Project.Name</span>
+    </div>
+    <div class="row">
+        <div class="col-md">
+
+        </div>
+    </div>
+</div>
+
+
+
+
 
 
 

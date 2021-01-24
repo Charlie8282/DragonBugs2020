@@ -16,28 +16,28 @@
 
     <span class="over-div mt-1">
         All Tickets
-        @if (!User.IsInRole("Admin"))
-        {
-            <span> |
-                <a class="btn btn-light" asp-area="" asp-controller="Tickets" asp-action="MyTickets">
-                    Go to My Tickets
+        @*@if (!User.IsInRole("Admin"))
+            {
+                <span> |
+                    <a class="btn btn-light" asp-area="" asp-controller="Tickets" asp-action="MyTickets">
+                        Go to My Tickets
+                    </a>
+                </span>
+            }*@
+        @*@if (!User.IsInRole("NewUser"))
+            {
+                <a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
+                    Create new ticket
                 </a>
-            </span>
-        }
-        @if (!User.IsInRole("NewUser"))
-        {
-            <a class="btn createTicket ml-2" asp-controller="Tickets" asp-action="Create">
-                Create new ticket
-            </a>
-        }
+            }*@
     </span>
     <hr />
 
     <div id="wrapper">
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <table id="responsive-datatable" class="table">
+                <div class="card table-responsive table-light">
+                    <table id="responsive-datatable" class="table table-light">
                         <thead class="dash">
                             <tr class="dash">
                                 <th>@Html.DisplayNameFor(model => model.Title)</th>
@@ -83,17 +83,17 @@
 
                                     </td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.Created)</td>
-                                    <td class="dash">@Html.DisplayFor(modelItem => item.Project.Name)</td>
+                                    <td class="dash"><a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">@Html.DisplayFor(modelItem => item.Project.Name)</a></td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.TicketType.Name)</td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.TicketStatus.Name)</td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.OwnerUser.FullName)</td>
                                     <td class="dash">@Html.DisplayFor(modelItem => item.DeveloperUser.FullName)</td>
                                     <td class="dash">
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                                         @if (await accessService.CanInteractTicket(userId, item.Id, roles))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
-                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                            <span>|</span> <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                         }
                                     </td>
                                 </tr>
